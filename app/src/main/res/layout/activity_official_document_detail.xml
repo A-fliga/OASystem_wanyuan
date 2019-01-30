@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/sign_toolbar"
+        layout="@layout/toolbar" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/sign_toolbar">
+
+        <FrameLayout
+            android:id="@+id/tbs_contentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <org.oasystem.mvp.view.SignView.SignatureView
+            android:id="@+id/mSignatureView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/sign_right_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/sign_show_more"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/show_list" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sign_right_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sign_left_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="70dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sign_agree"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+
+                android:layout_marginLeft="2dp"
+                android:background="@mipmap/sign_right_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="同意"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/sign_add_person"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/sign_right_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="加签"
+                android:textSize="12sp"
+                android:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/sign_add_advise"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/sign_right_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="意见"
+                android:textSize="12sp"
+                android:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/sign_refuse"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/sign_right_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="退回"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/sign_close"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@mipmap/sign_right_back"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="关闭"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/sign_full_fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/sign_top_ll"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@color/color_b93837"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/save_img"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/sign_save_selector" />
+
+                <ImageView
+                    android:id="@+id/pen_img"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/sign_pen_selector" />
+
+                <ImageView
+                    android:id="@+id/clear_img"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sign_clear_selector" />
+
+                <ImageView
+                    android:id="@+id/yinzhang_img"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sign_yinzhang_selector" />
+
+                <ImageView
+                    android:id="@+id/biaozhu_img"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/sign_biaozhu_selector" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+    </FrameLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sign_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_f5f5f5"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
+</RelativeLayout>

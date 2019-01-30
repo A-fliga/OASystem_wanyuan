@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.github.barteksc.pdfviewer.PDFView
+        android:id="@+id/pdf_view_sign"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center" />
+
+    <org.oasystem.mvp.view.customView.NoAnimationViewPager
+        android:id="@+id/signature_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center" />
+</merge>

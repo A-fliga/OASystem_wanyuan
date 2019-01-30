@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <CheckedTextView
+        android:textSize="50px"
+        android:id="@+id/fromDir"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:gravity="center"
+        android:text="个人文件夹"
+        android:textAlignment="center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4px"
+        android:background="@color/color_f0f0f0" />
+
+    <CheckedTextView
+        android:textSize="50px"
+        android:id="@+id/fromGallery"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:gravity="center"
+        android:text="手机相册"
+        android:textAlignment="center" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4px"
+        android:background="@color/color_f0f0f0" />
+
+    <CheckedTextView
+        android:textSize="50px"
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:gravity="center"
+        android:text="取消"
+        android:textAlignment="center" />
+</LinearLayout>

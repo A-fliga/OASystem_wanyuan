@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?><!--公共的toolbar-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/color_ea4b2e"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/toolbar_left_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:padding="5dp"
+            android:textColor="@color/color_ffffff"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_20" />
+
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/toolBar_img_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <RelativeLayout
+
+            android:id="@+id/toolbar_right_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/toolbar_right_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/color_ffffff" />
+        </RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

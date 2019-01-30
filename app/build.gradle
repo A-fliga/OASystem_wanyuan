@@ -1,0 +1,130 @@
+apply plugin: 'com.android.application'
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+def static releaseTime() {
+    return new Date().format("yyyy-MM-dd-HH-mm-ss");
+}
+
+android {
+    dexOptions {
+        jumboMode true
+    }
+    compileSdkVersion 27
+    buildToolsVersion "28.0.2"
+    defaultConfig {
+        applicationId "org.oasystem"
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //X5兼容64位手机
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //打包秘钥
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    //修改打包过后的apk名称
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith(".apk")) {
+                    //这里修改apk文件名
+                    def fileName = "OASystem-${defaultConfig.versionName}-${releaseTime()}.apk"
+//                    def fileName = "Release-Version-${defaultConfig.versionName}-${releaseTime()}.apk"
+                    output.outputFile = new File(outputFile.parent, fileName)
+                }
+            }
+        }
+    }
+    buildTypes {
+
+        debug {
+            //万源
+            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+            //大竹
+//            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
+//            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
+        }
+
+        release {
+            //万源
+//            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+            //大竹
+            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
+//            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
+            signingConfig android.signingConfigs.release
+            minifyEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:27.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:27.0.0'
+    compile 'com.android.support:recyclerview-v7:27.0.0'
+    //rxjava rxandroid
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.1.1'
+    //    rxpermission
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.3@aar'
+    //    rx preferences
+    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
+    //retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+
+    compile files('libs/droidText.0.5.jar')
+    compile 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
+    compile files('libs/tbs_sdk_thirdapp_v3.2.0.1104_43200_sharewithdownload_withfilereader_withoutGame_obfs_20170609_115346.jar')
+    //eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
+//    compile 'com.bm.photoview:library:1.4.1'
+    testCompile 'junit:junit:4.12'
+}

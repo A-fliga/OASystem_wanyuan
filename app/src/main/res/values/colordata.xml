@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string-array name="Color">
+
+        <item>黑(默认)</item>
+        <item>灰</item>
+        <item>红</item>
+        <item>绿</item>
+        <item>蓝</item>
+        <item>黄</item>
+        <item>青</item>
+    </string-array>
+</resources>
