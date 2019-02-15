@@ -19,7 +19,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "28.0.2"
     defaultConfig {
-        applicationId "org.oasystem"
+        applicationId "org.oasystem_dazhu"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 1

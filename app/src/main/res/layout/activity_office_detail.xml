@@ -7,7 +7,7 @@
 
     <include
         layout="@layout/toolbar"/>
-    <org.oasystem.mvp.view.SignView.SignatureView
+    <org.oasystem_dazhu.mvp.view.SignView.SignatureView
         android:id="@+id/pdf_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

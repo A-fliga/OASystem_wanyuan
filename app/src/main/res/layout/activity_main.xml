@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <org.oasystem.mvp.view.customView.NoScrollViewPager
+    <org.oasystem_dazhu.mvp.view.customView.NoScrollViewPager
         android:id="@+id/content_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

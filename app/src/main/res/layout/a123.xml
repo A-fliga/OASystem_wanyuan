@@ -12,7 +12,7 @@
         android:text="121asdasdasdasdasdasd"
         android:layout_height="120dp"
         android:layout_width="120dp"/>
-    <org.oasystem.mvp.view.customView.photoView.DrawPenView
+    <org.oasystem_dazhu.mvp.view.customView.photoView.DrawPenView
         android:id="@+id/newdraw"
         android:layout_height="match_parent"
         android:layout_width="match_parent"/>
