@@ -92,7 +92,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private String type;
     private static String OFFICE_PATH;
     private AlertDialog dialog, addAccessoryDialog;
-    private float width = 10f, tagWidth;
+    private float width = PenWidth.DEFAULT.getWidth(), tagWidth;
     private List<AllUserBean.DataBean> userBeanList;
 
     @Override
@@ -931,7 +931,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void noSigning() {
         isSigning = false;
         eraser = false;
-        width = 10f;
+        width = PenWidth.DEFAULT.getWidth();
         color = Color.BLACK;
         viewDelegate.setToolBarRightImg(R.mipmap.sign);
         viewDelegate.get(R.id.sign_left_ll).setVisibility(View.VISIBLE);

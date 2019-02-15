@@ -3,11 +3,11 @@
 
     <string-array name="Width">
 
-        <item>10(默认)</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
+        <item>细(默认)</item>
+        <item>较细</item>
+        <item>普通</item>
+        <item>较粗</item>
+        <item>粗</item>
+        <item>很粗</item>
     </string-array>
 </resources>
