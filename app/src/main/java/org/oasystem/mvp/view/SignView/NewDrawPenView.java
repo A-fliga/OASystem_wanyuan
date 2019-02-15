@@ -16,6 +16,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.lowagie.text.Document;
 
 import org.greenrobot.eventbus.EventBus;
+import org.oasystem.constants.Constants;
 import org.oasystem.mvp.model.bean.IsEraserMode;
 import org.oasystem.mvp.model.bean.IsSigningBean;
 import org.oasystem.mvp.model.bean.TransformBean;
@@ -227,10 +228,10 @@ public class NewDrawPenView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (createMotionElement(event).tooltype == MotionEvent.TOOL_TYPE_STYLUS) {
+        if (createMotionElement(event).tooltype == MotionEvent.TOOL_TYPE_STYLUS ) {
             return stylusMode(event);
         }
-        if (createMotionElement(event).tooltype == MotionEvent.TOOL_TYPE_ERASER) {
+        if (createMotionElement(event).tooltype == MotionEvent.TOOL_TYPE_ERASER && Constants.ClearEraser) {
             return eraserMode(event);
         } else {
             return isFingerMode(event);
