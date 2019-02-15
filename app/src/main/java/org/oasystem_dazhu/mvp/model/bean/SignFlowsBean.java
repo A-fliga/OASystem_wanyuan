@@ -9,6 +9,15 @@ public class SignFlowsBean {
     private String opName;
     private int userId;
     private int status;
+    private String opTime;
+
+    public String getOpTime() {
+        return opTime;
+    }
+
+    public void setOpTime(String opTime) {
+        this.opTime = opTime;
+    }
 
     public String getName() {
         return name;

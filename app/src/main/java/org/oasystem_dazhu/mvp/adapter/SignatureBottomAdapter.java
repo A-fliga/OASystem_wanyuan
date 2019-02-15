@@ -24,7 +24,7 @@ public class SignatureBottomAdapter extends RecyclerView.Adapter<SignatureBottom
     private Boolean done;
     private int userId;
     private int index = 0;
-    private Boolean isFirstAceept = true;
+    private Boolean isFirstAccept = true;
 
     public SignatureBottomAdapter(Context context, List<SignFlowsBean> beanList, Boolean done) {
         this.context = context;
@@ -72,10 +72,10 @@ public class SignatureBottomAdapter extends RecyclerView.Adapter<SignatureBottom
                     holder.sign_line_img.setImageResource(R.mipmap.sign_line);
                 } else {
                     if (bean.getStatus() == 0) {
-                        if (isFirstAceept) {
+                        if (isFirstAccept) {
                             holder.sign_status_img.setImageResource(R.mipmap.is_signing);
                             holder.sign_flows.setText("等待审批");
-                            isFirstAceept = false;
+                            isFirstAccept = false;
                         }
                     }
                 }

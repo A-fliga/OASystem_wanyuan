@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -81,8 +80,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private ImageView save_img, pen_img, clear_img, yinzhang_img, biaozhu_img;
-    private List<ImageView> imageViewList = new ArrayList<>();
+    private LinearLayout save_ll, pen_ll, clear_ll, yinzhang_ll, biaozhu_ll;
+    private List<LinearLayout> linearList = new ArrayList<>();
     private List<String> contentTv;
     private TbsReaderView sign_fileView;
     private SignatureView mSignatureView;
@@ -187,7 +186,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 //    public void isEraserMode(IsEraserMode bean) {
 //        if (bean.eraserMode) {
 //            eraser = true;
-//            setSelectedSates(viewDelegate.get(R.id.clear_img));
+//            setSelectedSates(viewDelegate.get(R.id.clear_ll));
 //            mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
 //        } else {
 //
@@ -394,16 +393,16 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void initView(final Boolean done) {
         sign_right_ll = viewDelegate.get(R.id.sign_right_ll);
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
-        save_img = viewDelegate.get(R.id.save_img);
-        pen_img = viewDelegate.get(R.id.pen_img);
-        clear_img = viewDelegate.get(R.id.clear_img);
-        yinzhang_img = viewDelegate.get(R.id.yinzhang_img);
-        biaozhu_img = viewDelegate.get(R.id.biaozhu_img);
-        imageViewList.add(save_img);
-        imageViewList.add(pen_img);
-        imageViewList.add(clear_img);
-        imageViewList.add(yinzhang_img);
-        imageViewList.add(biaozhu_img);
+        save_ll = viewDelegate.get(R.id.save_img);
+        pen_ll = viewDelegate.get(R.id.pen_img);
+        clear_ll = viewDelegate.get(R.id.clear_img);
+        yinzhang_ll = viewDelegate.get(R.id.yinzhang_img);
+        biaozhu_ll = viewDelegate.get(R.id.biaozhu_img);
+        linearList.add(save_ll);
+        linearList.add(pen_ll);
+        linearList.add(clear_ll);
+        linearList.add(yinzhang_ll);
+        linearList.add(biaozhu_ll);
         recyclerView = viewDelegate.get(R.id.sign_right_list);
         //需要代码创建view才可以显示多次
         createSignView();
@@ -537,12 +536,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 //                        setSelectedSates(view);
 //                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
 //                    } else {
-//                        setSelectedSates(viewDelegate.get(R.id.pen_img));
+//                        setSelectedSates(viewDelegate.get(R.id.pen_ll));
 //                        mSignatureView.setPenColor(color);
 //                        mSignatureView.setPenWidth(width);
 //                    }
                     opType = 4;
-                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除吗？", "确定", "取消", dOnClickListener);
+                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除签字吗？", "确定", "取消", dOnClickListener);
                     break;
                 //选择印章
                 case R.id.yinzhang_img:
@@ -937,8 +936,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         viewDelegate.get(R.id.sign_left_ll).setVisibility(View.VISIBLE);
         sign_full_fl.setVisibility(View.GONE);
         sign_right_ll.setVisibility(View.VISIBLE);
-        for (int j = 0; j < imageViewList.size(); j++) {
-            imageViewList.get(j).setSelected(false);
+        for (int j = 0; j < linearList.size(); j++) {
+            linearList.get(j).setSelected(false);
         }
 //        mSignatureView.resetZoomWithAnimation();
     }
@@ -999,10 +998,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
 
     private void setSelectedSates(View view) {
-        for (int i = 0; i < imageViewList.size(); i++) {
-            if (imageViewList.get(i).getId() != view.getId()) {
-                imageViewList.get(i).setSelected(false);
-            } else imageViewList.get(i).setSelected(true);
+        for (int i = 0; i < linearList.size(); i++) {
+            if (linearList.get(i).getId() != view.getId()) {
+                linearList.get(i).setSelected(false);
+            } else linearList.get(i).setSelected(true);
         }
         if (view.getId() != R.id.clear_img) {
             if (eraser) {
