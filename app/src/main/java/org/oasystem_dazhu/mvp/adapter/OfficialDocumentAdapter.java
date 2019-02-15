@@ -28,13 +28,11 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
     private List<DocumentBean.DataBean> beanList;
     private OnItemClickListener itemClickListener;
     private int urgent; //加急的标志
-    private int type;
 
-    public OfficialDocumentAdapter(Boolean done, Context context, List<DocumentBean.DataBean> beanList, int type) {
+    public OfficialDocumentAdapter(Boolean done, Context context, List<DocumentBean.DataBean> beanList) {
         this.done = done;
         this.context = context;
         this.beanList = beanList;
-        this.type = type;
     }
 
     public void setBeanList(List<DocumentBean.DataBean> waitBeanList) {
@@ -62,7 +60,7 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
         setText(holder.official_step, "流程步骤：" + bean.getName(), urgent);
         setText(holder.official_time, "发起日期：" + bean.getDispatch().getCreated_at(), urgent);
         setText(holder.official_last_time, "最后操作：" + bean.getDispatch().getUpdated_at(), urgent);
-        setIcon(holder.official_left_img, type);
+        setIcon(holder.official_left_img,bean.getDispatch().getForm_type());
 
     }
 

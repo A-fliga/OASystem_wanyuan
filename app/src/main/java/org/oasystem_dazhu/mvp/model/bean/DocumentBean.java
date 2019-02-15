@@ -868,6 +868,15 @@ public class DocumentBean implements Serializable {
             private List<AccessoryListBean> accessory_list;
             private List<FlowsBean> flows;
             private int urgent;
+            private int form_type;
+
+            public int getForm_type() {
+                return form_type;
+            }
+
+            public void setForm_type(int form_type) {
+                this.form_type = form_type;
+            }
 
             public int getUrgent() {
                 return urgent;

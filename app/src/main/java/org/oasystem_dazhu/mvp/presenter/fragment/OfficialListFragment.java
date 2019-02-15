@@ -97,7 +97,7 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
                 if (bean.getCode() == 0) {
                     doneBeanList = new ArrayList<>();
                     doneBeanList.addAll(SortUtl.sort(bean.getData().getData()));
-                    doneAdapter = new OfficialDocumentAdapter(true, getActivity(), doneBeanList,typeId);
+                    doneAdapter = new OfficialDocumentAdapter(true, getActivity(), doneBeanList);
                     viewDelegate.setRecycler(recyclerView, doneAdapter, true);
                     doneAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
@@ -124,7 +124,7 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
                 if (bean.getCode() == 0) {
                     notDoneBeanList = new ArrayList<>();
                     notDoneBeanList.addAll(SortUtl.sort(bean.getData().getData()));
-                    notDoneAdapter = new OfficialDocumentAdapter(false, getActivity(), notDoneBeanList,typeId);
+                    notDoneAdapter = new OfficialDocumentAdapter(false, getActivity(), notDoneBeanList);
                     viewDelegate.setRecycler(recyclerView, notDoneAdapter, true);
                     notDoneAdapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override

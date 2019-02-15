@@ -90,7 +90,7 @@ public class OfficialFragment extends FragmentPresenter {
                         }
                     }
                     RecyclerView recyclerView = viewDelegate.get(R.id.home_recyclerView);
-                    adapter = new OfficialDocumentAdapter(false, getActivity(), SortUtl.sort(newBeanList),1);
+                    adapter = new OfficialDocumentAdapter(false, getActivity(), SortUtl.sort(newBeanList));
                     viewDelegate.setRecycler(recyclerView, adapter, true);
                     adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
