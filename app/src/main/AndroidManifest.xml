@@ -46,7 +46,6 @@
         <activity
             android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficeDetailActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficialDocumentActivity" />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficialDocumentDetailActivity" />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.PreViewSignActivity" />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.ScreenActivity" />

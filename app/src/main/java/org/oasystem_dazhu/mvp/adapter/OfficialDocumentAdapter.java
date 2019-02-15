@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
@@ -26,15 +27,17 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
     private Context context;
     private List<DocumentBean.DataBean> beanList;
     private OnItemClickListener itemClickListener;
-    private int urgent;
+    private int urgent; //加急的标志
+    private int type;
 
-    public OfficialDocumentAdapter(Boolean done, Context context, List<DocumentBean.DataBean> beanList) {
+    public OfficialDocumentAdapter(Boolean done, Context context, List<DocumentBean.DataBean> beanList, int type) {
         this.done = done;
         this.context = context;
         this.beanList = beanList;
+        this.type = type;
     }
 
-    public void setBeanList(List<DocumentBean.DataBean> waitBeanList){
+    public void setBeanList(List<DocumentBean.DataBean> waitBeanList) {
         this.beanList = waitBeanList;
     }
 
@@ -55,10 +58,35 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
         });
         DocumentBean.DataBean bean = beanList.get(position);
         urgent = bean.getDispatch().getUrgent();
-        Glide.with(context).load(R.mipmap.pingjilaiwen).into(holder.official_left_img);
         setText(holder.official_title, bean.getDispatch().getName(), urgent);
-        setText(holder.official_step, "流程步骤："+bean.getName(), urgent);
+        setText(holder.official_step, "流程步骤：" + bean.getName(), urgent);
         setText(holder.official_time, "发起日期：" + bean.getDispatch().getCreated_at(), urgent);
+        setText(holder.official_last_time, "最后操作：" + bean.getDispatch().getUpdated_at(), urgent);
+        setIcon(holder.official_left_img, type);
+
+    }
+
+    private void setIcon(ImageView official_left_img, int type) {
+        switch (type) {
+            case 1:
+                Glide.with(context).load(R.mipmap.shangjilaiwen).into(official_left_img);
+                break;
+            case 2:
+                Glide.with(context).load(R.mipmap.pingjilaiwen).into(official_left_img);
+                break;
+            case 3:
+                Glide.with(context).load(R.mipmap.xiajilaiwen).into(official_left_img);
+                break;
+            case 4:
+                Glide.with(context).load(R.mipmap.fawenshenpi).into(official_left_img);
+                break;
+            case 5:
+                Glide.with(context).load(R.mipmap.chuanyuewenjian).into(official_left_img);
+                break;
+            case 6:
+                Glide.with(context).load(R.mipmap.neibuwenjian).into(official_left_img);
+                break;
+        }
     }
 
     private void setText(TextView v, String content, int urgent) {
@@ -80,7 +108,7 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
 
     class OfficialDocumentViewHolder extends RecyclerView.ViewHolder {
         public ImageView official_left_img;
-        public TextView official_title, official_office_id, official_company_name, official_step, official_serial, official_user_name, official_time;
+        public TextView official_title, official_office_id, official_company_name, official_step, official_serial, official_user_name, official_time, official_last_time;
 
         public OfficialDocumentViewHolder(View itemView) {
             super(itemView);
@@ -88,6 +116,7 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
             official_step = itemView.findViewById(R.id.official_step);
             official_time = itemView.findViewById(R.id.official_time);
             official_title = itemView.findViewById(R.id.official_title);
+            official_last_time = itemView.findViewById(R.id.official_last_time);
         }
     }
 }

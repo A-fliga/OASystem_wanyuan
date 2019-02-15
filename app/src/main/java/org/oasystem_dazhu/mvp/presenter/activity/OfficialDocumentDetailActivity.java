@@ -78,7 +78,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private DocumentBean.DataBean.DispatchBean dispatchBean;
     private DocumentBean.DataBean dataBean;
     private RecyclerView recyclerView;
-    private ImageView sign_show_more;
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
@@ -125,7 +124,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             accessoryList.add(Integer.parseInt(dispatchBean.getAccessory_list().get(i).getSource_id()));
         }
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.sign_show_more, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img, R.id.biaozhu_img);
+        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img, R.id.biaozhu_img);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -393,7 +392,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
 
     private void initView(final Boolean done) {
-        sign_show_more = viewDelegate.get(R.id.sign_show_more);
         sign_right_ll = viewDelegate.get(R.id.sign_right_ll);
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
         save_img = viewDelegate.get(R.id.save_img);
@@ -518,18 +516,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         } else {
                             ToastUtil.l("当前仅支持pdf文件");
                         }
-                    }
-                    break;
-                //判断展示更多还是收起
-                case R.id.sign_show_more:
-                    if (isShowing) {
-                        isShowing = false;
-                        recyclerView.setVisibility(View.GONE);
-                        sign_show_more.setImageResource(R.mipmap.sign_hide_more);
-                    } else {
-                        isShowing = true;
-                        recyclerView.setVisibility(View.VISIBLE);
-                        sign_show_more.setImageResource(R.mipmap.show_list);
                     }
                     break;
                 //保存签字图片

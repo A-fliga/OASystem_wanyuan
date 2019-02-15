@@ -69,12 +69,6 @@ public class OfficialFragment extends FragmentPresenter {
                 R.id.official_from_same, R.id.to_screen, R.id.official_dispatch, R.id.official_from_lower,
                 R.id.official_hand_round, R.id.to_sort,R.id.refresh);
 
-        viewDelegate.get(R.id.search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startMyActivity(TestActivity.class,null);
-            }
-        });
     }
 
     private void getNotDoneList(ScreenBean screenBean) {
@@ -96,7 +90,7 @@ public class OfficialFragment extends FragmentPresenter {
                         }
                     }
                     RecyclerView recyclerView = viewDelegate.get(R.id.home_recyclerView);
-                    adapter = new OfficialDocumentAdapter(false, getActivity(), SortUtl.sort(newBeanList));
+                    adapter = new OfficialDocumentAdapter(false, getActivity(), SortUtl.sort(newBeanList),1);
                     viewDelegate.setRecycler(recyclerView, adapter, true);
                     adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
