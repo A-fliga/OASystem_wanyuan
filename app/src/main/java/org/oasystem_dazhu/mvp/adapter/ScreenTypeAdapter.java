@@ -7,11 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by www on 2019/1/8.
@@ -22,10 +25,12 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
     private List<String> beanList;
     private Context context;
     private List<TextView> tv_view = new ArrayList<>();
+    private List<Map<Integer, Boolean>> selectedList;
 
-    public ScreenTypeAdapter(List<String> beanList, Context context) {
+    public ScreenTypeAdapter(List<String> beanList, List<Map<Integer, Boolean>> selectedList, Context context) {
         this.beanList = beanList;
         this.context = context;
+        this.selectedList = selectedList;
     }
 
     @Override
@@ -39,22 +44,27 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
         holder.item_type_tv.setText(beanList.get(position));
         setItemClick(holder, position);
     }
+    public List<Map<Integer, Boolean>> getList(){
+        return selectedList;
+    }
 
     private void setItemClick(ScreenTypeViewHolder holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (itemClickListener != null) {
-                    for (int i = 0; i < tv_view.size(); i++) {
-                        if (i == position) {
-                            TextView tv = tv_view.get(i);
-                            tv.setBackgroundResource(R.drawable.et_selected);
-                            tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
-                        } else {
-                            TextView tv = tv_view.get(i);
-                            tv.setBackgroundResource(R.drawable.et);
-                            tv.setTextColor(context.getResources().getColor(R.color.color_010101));
-                        }
+                    Boolean b = selectedList.get(position).get(position + 1);
+                    Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+                    map.put(position+1,!b);
+                    selectedList.set(position,map);
+                    if (!b) {
+                        TextView tv = tv_view.get(position);
+                        tv.setBackgroundResource(R.drawable.et_selected);
+                        tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
+                    } else {
+                        TextView tv = tv_view.get(position);
+                        tv.setBackgroundResource(R.drawable.et);
+                        tv.setTextColor(context.getResources().getColor(R.color.color_010101));
                     }
                     itemClickListener.onItemClick(position);
                 }
@@ -67,6 +77,11 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
             TextView tv = tv_view.get(i);
             tv.setBackgroundResource(R.drawable.et);
             tv.setTextColor(context.getResources().getColor(R.color.color_010101));
+        }
+        if (selectedList != null) {
+            for (int i = 0; i < selectedList.size(); i++) {
+                selectedList.get(i).put(i + 1, false);
+            }
         }
     }
 

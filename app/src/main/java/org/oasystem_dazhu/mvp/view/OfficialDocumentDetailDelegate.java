@@ -54,6 +54,7 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
         flowsBean.setOpName("起草");
         flowsBean.setStatus(1);
         flowsBean.setUserId(bean.getDispatch().getUser().getId());
+        flowsBean.setOpTime(bean.getDispatch().getUpdated_at());
         beanList.add(flowsBean);
         for (int i = 0; i < bean.getFlows().size(); i++) {
             DocumentBean.DataBean.DataFlowsBean dataFlowsBean = bean.getFlows().get(i);
@@ -61,6 +62,7 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
             fBean.setName(dataFlowsBean.getUser().getName());
             fBean.setOpName(dataFlowsBean.getName());
             fBean.setUserId(dataFlowsBean.getUser_id());
+            fBean.setOpTime(dataFlowsBean.getUpdated_at());
             beanList.add(fBean);
         }
 //        for (int i = 0; i < bean.getFlows().size(); i++) {

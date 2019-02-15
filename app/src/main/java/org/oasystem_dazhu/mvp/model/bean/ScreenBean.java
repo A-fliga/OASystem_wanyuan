@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class ScreenBean implements Serializable {
     //类型
-    public int type = 0;
+    public String type = "";
     //发文号
     public String serial = "";
     //文件名
@@ -16,7 +16,17 @@ public class ScreenBean implements Serializable {
     //日期
     public String s_date = "";
     public String e_date = "";
+    //来文机关
     public String organ = "";
+    public String number = "";
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getOrgan() {
         return organ;
@@ -26,11 +36,11 @@ public class ScreenBean implements Serializable {
         this.organ = organ;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

@@ -45,7 +45,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
         typeId = getIntent().getExtras().getInt("typeId");
         viewDelegate.initViews(typeId);
         initViewPager();
-        viewDelegate.setOnClickListener(onClickListener, R.id.official_not_done_tab, R.id.official_done_tab, R.id.to_screen, R.id.to_sort,R.id.refresh);
+        viewDelegate.setOnClickListener(onClickListener, R.id.official_not_done_tab, R.id.official_done_tab, R.id.to_screen, R.id.to_sort, R.id.refresh);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -124,7 +124,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
         if (requestCode == 1001 && resultCode == 2000) {
             ScreenBean screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
             if (screenBean != null) {
-                screenBean.setType(typeId);
+                screenBean.setType(String.valueOf(typeId));
                 if (doneFragment != null)
                     doneFragment.getDoneDocument(screenBean);
                 if (notDoneFragment != null)

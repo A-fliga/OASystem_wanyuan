@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.mvp.adapter.ScreenTypeAdapter;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
@@ -19,7 +20,9 @@ import org.oasystem_dazhu.utils.DialogUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by www on 2019/1/8.
@@ -30,9 +33,10 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     private ScreenBean screenBean;
     private ScreenTypeAdapter adapter;
     private TextView s_date, e_date;
-    private EditText office_name, office_serial, office_organ;
+    private EditText office_name, office_serial, office_organ, office_number;
     private int opType = 0;
     private DatePicker datePicker;
+    private List<Map<Integer, Boolean>> selectedType;
 
     @Override
     public Class<ScreenDelegate> getDelegateClass() {
@@ -66,6 +70,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
         office_name = viewDelegate.get(R.id.office_name);
         office_serial = viewDelegate.get(R.id.office_serial);
         office_organ = viewDelegate.get(R.id.office_organ);
+        office_number = viewDelegate.get(R.id.office_number);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -97,9 +102,22 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     };
 
     private void returnToOrg() {
+        if (selectedType != null) {
+            List<Map<Integer, Boolean>> list = adapter.getList();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).get(i + 1)) {
+                    sb.append((i + 1) + ",");
+                }
+            }
+            if (sb.length() >= 1)
+                screenBean.setType(sb.substring(0, sb.length() - 1));
+            else screenBean.setType("");
+        }
         screenBean.setSerial(office_serial.getText().toString().replaceAll(" ", ""));
         screenBean.setName(office_name.getText().toString().replaceAll(" ", ""));
         screenBean.setOrgan(office_organ.getText().toString().replaceAll(" ", ""));
+        screenBean.setNumber(office_number.getText().toString().replaceAll(" ", ""));
         ScreenBean newBean = new ScreenBean();
         if (screenBean.equals(newBean)) {
             finish();
@@ -170,7 +188,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     }
 
     private void reset() {
-        screenBean.setType(0);
+        screenBean.setType("");
         screenBean.setE_date("");
         screenBean.setName("");
         screenBean.setSerial("");
@@ -194,13 +212,19 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
         beanList.add("发文审批");
         beanList.add("传阅文件");
         beanList.add("内部文件");
+        selectedType = new ArrayList<>();
+        for (int i = 0; i < beanList.size(); i++) {
+            Map<Integer, Boolean> map = new HashMap<>();
+            map.put(i + 1, false);
+            selectedType.add(map);
+        }
         RecyclerView recyclerView = viewDelegate.get(R.id.screen_recyclerView);
-        adapter = new ScreenTypeAdapter(beanList, this);
+        adapter = new ScreenTypeAdapter(beanList, selectedType, this);
         viewDelegate.setRecycler(recyclerView, adapter, 4, false);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                screenBean.setType(position + 1);
+
             }
         });
     }

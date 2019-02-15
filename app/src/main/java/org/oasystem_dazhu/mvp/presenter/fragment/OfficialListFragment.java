@@ -88,7 +88,7 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
     }
 
     public void getDoneDocument(ScreenBean screenBean) {
-        screenBean.setType(typeId);
+        screenBean.setType(String.valueOf(typeId));
         final RecyclerView recyclerView = viewDelegate.get(R.id.official_document_recycler);
         PublicModel.getInstance().getDoneDocument(new MSubscribe<BaseEntity<DocumentBean>>() {
             @Override
@@ -115,7 +115,7 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
     }
 
     public void getNotDoneDocument(ScreenBean screenBean) {
-        screenBean.setType(typeId);
+        screenBean.setType(String.valueOf(typeId));
         final RecyclerView recyclerView = viewDelegate.get(R.id.official_document_recycler);
         PublicModel.getInstance().getNotDoneDocument(new MSubscribe<BaseEntity<DocumentBean>>() {
             @Override

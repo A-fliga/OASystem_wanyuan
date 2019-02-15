@@ -48,6 +48,7 @@ public class SignatureBottomAdapter extends RecyclerView.Adapter<SignatureBottom
     @Override
     public void onBindViewHolder(SignatureBottomViewHolder holder, int position) {
         SignFlowsBean bean = beanList.get(position);
+        holder.sign_update_time.setText(bean.getOpTime());
         if (position == 0) {
             holder.sign_name.setText("起草人:" + bean.getName());
             holder.sign_status_img.setImageResource(R.mipmap.already_sign);
@@ -96,7 +97,7 @@ public class SignatureBottomAdapter extends RecyclerView.Adapter<SignatureBottom
     }
 
     class SignatureBottomViewHolder extends RecyclerView.ViewHolder {
-        private TextView sign_name, sign_flows;
+        private TextView sign_name, sign_flows,sign_update_time;
         private ImageView sign_status_img, sign_line_img;
 
         public SignatureBottomViewHolder(View itemView) {
@@ -105,6 +106,7 @@ public class SignatureBottomAdapter extends RecyclerView.Adapter<SignatureBottom
             sign_flows = itemView.findViewById(R.id.sign_flows);
             sign_status_img = itemView.findViewById(R.id.sign_status_img);
             sign_line_img = itemView.findViewById(R.id.sign_line_img);
+            sign_update_time = itemView.findViewById(R.id.sign_update_time);
         }
     }
 }
