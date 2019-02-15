@@ -96,27 +96,6 @@ public class NewDrawPenView extends View {
         isEraserMode = false;
         initPaint();
     }
-//    class PdfBackground extends PdfPageEventHelper{
-//        @Override
-//        public void onEndPage(PdfWriter writer, Document document) {
-//            PdfContentByte canvas = writer.getDirectContentUnder();
-//            Rectangle rect = document.getPageSize();
-//            canvas.setColorFill(harmony.java.awt.Color.WHITE);
-//            canvas.rectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight());
-//            canvas.fill();
-//
-//            //设置pdf页面内间距
-//            PdfContentByte canvasBorder = writer.getDirectContent();
-//            Rectangle rectBorder = document.getPageSize();
-//            rectBorder.setBorder(Rectangle.BOX);
-////            rectBorder.setBorderWidth(BORDER_WIDTH);
-////            rectBorder.setBorderWidth(width);
-////            rectBorder.setBorderColor(BaseColor.WHITE);
-//            rectBorder.setUseVariableBorders(true);
-//            canvasBorder.rectangle(rectBorder);
-//
-//        }
-//    }
 
     public void setPenColor(int color) {
         this.penColor = color;

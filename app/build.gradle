@@ -59,7 +59,7 @@ android {
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".apk")) {
                     //这里修改apk文件名
-                    def fileName = "OASystem-${defaultConfig.versionName}-${releaseTime()}.apk"
+                    def fileName = "dazhu-${defaultConfig.versionName}-${releaseTime()}.apk"
 //                    def fileName = "Release-Version-${defaultConfig.versionName}-${releaseTime()}.apk"
                     output.outputFile = new File(outputFile.parent, fileName)
                 }
