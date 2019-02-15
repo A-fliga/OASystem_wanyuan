@@ -594,7 +594,7 @@ public class DocumentBean implements Serializable {
 
             private int id;
             private String name;
-            private int phone;
+            private String phone;
             private String headimg;
             private int department_id;
             private int position_id;
@@ -617,11 +617,11 @@ public class DocumentBean implements Serializable {
                 this.name = name;
             }
 
-            public int getPhone() {
+            public String getPhone() {
                 return phone;
             }
 
-            public void setPhone(int phone) {
+            public void setPhone(String phone) {
                 this.phone = phone;
             }
 
@@ -1065,7 +1065,7 @@ public class DocumentBean implements Serializable {
 
                 private int id;
                 private String name;
-                private long phone;
+                private String phone;
                 private String headimg;
                 private int department_id;
                 private int position_id;
@@ -1086,11 +1086,11 @@ public class DocumentBean implements Serializable {
                     this.name = name;
                 }
 
-                public long getPhone() {
+                public String getPhone() {
                     return phone;
                 }
 
-                public void setPhone(long phone) {
+                public void setPhone(String phone) {
                     this.phone = phone;
                 }
 
@@ -1143,7 +1143,7 @@ public class DocumentBean implements Serializable {
                 private int id;
                 private String name;
                 private String account;
-                private long phone;
+                private String phone;
                 private String mail;
                 private int status;
                 private String headimg;
@@ -1182,11 +1182,11 @@ public class DocumentBean implements Serializable {
                     this.account = account;
                 }
 
-                public long getPhone() {
+                public String getPhone() {
                     return phone;
                 }
 
-                public void setPhone(long phone) {
+                public void setPhone(String phone) {
                     this.phone = phone;
                 }
 

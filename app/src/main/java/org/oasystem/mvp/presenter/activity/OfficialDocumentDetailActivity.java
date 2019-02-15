@@ -187,17 +187,17 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         }
     }
 
-    //是否是橡皮擦状态
-    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
-    public void isEraserMode(IsEraserMode bean) {
-        if (bean.eraserMode) {
-            eraser = true;
-            setSelectedSates(viewDelegate.get(R.id.clear_img));
-            mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
-        } else {
-
-        }
-    }
+//    //是否是橡皮擦状态
+//    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+//    public void isEraserMode(IsEraserMode bean) {
+//        if (bean.eraserMode) {
+//            eraser = true;
+//            setSelectedSates(viewDelegate.get(R.id.clear_img));
+//            mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
+//        } else {
+//
+//        }
+//    }
 
     private void showFile(int id, String type) {
         File fileDir = new File(OFFICE_PATH);
@@ -550,17 +550,17 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     break;
                 //橡皮擦
                 case R.id.clear_img:
-                    eraser = !eraser;
-                    if (eraser) {
-                        setSelectedSates(view);
-                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
-                    } else {
-                        setSelectedSates(viewDelegate.get(R.id.pen_img));
-                        mSignatureView.setPenColor(color);
-                        mSignatureView.setPenWidth(width);
-                    }
-//                    opType = 2;
-//                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除吗？", "确定", "取消", dOnClickListener);
+//                    eraser = !eraser;
+//                    if (eraser) {
+//                        setSelectedSates(view);
+//                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
+//                    } else {
+//                        setSelectedSates(viewDelegate.get(R.id.pen_img));
+//                        mSignatureView.setPenColor(color);
+//                        mSignatureView.setPenWidth(width);
+//                    }
+                    opType = 4;
+                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除吗？", "确定", "取消", dOnClickListener);
                     break;
                 //选择印章
                 case R.id.yinzhang_img:
@@ -622,7 +622,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         isSigning = true;
         isSigning();
         mSignatureView.setCanSigning(true);
-        mSignatureView.resetZoomWithAnimation();
+//        mSignatureView.resetZoomWithAnimation();
     }
 
     private void isSigning() {
@@ -919,13 +919,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 }
                 if (opType == 2) {
                     finish();
-//                    accessoryList.clear();
-//                    accessoryList.addAll(tagAccessoryList);
                 }
                 if (opType == 3) {
                     clearCanvas(null);
-//                    accessoryList.clear();
-//                    accessoryList.addAll(tagAccessoryList);
+                    noSigning();
+                }
+                if(opType == 4){
+                    clearCanvas(null);
                     noSigning();
                 }
             }
@@ -965,15 +965,15 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         if (path != null)
             mSignatureView.clearCanvas(new File(path));
         else {
-            mSignatureView.clearCanvas(null);
-//            mSignatureView.setNewPath("");
-//            mSignatureView.clearCanvas(new File(getPath(id, type)));
+//            mSignatureView.clearCanvas(null);
+            mSignatureView.setNewPath("");
+            mSignatureView.clearCanvas(new File(getPath(id, type)));
         }
     }
 
     private void saveImg(final Boolean needUpLoad) {
         if (mSignatureView != null) {
-//            LogUtil.d("pianyi", "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
+            LogUtil.d("pianyi", "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
             mSignatureView.addSignature2Pdf(TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()
                     , false, new SignatureView.DataFinishListener() {
                         @Override
