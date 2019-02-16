@@ -24,6 +24,9 @@ public final class Constants {
 //    public static int SIGN_BITMAP_WIDTH = 0,SIGN_BITMAP_HEIGHT = 0;
     public static final String SIGN_RESULT = Environment.getExternalStorageDirectory().toString() +
             File.separator + "OASystem_dazhu" + File.separator+"SignResult";
+
+    public static final String DOWNLOAD_UPDATE = Environment.getExternalStorageDirectory().toString() +
+            File.separator + "OASystem_dazhu" + File.separator+"Apk";
     //极光别名，不可修改
     public static final String JPUSH_NAME = "USER_ID";
 

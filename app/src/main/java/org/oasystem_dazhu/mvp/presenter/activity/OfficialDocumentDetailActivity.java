@@ -119,8 +119,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         itemId = dataBean.getId();
         accessoryList = new ArrayList<>();
         accessoryList.add(dispatchBean.getForm_source_id());
-        for (int i = 0; i < dispatchBean.getAccessory_list().size(); i++) {
-            accessoryList.add(Integer.parseInt(dispatchBean.getAccessory_list().get(i).getSource_id()));
+        if (dispatchBean.getAccessory_list() != null) {
+            for (int i = 0; i < dispatchBean.getAccessory_list().size(); i++) {
+                accessoryList.add(Integer.parseInt(dispatchBean.getAccessory_list().get(i).getSource_id()));
+            }
         }
         initView(done);
         viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img, R.id.biaozhu_img);
@@ -439,8 +441,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         viewDelegate.setOnClickListener(onClickListener, R.id.sign_add_advise, R.id.sign_add_person, R.id.sign_agree, R.id.sign_refuse, R.id.sign_close);
         contentTv = new ArrayList<>();
         contentTv.add("审批单");
-        for (int i = 0; i < dispatchBean.getAccessory_list().size(); i++) {
-            contentTv.add("附件" + (i + 1));
+        if (dispatchBean.getAccessory_list() != null) {
+            for (int i = 0; i < dispatchBean.getAccessory_list().size(); i++) {
+                contentTv.add("附件" + (i + 1));
+            }
         }
         SignOfficialAdapter adapter = new SignOfficialAdapter(contentTv, this);
         viewDelegate.setRecycler(recyclerView, adapter, true);

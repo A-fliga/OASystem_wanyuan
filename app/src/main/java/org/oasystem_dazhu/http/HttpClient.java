@@ -335,4 +335,15 @@ public final class HttpClient {
         Observable observable = mApi.getType(addToken());
         toSubscribe(observable, subscriber);
     }
+    /**
+     * 文件监控
+     */
+    public void getMonitorList(Subscriber<BaseEntity<DocumentBean>> subscriber, ScreenBean bean) {
+        String data = new Gson().toJson(bean);
+        HashMap<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("param", data);
+
+        Observable observable = mApi.getMonitorList(addToken(),getMapRequestBody(bodyMap));
+        toSubscribe(observable, subscriber);
+    }
 }

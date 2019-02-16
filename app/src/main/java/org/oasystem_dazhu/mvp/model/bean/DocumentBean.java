@@ -859,6 +859,7 @@ public class DocumentBean implements Serializable {
             private String accessory_source_id;
             private int flow_type;
             private int status;
+            private String status_name;
             private String created_at;
             private String updated_at;
             private String approver;
@@ -870,6 +871,13 @@ public class DocumentBean implements Serializable {
             private int urgent;
             private int form_type;
 
+            public String getStatus_name() {
+                return status_name;
+            }
+
+            public void setStatus_name(String status_name) {
+                this.status_name = status_name;
+            }
             public int getForm_type() {
                 return form_type;
             }

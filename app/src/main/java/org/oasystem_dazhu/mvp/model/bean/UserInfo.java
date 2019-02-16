@@ -49,6 +49,94 @@ public class UserInfo {
     private CompanyBean company;
     private List<OfficeSealTpyeBean> office_seal_tpye;
     private List<OfficeSealBean> office_seal;
+    private SysAppBean sys_app;
+
+
+    public static class SysAppBean {
+
+        /**
+         * app_v : 1.0.0
+         * app_label : 说明1
+         * app_path :
+         * app_type : 1
+         * id : 0
+         * created_at : 2019-02-16 21:04:00
+         * updated_at : 2019-02-16 21:04:02
+         */
+
+        private String app_v;
+        private String app_label;
+        private String app_path;
+        private int app_type;
+        private int id;
+        private String created_at;
+        private String updated_at;
+
+        public String getApp_v() {
+            return app_v;
+        }
+
+        public void setApp_v(String app_v) {
+            this.app_v = app_v;
+        }
+
+        public String getApp_label() {
+            return app_label;
+        }
+
+        public void setApp_label(String app_label) {
+            this.app_label = app_label;
+        }
+
+        public String getApp_path() {
+            return app_path;
+        }
+
+        public void setApp_path(String app_path) {
+            this.app_path = app_path;
+        }
+
+        public int getApp_type() {
+            return app_type;
+        }
+
+        public void setApp_type(int app_type) {
+            this.app_type = app_type;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
+        }
+
+        public String getUpdated_at() {
+            return updated_at;
+        }
+
+        public void setUpdated_at(String updated_at) {
+            this.updated_at = updated_at;
+        }
+    }
+
+
+    public SysAppBean getSys_app() {
+        return sys_app;
+    }
+
+    public void setSys_app(SysAppBean sys_app) {
+        this.sys_app = sys_app;
+    }
 
     public List<OfficeSealBean> getOffice_seal() {
         return office_seal;

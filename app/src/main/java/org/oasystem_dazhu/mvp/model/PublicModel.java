@@ -143,4 +143,11 @@ public class PublicModel implements IModel {
     public void getType(Subscriber<BaseEntity<HomeTypeBean>> subscriber) {
         HttpClient.getInstance().getType(subscriber);
     }
+
+    /**
+     * 文件监控
+     */
+    public void getMonitorList(Subscriber<BaseEntity<DocumentBean>> subscriber, ScreenBean bean) {
+        HttpClient.getInstance().getMonitorList(subscriber,bean);
+    }
 }

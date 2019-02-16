@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
@@ -28,7 +27,7 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
     private Context context;
     private List<DocumentBean.DataBean> beanList;
     private OnItemClickListener itemClickListener;
-    private int urgent; //加急的标志
+    private int urgent = 0; //加急的标志
 
     public OfficialDocumentAdapter(Boolean done, Context context, List<DocumentBean.DataBean> beanList) {
         this.done = done;
@@ -56,7 +55,8 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
             }
         });
         DocumentBean.DataBean bean = beanList.get(position);
-        urgent = bean.getDispatch().getUrgent();
+        if (bean.getDispatch() != null)
+            urgent = bean.getDispatch().getUrgent();
         setText(holder.official_title, bean.getDispatch().getName(), urgent);
         setText(holder.official_step, "流程步骤：" + bean.getName(), urgent);
         setText(holder.official_time, "发起日期：" + bean.getDispatch().getCreated_at(), urgent);

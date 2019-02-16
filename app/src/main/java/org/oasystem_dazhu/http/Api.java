@@ -153,4 +153,11 @@ public interface Api {
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/office_form_type")
     Observable<BaseEntity<HomeTypeBean>> getType(@Header("Authorization") String token);
+
+    /**
+     * 文件监控
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("dispatch/monitoring")
+    Observable<BaseEntity<DocumentBean>> getMonitorList(@Header("Authorization") String token,@Body RequestBody body);
 }

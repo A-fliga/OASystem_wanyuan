@@ -2,7 +2,10 @@ package org.oasystem_dazhu.mvp.presenter.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import org.oasystem_dazhu.R;
+import org.oasystem_dazhu.constants.Constants;
 import org.oasystem_dazhu.http.MSubscribe;
 import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.manager.UserManager;
@@ -30,9 +34,23 @@ import org.oasystem_dazhu.mvp.presenter.fragment.OfficialFragment;
 import org.oasystem_dazhu.mvp.presenter.fragment.UserCenterFragment;
 import org.oasystem_dazhu.mvp.view.MainDelegate;
 import org.oasystem_dazhu.mvp.view.customView.NoScrollViewPager;
+import org.oasystem_dazhu.utils.AppUtil;
+import org.oasystem_dazhu.utils.DialogUtil;
+import org.oasystem_dazhu.utils.FileUtil;
+import org.oasystem_dazhu.utils.NetUtil;
+import org.oasystem_dazhu.utils.PackageUtils;
 import org.oasystem_dazhu.utils.ToastUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,20 +62,131 @@ public class MainActivity extends ActivityPresenter {
     private Boolean canFinish = false;//按两次退出APP的标志
     private TimerTask task;
     private Timer timer = new Timer();
+    private static UpdateAsync async;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getUserInfo();
-        getFirmingType();
         checkLocationPermission();
     }
+
+    private void checkUpdate() {
+        if (Float.parseFloat(AppUtil.getVersionName()) < Float.parseFloat(UserManager.getInstance().getUserInfo().getSys_app().getApp_v())) {
+            //开始下载更新并安装
+            async = new UpdateAsync(new WeakReference<MainActivity>(this));
+            async.execute(UserManager.getInstance().getUserInfo().getSys_app().getApp_path());
+        }
+    }
+
+    public static class UpdateAsync extends AsyncTask<String, Integer, String> {
+        private Context context;
+        ProgressDialog pd;
+
+        public UpdateAsync(WeakReference<MainActivity> weakReference) {
+            context = weakReference.get();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return downLoadApk(strings[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = DialogUtil.showProgressDialog(context);
+            pd.show();
+        }
+
+        public void setMax(final int max) {
+            ActivityPresenter.getTopActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pd.setMax(max);
+                }
+            });
+        }
+
+        public void upDateProgress(final int progress) {
+            ActivityPresenter.getTopActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pd.setProgress(progress);
+                }
+            });
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pd.dismiss();
+            if (s.equals("")) {
+                ToastUtil.l("更新出现错误");
+            } else {
+                PackageUtils.install(context, s);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+        }
+    }
+
+
+    public static String downLoadApk(String appUtl) {
+        String apkPath;
+        if (NetUtil.isConnectNoToast()) {
+            String apkDirPath = Constants.DOWNLOAD_UPDATE;
+            File apkDir = new File(apkDirPath);
+            if (apkDir.exists()) {
+                FileUtil.deleteFile(apkDir);
+                apkDir.mkdirs();
+            } else apkDir.mkdirs();
+            try {
+                URL url = new URL(appUtl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() == 200) {
+                    apkPath = apkDirPath + File.separator + System.currentTimeMillis() + ".apk";
+                    File apkFile = new File(apkPath);
+                    if (!apkFile.exists()) {
+                        apkFile.createNewFile();
+                    }
+                    InputStream is = url.openStream();
+                    OutputStream os = new FileOutputStream(apkPath);
+                    async.setMax(conn.getContentLength());
+                    byte[] fileByte = new byte[4096];
+                    int len;
+                    int per = 0;
+                    while ((len = is.read(fileByte)) != -1) {
+                        os.write(fileByte, 0, len);
+                        per += len;
+                        async.upDateProgress(per);
+                    }
+                    is.close();
+                    os.close();
+                } else return "";
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return "";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "";
+            }
+            return apkPath;
+        } else return "";
+    }
+
     private void getFirmingType() {
         PublicModel.getInstance().getType(new MSubscribe<BaseEntity<HomeTypeBean>>() {
             @Override
             public void onNext(BaseEntity<HomeTypeBean> bean) {
                 super.onNext(bean);
                 FirmingTypeManager.getInstance().addBeanList(bean.getData().getData());
+                initTabView();
+                checkUpdate();
             }
         });
     }
@@ -88,7 +217,7 @@ public class MainActivity extends ActivityPresenter {
                 super.onNext(bean);
                 if (bean.getCode() == 0) {
                     UserManager.getInstance().setUserInfo(bean.getData());
-                    initTabView();
+                    getFirmingType();
                 }
             }
         });
@@ -219,6 +348,9 @@ public class MainActivity extends ActivityPresenter {
         super.onDestroy();
         if (task != null) {
             task.cancel();
+        }
+        if (async != null) {
+            async.cancel(true);
         }
     }
 }

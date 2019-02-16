@@ -19,6 +19,7 @@ import org.oasystem_dazhu.mvp.model.BaseEntity;
 import org.oasystem_dazhu.mvp.model.PublicModel;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
 import org.oasystem_dazhu.mvp.model.bean.ScreenBean;
+import org.oasystem_dazhu.mvp.presenter.activity.FileMonitorActivity;
 import org.oasystem_dazhu.mvp.presenter.activity.OfficialDocumentDetailActivity;
 import org.oasystem_dazhu.mvp.presenter.activity.OfficialHandleActivity;
 import org.oasystem_dazhu.mvp.presenter.activity.ScreenActivity;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static org.oasystem_dazhu.utils.SortUtl.POSITIVE;
 import static org.oasystem_dazhu.utils.SortUtl.REVERSE;
+
 
 /**
  * Created by www on 2018/12/29.
@@ -77,7 +79,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                     start2Activity(FirmingTypeManager.getInstance().getBeanList().get(position).getId());
                     //有多的代表有文件监控
                 else {
-
+                    startMyActivity(FileMonitorActivity.class,null);
                 }
             }
         });
