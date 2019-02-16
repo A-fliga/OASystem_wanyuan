@@ -11,6 +11,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.http.MSubscribe;
+import org.oasystem_dazhu.manager.FirmingTypeManager;
+import org.oasystem_dazhu.mvp.adapter.HomeTypeAdapter;
 import org.oasystem_dazhu.mvp.adapter.OfficialDocumentAdapter;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_dazhu.mvp.model.BaseEntity;
@@ -20,7 +22,6 @@ import org.oasystem_dazhu.mvp.model.bean.ScreenBean;
 import org.oasystem_dazhu.mvp.presenter.activity.OfficialDocumentDetailActivity;
 import org.oasystem_dazhu.mvp.presenter.activity.OfficialHandleActivity;
 import org.oasystem_dazhu.mvp.presenter.activity.ScreenActivity;
-import org.oasystem_dazhu.mvp.presenter.activity.TestActivity;
 import org.oasystem_dazhu.mvp.view.OfficialDelegate;
 import org.oasystem_dazhu.utils.SortUtl;
 import org.oasystem_dazhu.utils.ToastUtil;
@@ -35,15 +36,11 @@ import static org.oasystem_dazhu.utils.SortUtl.REVERSE;
  * Created by www on 2018/12/29.
  */
 
-public class OfficialFragment extends FragmentPresenter {
+public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     private OfficialDocumentAdapter adapter;
     private List<DocumentBean.DataBean> newBeanList;
     private Boolean isPositive = false;
-
-    @Override
-    public Class getDelegateClass() {
-        return OfficialDelegate.class;
-    }
+    private HomeTypeAdapter typeAdapter;
 
     @Override
     protected void onFragmentVisible() {
@@ -64,12 +61,28 @@ public class OfficialFragment extends FragmentPresenter {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);
+        typeAdapter = viewDelegate.initTypeList();
         getNotDoneList(new ScreenBean());
-        viewDelegate.setOnClickListener(onClickListener, R.id.my_office, R.id.official_from_higher,
-                R.id.official_from_same, R.id.to_screen, R.id.official_dispatch, R.id.official_from_lower,
-                R.id.official_hand_round, R.id.to_sort,R.id.refresh);
-
+        viewDelegate.setOnClickListener(onClickListener,
+                R.id.to_screen, R.id.to_sort, R.id.refresh);
+        setOnItemClickListener();
     }
+
+    private void setOnItemClickListener() {
+        typeAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //这些是固定分类
+                if (position <= FirmingTypeManager.getInstance().getBeanList().size() - 1)
+                    start2Activity(FirmingTypeManager.getInstance().getBeanList().get(position).getId());
+                    //有多的代表有文件监控
+                else {
+
+                }
+            }
+        });
+    }
+
 
     private void getNotDoneList(ScreenBean screenBean) {
         PublicModel.getInstance().getNotDoneDocument(new MSubscribe<BaseEntity<DocumentBean>>() {
@@ -119,30 +132,6 @@ public class OfficialFragment extends FragmentPresenter {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                //上级来文
-                case R.id.official_from_higher:
-                    start2Activity(1);
-                    break;
-                //平级来文
-                case R.id.official_from_same:
-                    start2Activity(2);
-                    break;
-                //下级来文
-                case R.id.official_from_lower:
-                    start2Activity(3);
-                    break;
-                //发文审批
-                case R.id.official_dispatch:
-                    start2Activity(4);
-                    break;
-                //传阅文件
-                case R.id.official_hand_round:
-                    start2Activity(5);
-                    break;
-                //内部文件
-                case R.id.my_office:
-                    start2Activity(6);
-                    break;
                 //去筛选
                 case R.id.to_screen:
                     Intent intent = new Intent(getActivity(), ScreenActivity.class);
@@ -157,7 +146,6 @@ public class OfficialFragment extends FragmentPresenter {
                     adapter.setBeanList(SortUtl.sort(newBeanList, isPositive ? POSITIVE : REVERSE));
                     adapter.notifyDataSetChanged();
                     break;
-
                 case R.id.refresh:
                     getNotDoneList(new ScreenBean());
                     break;
@@ -187,5 +175,10 @@ public class OfficialFragment extends FragmentPresenter {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public Class<OfficialDelegate> getDelegateClass() {
+        return OfficialDelegate.class;
     }
 }

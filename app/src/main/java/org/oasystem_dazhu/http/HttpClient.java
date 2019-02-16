@@ -12,6 +12,7 @@ import org.oasystem_dazhu.http.cookie.CookiesManager;
 import org.oasystem_dazhu.mvp.model.BaseEntity;
 import org.oasystem_dazhu.mvp.model.bean.AllUserBean;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.LoginBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeListBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeTypeBean;
@@ -327,5 +328,11 @@ public final class HttpClient {
                 getStrings(String.valueOf(id), user_id))));
         toSubscribe(observable, subscriber);
     }
-
+    /**
+     * 获取固定分类
+     */
+    public void getType(Subscriber<BaseEntity<HomeTypeBean>> subscriber) {
+        Observable observable = mApi.getType(addToken());
+        toSubscribe(observable, subscriber);
+    }
 }

@@ -40,6 +40,16 @@ public class UserInfo {
     private int position_id;
     private String company_name;
     private String created_at;
+    private int is_monitoring;
+
+    public int getIs_monitoring() {
+        return is_monitoring;
+    }
+
+    public void setIs_monitoring(int is_monitoring) {
+        this.is_monitoring = is_monitoring;
+    }
+
     private DepartmentBean department;
     private PositionBean position;
     private List<OfficeSealBean> office_seal;

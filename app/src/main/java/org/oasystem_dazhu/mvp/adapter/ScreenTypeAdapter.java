@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +23,12 @@ import java.util.Map;
 
 public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.ScreenTypeViewHolder> {
     private OnItemClickListener itemClickListener;
-    private List<String> beanList;
+    private List<HomeTypeBean.DataBean> beanList;
     private Context context;
     private List<TextView> tv_view = new ArrayList<>();
     private List<Map<Integer, Boolean>> selectedList;
 
-    public ScreenTypeAdapter(List<String> beanList, List<Map<Integer, Boolean>> selectedList, Context context) {
+    public ScreenTypeAdapter(List<HomeTypeBean.DataBean> beanList, List<Map<Integer, Boolean>> selectedList, Context context) {
         this.beanList = beanList;
         this.context = context;
         this.selectedList = selectedList;
@@ -41,10 +42,11 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
     @Override
     public void onBindViewHolder(ScreenTypeViewHolder holder, final int position) {
         tv_view.add(holder.item_type_tv);
-        holder.item_type_tv.setText(beanList.get(position));
+        holder.item_type_tv.setText(beanList.get(position).getName());
         setItemClick(holder, position);
     }
-    public List<Map<Integer, Boolean>> getList(){
+
+    public List<Map<Integer, Boolean>> getList() {
         return selectedList;
     }
 
@@ -52,22 +54,21 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemClickListener != null) {
-                    Boolean b = selectedList.get(position).get(position + 1);
-                    Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
-                    map.put(position+1,!b);
-                    selectedList.set(position,map);
-                    if (!b) {
-                        TextView tv = tv_view.get(position);
-                        tv.setBackgroundResource(R.drawable.et_selected);
-                        tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
-                    } else {
-                        TextView tv = tv_view.get(position);
-                        tv.setBackgroundResource(R.drawable.et);
-                        tv.setTextColor(context.getResources().getColor(R.color.color_010101));
-                    }
-                    itemClickListener.onItemClick(position);
+                Boolean b = selectedList.get(position).get(beanList.get(position).getId());
+                Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+                map.put(beanList.get(position).getId(), !b);
+                selectedList.set(position, map);
+                if (!b) {
+                    TextView tv = tv_view.get(position);
+                    tv.setBackgroundResource(R.drawable.et_selected);
+                    tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
+                } else {
+                    TextView tv = tv_view.get(position);
+                    tv.setBackgroundResource(R.drawable.et);
+                    tv.setTextColor(context.getResources().getColor(R.color.color_010101));
                 }
+                if (itemClickListener != null)
+                    itemClickListener.onItemClick(position);
             }
         });
     }
@@ -80,7 +81,7 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
         }
         if (selectedList != null) {
             for (int i = 0; i < selectedList.size(); i++) {
-                selectedList.get(i).put(i + 1, false);
+                selectedList.get(i).put(beanList.get(i).getId(), false);
             }
         }
     }

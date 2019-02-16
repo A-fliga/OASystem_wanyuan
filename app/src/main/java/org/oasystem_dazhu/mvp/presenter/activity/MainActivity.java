@@ -20,9 +20,11 @@ import android.view.ViewGroup;
 
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.http.MSubscribe;
+import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.manager.UserManager;
 import org.oasystem_dazhu.mvp.model.BaseEntity;
 import org.oasystem_dazhu.mvp.model.PublicModel;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.UserInfo;
 import org.oasystem_dazhu.mvp.presenter.fragment.OfficialFragment;
 import org.oasystem_dazhu.mvp.presenter.fragment.UserCenterFragment;
@@ -47,7 +49,17 @@ public class MainActivity extends ActivityPresenter {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getUserInfo();
+        getFirmingType();
         checkLocationPermission();
+    }
+    private void getFirmingType() {
+        PublicModel.getInstance().getType(new MSubscribe<BaseEntity<HomeTypeBean>>() {
+            @Override
+            public void onNext(BaseEntity<HomeTypeBean> bean) {
+                super.onNext(bean);
+                FirmingTypeManager.getInstance().addBeanList(bean.getData().getData());
+            }
+        });
     }
 
     public void checkLocationPermission() {

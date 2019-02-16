@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 
 
 import org.oasystem_dazhu.R;
+import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
 
@@ -60,31 +61,9 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
         setText(holder.official_step, "流程步骤：" + bean.getName(), urgent);
         setText(holder.official_time, "发起日期：" + bean.getDispatch().getCreated_at(), urgent);
         setText(holder.official_last_time, "最后操作：" + bean.getDispatch().getUpdated_at(), urgent);
-        setIcon(holder.official_left_img,bean.getDispatch().getForm_type());
+        Glide.with(context).load(FirmingTypeManager.getInstance().getTypeImg(bean.getDispatch().getForm_type())).placeholder(R.mipmap.ic_launcher_round)
+                .into(holder.official_left_img);
 
-    }
-
-    private void setIcon(ImageView official_left_img, int type) {
-        switch (type) {
-            case 1:
-                Glide.with(context).load(R.mipmap.shangjilaiwen).into(official_left_img);
-                break;
-            case 2:
-                Glide.with(context).load(R.mipmap.pingjilaiwen).into(official_left_img);
-                break;
-            case 3:
-                Glide.with(context).load(R.mipmap.xiajilaiwen).into(official_left_img);
-                break;
-            case 4:
-                Glide.with(context).load(R.mipmap.fawenshenpi).into(official_left_img);
-                break;
-            case 5:
-                Glide.with(context).load(R.mipmap.chuanyuewenjian).into(official_left_img);
-                break;
-            case 6:
-                Glide.with(context).load(R.mipmap.neibuwenjian).into(official_left_img);
-                break;
-        }
     }
 
     private void setText(TextView v, String content, int urgent) {

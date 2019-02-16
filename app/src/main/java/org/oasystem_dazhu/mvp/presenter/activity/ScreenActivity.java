@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 
 import org.oasystem_dazhu.R;
+import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.mvp.adapter.ScreenTypeAdapter;
-import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.ScreenBean;
 import org.oasystem_dazhu.mvp.view.ScreenDelegate;
 import org.oasystem_dazhu.utils.DialogUtil;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 
 public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
-    private List<String> beanList;
+    //    private List<String> beanList;
     private ScreenBean screenBean;
     private ScreenTypeAdapter adapter;
     private TextView s_date, e_date;
@@ -37,6 +38,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     private int opType = 0;
     private DatePicker datePicker;
     private List<Map<Integer, Boolean>> selectedType;
+    private List<HomeTypeBean.DataBean> typeBeanList;
 
     @Override
     public Class<ScreenDelegate> getDelegateClass() {
@@ -54,9 +56,10 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
         screenBean = new ScreenBean();
         initView();
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getBoolean("needShowTop"))
+        if (bundle != null && bundle.getBoolean("needShowTop")) {
             initTypeList();
-        else {
+
+        } else {
             viewDelegate.get(R.id.screen_top_line).setVisibility(View.GONE);
             viewDelegate.get(R.id.screen_type_tv).setVisibility(View.GONE);
         }
@@ -205,27 +208,16 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     }
 
     private void initTypeList() {
-        beanList = new ArrayList<>();
-        beanList.add("上级来文");
-        beanList.add("平级来文");
-        beanList.add("下级来文");
-        beanList.add("发文审批");
-        beanList.add("传阅文件");
-        beanList.add("内部文件");
+        typeBeanList = new ArrayList<>();
+        typeBeanList = FirmingTypeManager.getInstance().getBeanList();
         selectedType = new ArrayList<>();
-        for (int i = 0; i < beanList.size(); i++) {
+        for (int i = 0; i < typeBeanList.size(); i++) {
             Map<Integer, Boolean> map = new HashMap<>();
-            map.put(i + 1, false);
+            map.put(typeBeanList.get(i).getId(), false);
             selectedType.add(map);
         }
         RecyclerView recyclerView = viewDelegate.get(R.id.screen_recyclerView);
-        adapter = new ScreenTypeAdapter(beanList, selectedType, this);
+        adapter = new ScreenTypeAdapter(typeBeanList, selectedType, this);
         viewDelegate.setRecycler(recyclerView, adapter, 4, false);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-            }
-        });
     }
 }

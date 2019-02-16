@@ -4,6 +4,7 @@ package org.oasystem_dazhu.mvp.model;
 import org.oasystem_dazhu.http.HttpClient;
 import org.oasystem_dazhu.mvp.model.bean.AllUserBean;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.LoginBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeListBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeTypeBean;
@@ -134,5 +135,12 @@ public class PublicModel implements IModel {
      */
     public void add_countersign(Subscriber<BaseEntity> subscriber, int id, String user_id) {
         HttpClient.getInstance().add_countersign(subscriber,id,user_id);
+    }
+
+    /**
+     * 获取固定分类
+     */
+    public void getType(Subscriber<BaseEntity<HomeTypeBean>> subscriber) {
+        HttpClient.getInstance().getType(subscriber);
     }
 }

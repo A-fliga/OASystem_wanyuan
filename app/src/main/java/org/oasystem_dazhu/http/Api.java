@@ -1,9 +1,11 @@
 package org.oasystem_dazhu.http;
 
 
+
 import org.oasystem_dazhu.mvp.model.BaseEntity;
 import org.oasystem_dazhu.mvp.model.bean.AllUserBean;
 import org.oasystem_dazhu.mvp.model.bean.DocumentBean;
+import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.LoginBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeListBean;
 import org.oasystem_dazhu.mvp.model.bean.OfficeTypeBean;
@@ -101,35 +103,35 @@ public interface Api {
      */
     @Multipart
     @POST("upload_flie")
-    Observable<BaseEntity<UpFileBean>> upload_file(@Header("Authorization") String token,@Part MultipartBody.Part body);
+    Observable<BaseEntity<UpFileBean>> upload_file(@Header("Authorization") String token, @Part MultipartBody.Part body);
 
     /**
      * 审批接口
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/examine")
-    Observable<BaseEntity> examine(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity> examine(@Header("Authorization") String token, @Body RequestBody body);
 
     /**
      * 结束流程
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/close")
-    Observable<BaseEntity> closeAll(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity> closeAll(@Header("Authorization") String token, @Body RequestBody body);
 
     /**
      * 添加附件
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/add_accessory")
-    Observable<BaseEntity> addAccessory(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity> addAccessory(@Header("Authorization") String token, @Body RequestBody body);
 
     /**
      * 意见
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/add_opinion")
-    Observable<BaseEntity> add_opinion(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity> add_opinion(@Header("Authorization") String token, @Body RequestBody body);
 
     /**
      * 获取全部用户的信息
@@ -143,5 +145,12 @@ public interface Api {
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/add_countersign")
-    Observable<BaseEntity> add_countersign(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity> add_countersign(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 获取固定分类
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("dispatch/office_form_type")
+    Observable<BaseEntity<HomeTypeBean>> getType(@Header("Authorization") String token);
 }

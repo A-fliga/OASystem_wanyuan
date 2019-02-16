@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.oasystem_dazhu.R;
+import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.mvp.model.bean.ScreenBean;
 import org.oasystem_dazhu.mvp.presenter.fragment.OfficialListFragment;
 import org.oasystem_dazhu.mvp.view.OfficialHandleDelegate;
@@ -43,7 +44,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         typeId = getIntent().getExtras().getInt("typeId");
-        viewDelegate.initViews(typeId);
+        viewDelegate.initViews(FirmingTypeManager.getInstance().getTypeName(typeId));
         initViewPager();
         viewDelegate.setOnClickListener(onClickListener, R.id.official_not_done_tab, R.id.official_done_tab, R.id.to_screen, R.id.to_sort, R.id.refresh);
     }
@@ -86,8 +87,6 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     };
 
     private void changeTopStyle(Boolean done) {
-//            viewDelegate.get(R.id.official_not_done).setBackground();
-//            viewDelegate.get(R.id.official_not_done).setBackground();
         ImageView tv1 = viewDelegate.get(R.id.official_not_done_tab);
         tv1.setImageResource(done ? R.mipmap.not_read_normal : R.mipmap.not_read_selected);
         ImageView tv2 = viewDelegate.get(R.id.official_done_tab);
@@ -96,7 +95,6 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
 
     private void initViewPager() {
         viewPager = viewDelegate.getViewPager();
-//        viewPager.setOffscreenPageLimit(1);
         mFragmentPagerAdapter mFragmentPagerAdapter = new mFragmentPagerAdapter(getSupportFragmentManager(), getFragments());
         viewPager.setAdapter(mFragmentPagerAdapter);
     }
