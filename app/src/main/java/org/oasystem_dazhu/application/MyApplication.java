@@ -3,10 +3,7 @@ package org.oasystem_dazhu.application;
 import android.app.Application;
 import android.content.Context;
 
-
 import com.tencent.smtt.sdk.QbSdk;
-
-import org.oasystem_dazhu.utils.FontsUtils;
 
 import static org.oasystem_dazhu.constants.Constants.CORE_INIT;
 
@@ -22,7 +19,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FontsUtils.setDefaultFont(this, "serif", "fonts/mstypeface.ttf");
         context = getApplicationContext();
         application = this;
         //增加这句话

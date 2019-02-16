@@ -82,9 +82,11 @@ public class MainActivity extends ActivityPresenter {
     public static class UpdateAsync extends AsyncTask<String, Integer, String> {
         private Context context;
         ProgressDialog pd;
+        private MainActivity activity;
 
         public UpdateAsync(WeakReference<MainActivity> weakReference) {
             context = weakReference.get();
+            activity = weakReference.get();
         }
 
         @Override
@@ -109,12 +111,7 @@ public class MainActivity extends ActivityPresenter {
         }
 
         public void upDateProgress(final int progress) {
-            ActivityPresenter.getTopActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    pd.setProgress(progress);
-                }
-            });
+            publishProgress(progress);
         }
 
         @Override
@@ -125,13 +122,14 @@ public class MainActivity extends ActivityPresenter {
                 ToastUtil.l("更新出现错误");
             } else {
                 PackageUtils.install(context, s);
+                activity.finish();
             }
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-
+            pd.setProgress(values[0]);
         }
     }
 
