@@ -2,11 +2,7 @@ package org.oasystem_dazhu.mvp.presenter.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
 
-import org.oasystem_dazhu.BuildConfig;
-import org.oasystem_dazhu.R;
-import org.oasystem_dazhu.constants.Constants;
 import org.oasystem_dazhu.manager.UserManager;
 import org.oasystem_dazhu.mvp.view.SplashDelegate;
 
@@ -32,22 +28,8 @@ public class SplashActivity extends ActivityPresenter {
         super.onCreate(savedInstanceState);
         handler = new Handler();
         handler.postDelayed(mRun, 1500);
-        initView();
     }
 
-    private void initView() {
-        ImageView splash_img = viewDelegate.get(R.id.splash_img);
-        //大竹
-        if (BuildConfig.HOST.equals(Constants.DAZHU_URL)) {
-            splash_img.setImageResource(R.mipmap.splash_dazhu);
-        }
-        //万源
-        else if (BuildConfig.HOST.equals(Constants.WANYUAN_URL)) {
-            splash_img.setImageResource(R.mipmap.splash_wanyuan);
-        } else {
-            splash_img.setImageResource(R.mipmap.splash_wanyuan);
-        }
-    }
 
 
     Runnable mRun = new Runnable() {

@@ -80,8 +80,8 @@ android {
             //万源
 //            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
             //大竹
-//            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
-            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
+            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
+//            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
             signingConfig android.signingConfigs.release
             minifyEnabled true
             zipAlignEnabled true
@@ -126,7 +126,5 @@ dependencies {
     //eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
 //    compile 'com.bm.photoview:library:1.4.1'
-    //应用角标
-    compile "me.leolin:ShortcutBadger:1.1.22@aar"
     testCompile 'junit:junit:4.12'
 }

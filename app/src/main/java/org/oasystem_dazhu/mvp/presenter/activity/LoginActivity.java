@@ -3,12 +3,9 @@ package org.oasystem_dazhu.mvp.presenter.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import org.oasystem_dazhu.BuildConfig;
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.application.MyApplication;
-import org.oasystem_dazhu.constants.Constants;
 import org.oasystem_dazhu.http.MSubscribe;
 import org.oasystem_dazhu.mvp.model.BaseEntity;
 import org.oasystem_dazhu.mvp.model.PublicModel;
@@ -20,6 +17,7 @@ import org.oasystem_dazhu.utils.SharedPreferencesUtil;
 import org.oasystem_dazhu.utils.ToastUtil;
 
 import static org.oasystem_dazhu.constants.Constants.LOGIN_INFO;
+
 
 /**
  * Created by www on 2018/12/29.
@@ -41,25 +39,11 @@ public class LoginActivity extends ActivityPresenter {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initTop();
         unEt = viewDelegate.get(R.id.login_username);
         pwdEt = viewDelegate.get(R.id.login_password);
         viewDelegate.setOnClickListener(onClickListener, R.id.login_btn);
     }
 
-    private void initTop() {
-        ImageView login_top_img = viewDelegate.get(R.id.login_top_img);
-        //大竹
-        if (BuildConfig.HOST.equals(Constants.DAZHU_URL)) {
-            login_top_img.setImageResource(R.mipmap.login_top_dazhu);
-        }
-        //万源
-        else if (BuildConfig.HOST.equals(Constants.WANYUAN_URL)) {
-            login_top_img.setImageResource(R.mipmap.login_top_wanyuan);
-        } else {
-            login_top_img.setImageResource(R.mipmap.login_top_wanyuan);
-        }
-    }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

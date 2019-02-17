@@ -1,5 +1,6 @@
 package org.oasystem_dazhu.mvp.view;
 
+import android.app.Notification;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -14,12 +15,10 @@ import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
 import org.oasystem_dazhu.mvp.model.bean.UserInfo;
 import org.oasystem_dazhu.mvp.view.baseDelegate.ViewDelegate;
 import org.oasystem_dazhu.utils.LoadImgUtil;
+import org.oasystem_dazhu.utils.badger.BadgeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.leolin.shortcutbadger.ShortcutBadger;
-
 
 /**
  * Created by www on 2018/12/29.
@@ -57,7 +56,10 @@ public class OfficialDelegate extends ViewDelegate {
 
     }
 
+
     public HomeTypeAdapter initTypeList() {
+
+
         int totalCount = 0;
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
@@ -69,7 +71,8 @@ public class OfficialDelegate extends ViewDelegate {
         }
         if (totalCount > 0) {
             //设置成桌面图标小红点
-            ShortcutBadger.applyCount(MyApplication.getAppContext(), totalCount); //for 1.1.4+
+//            ShortcutBadger.applyCount(MyApplication.getAppContext(), totalCount); //for 1.1.4+
+            setNotification(totalCount);
         }
         if (UserManager.getInstance().getUserInfo().getIs_monitoring() == 1) {
             typeContentList.add("文件监控");
@@ -78,6 +81,19 @@ public class OfficialDelegate extends ViewDelegate {
         HomeTypeAdapter adapter = new HomeTypeAdapter(imgIdList, typeContentList, beanList, this.getActivity());
         setRecyclerView(typeRecyclerView, adapter);
         return adapter;
+    }
+
+    public void setNotification(int count) {
+        //实例化通知构建器对象
+        Notification.Builder builder = new Notification.Builder(this.getActivity());
+        //设置通知的图标
+        builder.setSmallIcon(R.mipmap.mlogo);
+        //设置通知的标题
+        builder.setContentTitle("政务OA系统");
+        //设置通知的内容
+        builder.setContentText("您有" + count + "条未处理文件");
+        Notification notification = builder.build();
+        BadgeUtil.sendBadgeNotification(notification, 1, MyApplication.getAppContext(), count, count);
     }
 
     private void setRecyclerView(RecyclerView recyclerView, HomeTypeAdapter adapter) {
