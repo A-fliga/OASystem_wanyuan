@@ -47,10 +47,10 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/home_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/ic_launcher_round" />
+                android:layout_centerInParent="true" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -81,9 +81,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/home_type_recyclerView"
+            android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"/>
+            android:layout_marginTop="20dp" />
 
 
         <RelativeLayout
