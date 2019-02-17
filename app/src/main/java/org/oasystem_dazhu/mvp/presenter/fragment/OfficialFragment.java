@@ -37,7 +37,6 @@ import java.util.List;
 import static org.oasystem_dazhu.utils.SortUtl.POSITIVE;
 import static org.oasystem_dazhu.utils.SortUtl.REVERSE;
 
-
 /**
  * Created by www on 2018/12/29.
  */
@@ -50,7 +49,6 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
 
     @Override
     protected void onFragmentVisible() {
-
     }
 
     @Override

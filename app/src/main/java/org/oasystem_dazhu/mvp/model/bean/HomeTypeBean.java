@@ -37,6 +37,15 @@ public class HomeTypeBean {
         private int parent_id;
         private String sort;
         private String img;
+        private long dispatch_flow_list_count;
+
+        public long getDispatch_flow_list_count() {
+            return dispatch_flow_list_count;
+        }
+
+        public void setDispatch_flow_list_count(long dispatch_flow_list_count) {
+            this.dispatch_flow_list_count = dispatch_flow_list_count;
+        }
 
         public String getImg() {
             return img;

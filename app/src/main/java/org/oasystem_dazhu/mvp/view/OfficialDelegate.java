@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import org.oasystem_dazhu.R;
+import org.oasystem_dazhu.application.MyApplication;
 import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.manager.UserManager;
 import org.oasystem_dazhu.mvp.adapter.HomeTypeAdapter;
@@ -17,6 +17,9 @@ import org.oasystem_dazhu.utils.LoadImgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 
 /**
  * Created by www on 2018/12/29.
@@ -55,18 +58,24 @@ public class OfficialDelegate extends ViewDelegate {
     }
 
     public HomeTypeAdapter initTypeList() {
+        int totalCount = 0;
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
         List<HomeTypeBean.DataBean> beanList = FirmingTypeManager.getInstance().getBeanList();
         for (int i = 0; i < beanList.size(); i++) {
             typeContentList.add(beanList.get(i).getName());
             imgIdList.add(beanList.get(i).getImg());
+            totalCount += beanList.get(i).getDispatch_flow_list_count();
+        }
+        if (totalCount > 0) {
+            //设置成桌面图标小红点
+            ShortcutBadger.applyCount(MyApplication.getAppContext(), totalCount); //for 1.1.4+
         }
         if (UserManager.getInstance().getUserInfo().getIs_monitoring() == 1) {
             typeContentList.add("文件监控");
         }
 
-        HomeTypeAdapter adapter = new HomeTypeAdapter(imgIdList, typeContentList, this.getActivity());
+        HomeTypeAdapter adapter = new HomeTypeAdapter(imgIdList, typeContentList, beanList, this.getActivity());
         setRecyclerView(typeRecyclerView, adapter);
         return adapter;
     }
