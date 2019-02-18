@@ -44,7 +44,7 @@ import static org.oasystem_dazhu.utils.SortUtl.REVERSE;
 public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     private OfficialDocumentAdapter adapter;
     private List<DocumentBean.DataBean> newBeanList;
-    private Boolean isPositive = false;
+    private Boolean isPositive_create = false, isPositive_update = false;
     private HomeTypeAdapter typeAdapter;
     private ScreenBean screenBean;
 
@@ -69,7 +69,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
         typeAdapter = viewDelegate.initTypeList();
         getNotDoneList(new ScreenBean());
         viewDelegate.setOnClickListener(onClickListener,
-                R.id.to_screen, R.id.to_sort, R.id.refresh);
+                R.id.to_screen, R.id.to_sort_create, R.id.to_sort_update, R.id.refresh);
         setOnItemClickListener();
         Glide.with(this).load(UserManager.getInstance().getUserInfo().getCompany().getCompany_logo()).into((ImageView) viewDelegate.get(R.id.home_logo));
     }
@@ -150,12 +150,21 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                     startActivityForResult(intent, 1000);
                     break;
 
-                case R.id.to_sort:
-                    isPositive = !isPositive;
-                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive ? POSITIVE : REVERSE));
+                case R.id.to_sort_create:
+                    isPositive_create = !isPositive_create;
+                    isPositive_update = false;
+                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive_create ? POSITIVE : REVERSE, true));
+                    adapter.notifyDataSetChanged();
+                    break;
+                case R.id.to_sort_update:
+                    isPositive_create = false;
+                    isPositive_update = !isPositive_update;
+                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive_update ? POSITIVE : REVERSE, false));
                     adapter.notifyDataSetChanged();
                     break;
                 case R.id.refresh:
+                    isPositive_update = false;
+                    isPositive_create = false;
                     getNotDoneList(new ScreenBean());
                     break;
 

@@ -69,19 +69,19 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
             getNotDoneDocument(new ScreenBean());
     }
 
-    public void notifyDataSetChanged(Boolean done, Boolean positive) {
+    public void notifyDataSetChanged(Boolean done, Boolean positive,Boolean isCreate) {
         if (done) {
             if (positive)
-                doneAdapter.setBeanList(SortUtl.sort(doneBeanList, SortUtl.POSITIVE));
+                doneAdapter.setBeanList(SortUtl.sort(doneBeanList, SortUtl.POSITIVE,isCreate));
             else {
-                doneAdapter.setBeanList(SortUtl.sort(doneBeanList, SortUtl.REVERSE));
+                doneAdapter.setBeanList(SortUtl.sort(doneBeanList, SortUtl.REVERSE,isCreate));
             }
             doneAdapter.notifyDataSetChanged();
         } else {
             if (positive)
-                notDoneAdapter.setBeanList(SortUtl.sort(notDoneBeanList, SortUtl.POSITIVE));
+                notDoneAdapter.setBeanList(SortUtl.sort(notDoneBeanList, SortUtl.POSITIVE,isCreate));
             else {
-                notDoneAdapter.setBeanList(SortUtl.sort(notDoneBeanList, SortUtl.REVERSE));
+                notDoneAdapter.setBeanList(SortUtl.sort(notDoneBeanList, SortUtl.REVERSE,isCreate));
             }
             notDoneAdapter.notifyDataSetChanged();
         }

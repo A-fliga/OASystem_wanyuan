@@ -31,8 +31,9 @@ import static org.oasystem_dazhu.utils.SortUtl.REVERSE;
 public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> {
     private OfficialDocumentAdapter adapter;
     private List<DocumentBean.DataBean> newBeanList;
-    private Boolean isPositive = false;
+    private Boolean isPositive_create = false, isPositive_update = false;
     private ScreenBean screenBean;
+
     @Override
     public Class<FileMonitorDelegate> getDelegateClass() {
         return FileMonitorDelegate.class;
@@ -47,7 +48,7 @@ public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewDelegate.setOnClickListener(onClickListener, R.id.to_screen, R.id.to_sort, R.id.refresh);
+        viewDelegate.setOnClickListener(onClickListener, R.id.to_screen, R.id.to_sort_create, R.id.to_sort_update, R.id.refresh);
 
         getFileMonitorList(new ScreenBean());
     }
@@ -97,12 +98,20 @@ public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> 
                     startActivityForResult(intent, 1000);
                     break;
 
-                case R.id.to_sort:
-                    isPositive = !isPositive;
-                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive ? POSITIVE : REVERSE));
+                case R.id.to_sort_create:
+                    isPositive_create = !isPositive_create;
+                    isPositive_update = false;
+                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive_create ? POSITIVE : REVERSE, true));
+                    adapter.notifyDataSetChanged();
+                case R.id.to_sort_update:
+                    isPositive_update = !isPositive_update;
+                    isPositive_create = false;
+                    adapter.setBeanList(SortUtl.sort(newBeanList, isPositive_update ? POSITIVE : REVERSE, false));
                     adapter.notifyDataSetChanged();
                     break;
                 case R.id.refresh:
+                    isPositive_update = false;
+                    isPositive_create = false;
                     getFileMonitorList(new ScreenBean());
                     break;
 

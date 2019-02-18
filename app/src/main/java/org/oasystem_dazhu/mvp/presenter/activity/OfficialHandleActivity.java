@@ -28,7 +28,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     private NoScrollViewPager viewPager;
     private Boolean done = false;
     private OfficialListFragment notDoneFragment, doneFragment;
-    private Boolean isPositive = false;
+    private Boolean isPositive_create = false, isPositive_update = false;
     private ScreenBean screenBean;
 
     @Override
@@ -47,7 +47,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
         typeId = getIntent().getExtras().getInt("typeId");
         viewDelegate.initViews(FirmingTypeManager.getInstance().getTypeName(typeId));
         initViewPager();
-        viewDelegate.setOnClickListener(onClickListener, R.id.official_not_done_tab, R.id.official_done_tab, R.id.to_screen, R.id.to_sort, R.id.refresh);
+        viewDelegate.setOnClickListener(onClickListener, R.id.official_not_done_tab, R.id.official_done_tab, R.id.to_screen, R.id.to_sort_create, R.id.to_sort_update, R.id.refresh);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -80,13 +80,22 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
                     intent.putExtras(bundle);
                     startActivityForResult(intent, 1001);
                     break;
-                case R.id.to_sort:
-                    isPositive = !isPositive;
-                    doneFragment.notifyDataSetChanged(true, isPositive);
-                    notDoneFragment.notifyDataSetChanged(false, isPositive);
+                case R.id.to_sort_create:
+                    isPositive_create = !isPositive_create;
+                    isPositive_update = false;
+                    doneFragment.notifyDataSetChanged(true, isPositive_create,true);
+                    notDoneFragment.notifyDataSetChanged(false, isPositive_create,true);
+                    break;
+                case R.id.to_sort_update:
+                    isPositive_update = !isPositive_update;
+                    isPositive_create = false;
+                    doneFragment.notifyDataSetChanged(true, isPositive_update,false);
+                    notDoneFragment.notifyDataSetChanged(false, isPositive_update,false);
                     break;
 
                 case R.id.refresh:
+                    isPositive_update = false;
+                    isPositive_create = false;
                     EventBus.getDefault().post("upLoadSuccess");
                     break;
             }

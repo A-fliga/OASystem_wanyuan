@@ -15,10 +15,11 @@ import java.util.List;
 
 public class SortUtl {
     public static final int REVERSE = -1, POSITIVE = 1;
+    public static boolean IS_CREATE = true;
     private static List<DocumentBean.DataBean> totalList, urgentBeanList, notUrgentBeanList;
 
-    public static List<DocumentBean.DataBean> sort(List<DocumentBean.DataBean> beanList, int sortType) {
-
+    public static List<DocumentBean.DataBean> sort(List<DocumentBean.DataBean> beanList, int sortType, Boolean is_create) {
+        IS_CREATE = is_create;
         if (beanList.size() < 2) {
             return beanList;
         }
@@ -77,8 +78,8 @@ public class SortUtl {
             public int compare(DocumentBean.DataBean o1, DocumentBean.DataBean o2) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
-                    Date dt1 = format.parse(o1.getCreated_at());
-                    Date dt2 = format.parse(o2.getCreated_at());
+                    Date dt1 = format.parse(IS_CREATE ? o1.getDispatch().getCreated_at() : o1.getDispatch().getUpdated_at());
+                    Date dt2 = format.parse(IS_CREATE ? o2.getDispatch().getCreated_at() : o2.getDispatch().getUpdated_at());
                     if (dt1.getTime() > dt2.getTime()) {
                         return sortType;
                     } else if (dt1.getTime() < dt2.getTime()) {

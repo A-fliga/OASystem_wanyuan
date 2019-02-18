@@ -106,20 +106,42 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/to_sort"
+                android:layout_toLeftOf="@+id/to_sort_create"
                 android:clickable="true"
                 android:gravity="center_vertical"
                 android:text="刷新" />
 
-            <ImageView
-                android:id="@+id/to_sort"
+            <TextView
+                android:id="@+id/to_sort_create"
                 android:layout_width="wrap_content"
-                android:layout_height="18dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/to_sort_update"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:text="发文" />
+
+            <TextView
+                android:id="@+id/to_sort_update"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/to_screen"
                 android:clickable="true"
-                android:src="@mipmap/to_sort" />
+                android:gravity="center_vertical"
+                android:text="操作" />
+
+            <!--<ImageView-->
+            <!--android:id="@+id/to_sort"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="18dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_toLeftOf="@+id/to_screen"-->
+            <!--android:clickable="true"-->
+            <!--android:src="@mipmap/to_sort" />-->
 
             <ImageView
                 android:id="@+id/to_screen"

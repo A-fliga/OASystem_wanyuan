@@ -5,6 +5,7 @@
 
     <include
         layout="@layout/toolbar"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -12,32 +13,59 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:gravity="center"
+            android:text="待审批事项"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/refresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/to_sort"
+            android:layout_toLeftOf="@+id/to_sort_create"
             android:clickable="true"
+            android:gravity="center_vertical"
             android:text="刷新" />
+
+        <TextView
+            android:id="@+id/to_sort_create"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/to_sort_update"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:text="发文" />
+
+        <TextView
+            android:id="@+id/to_sort_update"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/to_screen"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:text="操作" />
+
 
         <ImageView
             android:id="@+id/to_screen"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="27dp"
-            android:src="@mipmap/screen" />
-
-        <ImageView
             android:layout_centerVertical="true"
-            android:id="@+id/to_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/to_screen"
-            android:src="@mipmap/to_sort" />
+            android:layout_marginEnd="50px"
+            android:clickable="true"
+            android:src="@mipmap/screen"
+            android:visibility="visible" />
+
+
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/file_monitor_recyclerView"
