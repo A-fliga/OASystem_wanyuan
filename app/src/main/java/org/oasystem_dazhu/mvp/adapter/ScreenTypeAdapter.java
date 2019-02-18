@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_dazhu.mvp.model.bean.HomeTypeBean;
@@ -43,6 +42,11 @@ public class ScreenTypeAdapter extends RecyclerView.Adapter<ScreenTypeAdapter.Sc
     public void onBindViewHolder(ScreenTypeViewHolder holder, final int position) {
         tv_view.add(holder.item_type_tv);
         holder.item_type_tv.setText(beanList.get(position).getName());
+        if(selectedList.get(position).get(beanList.get(position).getId())){
+            TextView tv = tv_view.get(position);
+            tv.setBackgroundResource(R.drawable.et_selected);
+            tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
+        }
         setItemClick(holder, position);
     }
 

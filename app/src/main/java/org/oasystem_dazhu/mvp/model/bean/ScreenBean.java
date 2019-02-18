@@ -18,6 +18,7 @@ public class ScreenBean implements Serializable {
     public String e_date = "";
     //来文机关
     public String organ = "";
+    //文件编号
     public String number = "";
 
     public String getNumber() {

@@ -29,6 +29,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     private Boolean done = false;
     private OfficialListFragment notDoneFragment, doneFragment;
     private Boolean isPositive = false;
+    private ScreenBean screenBean;
 
     @Override
     public Class<OfficialHandleDelegate> getDelegateClass() {
@@ -71,6 +72,12 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
                     break;
                 case R.id.to_screen:
                     Intent intent = new Intent(OfficialHandleActivity.this, ScreenActivity.class);
+                    Bundle bundle = new Bundle();
+                    if (screenBean == null)
+                        screenBean = new ScreenBean();
+                    bundle.putSerializable("localScreenBean", screenBean);
+                    bundle.putBoolean("needShowTop", false);
+                    intent.putExtras(bundle);
                     startActivityForResult(intent, 1001);
                     break;
                 case R.id.to_sort:
@@ -120,7 +127,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1001 && resultCode == 2000) {
-            ScreenBean screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
+            screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
             if (screenBean != null) {
                 screenBean.setType(String.valueOf(typeId));
                 if (doneFragment != null)

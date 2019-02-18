@@ -46,6 +46,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     private List<DocumentBean.DataBean> newBeanList;
     private Boolean isPositive = false;
     private HomeTypeAdapter typeAdapter;
+    private ScreenBean screenBean;
 
     @Override
     protected void onFragmentVisible() {
@@ -82,7 +83,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                     start2Activity(FirmingTypeManager.getInstance().getBeanList().get(position).getId());
                     //有多的代表有文件监控
                 else {
-                    startMyActivity(FileMonitorActivity.class,null);
+                    startMyActivity(FileMonitorActivity.class, null);
                 }
             }
         });
@@ -142,6 +143,9 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                     Intent intent = new Intent(getActivity(), ScreenActivity.class);
                     Bundle bundle2 = new Bundle();
                     bundle2.putBoolean("needShowTop", true);
+                    if (screenBean == null)
+                        screenBean = new ScreenBean();
+                    bundle2.putSerializable("localScreenBean", screenBean);
                     intent.putExtras(bundle2);
                     startActivityForResult(intent, 1000);
                     break;
@@ -169,7 +173,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000 && resultCode == 2000) {
-            ScreenBean screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
+            screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
             if (screenBean != null) {
                 getNotDoneList(screenBean);
             }

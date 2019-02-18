@@ -32,7 +32,7 @@ public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> 
     private OfficialDocumentAdapter adapter;
     private List<DocumentBean.DataBean> newBeanList;
     private Boolean isPositive = false;
-
+    private ScreenBean screenBean;
     @Override
     public Class<FileMonitorDelegate> getDelegateClass() {
         return FileMonitorDelegate.class;
@@ -90,6 +90,9 @@ public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> 
                     Intent intent = new Intent(FileMonitorActivity.this, ScreenActivity.class);
                     Bundle bundle2 = new Bundle();
                     bundle2.putBoolean("needShowTop", true);
+                    if (screenBean == null)
+                        screenBean = new ScreenBean();
+                    bundle2.putSerializable("localScreenBean", screenBean);
                     intent.putExtras(bundle2);
                     startActivityForResult(intent, 1000);
                     break;
@@ -111,7 +114,7 @@ public class FileMonitorActivity extends ActivityPresenter<FileMonitorDelegate> 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000 && resultCode == 2000) {
-            ScreenBean screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
+            screenBean = (ScreenBean) data.getExtras().getSerializable("screenBean");
             if (screenBean != null) {
                 getFileMonitorList(screenBean);
             }

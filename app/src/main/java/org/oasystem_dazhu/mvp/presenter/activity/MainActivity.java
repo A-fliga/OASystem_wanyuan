@@ -72,7 +72,16 @@ public class MainActivity extends ActivityPresenter {
     }
 
     private void checkUpdate() {
-        if (Float.parseFloat(AppUtil.getVersionName()) < Float.parseFloat(UserManager.getInstance().getUserInfo().getSys_app().getApp_v())) {
+        String version = UserManager.getInstance().getUserInfo().getSys_app().getApp_v();
+        String[] s = version.split("\\.");
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < s.length; i++) {
+            if(i == 0){
+                sb.append(s[i]).append(".");
+            }
+            else sb.append(s[i]);
+        }
+        if (Float.parseFloat(AppUtil.getVersionName()) < Float.parseFloat(sb.toString())) {
             //开始下载更新并安装
             async = new UpdateAsync(new WeakReference<MainActivity>(this));
             async.execute(UserManager.getInstance().getUserInfo().getSys_app().getApp_path());

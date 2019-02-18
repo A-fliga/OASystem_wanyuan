@@ -49,7 +49,9 @@
             android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficeDetailActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficialDocumentDetailActivity" />
-        <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.ScreenActivity" />
+        <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.ScreenActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.OfficialHandleActivity" />
         <activity android:name="org.oasystem_dazhu.mvp.presenter.activity.FileMonitorActivity" />
 

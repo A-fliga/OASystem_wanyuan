@@ -54,4 +54,11 @@ public class FirmingTypeManager {
         int index = typeIdList.indexOf(typeId);
         return beanList.get(index).getName();
     }
+    public List<Integer> getTypeIdList(){
+        List<Integer> typeIdList = new ArrayList<>();
+        for (int i = 0; i < beanList.size(); i++) {
+            typeIdList.add(beanList.get(i).getId());
+        }
+        return typeIdList;
+    }
 }

@@ -20,6 +20,6 @@ public class ScreenDelegate extends ViewDelegate {
 
     @Override
     public void initWidget() {
-
+        getTitleView().setText("筛选");
     }
 }

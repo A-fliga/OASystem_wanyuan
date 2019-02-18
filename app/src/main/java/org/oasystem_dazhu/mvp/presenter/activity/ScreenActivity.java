@@ -10,7 +10,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import org.oasystem_dazhu.R;
 import org.oasystem_dazhu.manager.FirmingTypeManager;
 import org.oasystem_dazhu.mvp.adapter.ScreenTypeAdapter;
@@ -47,23 +46,47 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
 
     @Override
     public boolean isSetDisplayHomeAsUpEnabled() {
-        return false;
+        return true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        screenBean = new ScreenBean();
         initView();
         Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            screenBean = (ScreenBean) bundle.getSerializable("localScreenBean");
+        }
         if (bundle != null && bundle.getBoolean("needShowTop")) {
             initTypeList();
-
         } else {
             viewDelegate.get(R.id.screen_top_line).setVisibility(View.GONE);
             viewDelegate.get(R.id.screen_type_tv).setVisibility(View.GONE);
         }
+        initDataView();
         viewDelegate.setOnClickListener(onClickListener, R.id.s_date, R.id.e_date, R.id.screen_reset, R.id.screen_sure);
+
+    }
+
+    private void initDataView() {
+        if (!screenBean.getOrgan().equals("")) {
+            office_organ.setText(screenBean.getOrgan());
+        }
+        if (!screenBean.getName().equals("")) {
+            office_name.setText(screenBean.getName());
+        }
+        if (!screenBean.getSerial().equals("")) {
+            office_serial.setText(screenBean.getSerial());
+        }
+        if (!screenBean.getNumber().equals("")) {
+            office_number.setText(screenBean.getNumber());
+        }
+        if (!screenBean.getS_date().equals("")) {
+            s_date.setText(screenBean.getS_date());
+        }
+        if (!screenBean.getE_date().equals("")) {
+            e_date.setText(screenBean.getE_date());
+        }
 
     }
 
@@ -121,17 +144,12 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
         screenBean.setName(office_name.getText().toString().replaceAll(" ", ""));
         screenBean.setOrgan(office_organ.getText().toString().replaceAll(" ", ""));
         screenBean.setNumber(office_number.getText().toString().replaceAll(" ", ""));
-        ScreenBean newBean = new ScreenBean();
-        if (screenBean.equals(newBean)) {
-            finish();
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("screenBean", screenBean);
-            Intent intent = new Intent();
-            intent.putExtras(bundle);
-            setResult(2000, intent);
-            finish();
-        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("screenBean", screenBean);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(2000, intent);
+        finish();
     }
 
 
@@ -208,6 +226,10 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     }
 
     private void initTypeList() {
+        String[] type = new String[]{};
+        if (!screenBean.getType().equals("")) {
+            type = screenBean.getType().split(",");
+        }
         typeBeanList = new ArrayList<>();
         typeBeanList = FirmingTypeManager.getInstance().getBeanList();
         selectedType = new ArrayList<>();
@@ -215,6 +237,13 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
             Map<Integer, Boolean> map = new HashMap<>();
             map.put(typeBeanList.get(i).getId(), false);
             selectedType.add(map);
+        }
+        for (int i = 0; i < selectedType.size(); i++) {
+            for (String aType : type) {
+                if (selectedType.get(i).containsKey(Integer.parseInt(aType))) {
+                    selectedType.get(i).put(Integer.parseInt(aType), true);
+                }
+            }
         }
         RecyclerView recyclerView = viewDelegate.get(R.id.screen_recyclerView);
         adapter = new ScreenTypeAdapter(typeBeanList, selectedType, this);
