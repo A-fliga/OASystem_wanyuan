@@ -102,6 +102,16 @@ public class SavePdf {
         ProgressDialogUtil.instance().startLoad("请勿关闭！");
         try {
             reader = new PdfReader(pdfPath);
+            /**
+             * 解决Exception in thread "main" java.lang.IllegalArgumentException:
+             * PdfReader not opened with owner password
+             */
+
+            java.lang.reflect.Field f = reader.getClass().getDeclaredField(
+                    "encrypted");
+            f.setAccessible(true);
+            f.set(reader, false);
+
             File fileDir = new File(SIGN_RESULT);
             if (!fileDir.exists()) {
                 fileDir.mkdirs();
@@ -144,7 +154,7 @@ public class SavePdf {
             stamp.close();
             reader.close();
             return newPath;
-        } catch (IOException | DocumentException e) {
+        } catch (IOException | DocumentException | IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         } finally {
             ProgressDialogUtil.instance().stopLoad();
