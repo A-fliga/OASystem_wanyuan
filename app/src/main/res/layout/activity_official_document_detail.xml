@@ -126,7 +126,7 @@
             <LinearLayout
                 android:id="@+id/sign_top_ll"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="52dp"
                 android:background="@color/color_b93837"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -141,8 +141,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="2dp"
                         android:src="@drawable/sign_save_selector" />
 
@@ -152,7 +152,7 @@
                         android:layout_marginBottom="2dp"
                         android:text="保存"
                         android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
 
@@ -167,8 +167,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="2dp"
                         android:src="@drawable/sign_clear_selector" />
 
@@ -176,9 +176,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:text="清除"
+                        android:text="橡皮擦"
                         android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -191,8 +191,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="2dp"
 
                         android:src="@drawable/sign_pen_selector" />
@@ -203,7 +203,7 @@
                         android:layout_marginBottom="2dp"
                         android:text="画笔"
                         android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -216,8 +216,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="2dp"
 
                         android:src="@drawable/sign_yinzhang_selector" />
@@ -228,7 +228,7 @@
                         android:layout_marginBottom="2dp"
                         android:text="印章"
                         android:textColor="@color/color_ffffff"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <!--<LinearLayout-->
@@ -241,8 +241,8 @@
                     <!--android:orientation="vertical">-->
 
                     <!--<ImageView-->
-                        <!--android:layout_width="38dp"-->
-                        <!--android:layout_height="38dp"-->
+                        <!--android:layout_width="30dp"-->
+                        <!--android:layout_height="30dp"-->
                         <!--android:layout_marginTop="2dp"-->
 
                         <!--android:src="@drawable/sign_biaozhu_selector" />-->

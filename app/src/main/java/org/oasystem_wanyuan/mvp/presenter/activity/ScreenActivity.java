@@ -17,6 +17,7 @@ import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.ScreenBean;
 import org.oasystem_wanyuan.mvp.view.ScreenDelegate;
 import org.oasystem_wanyuan.utils.DialogUtil;
+import org.oasystem_wanyuan.utils.HideIMEUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,6 +53,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HideIMEUtil.wrap(this);
         initView();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

@@ -580,7 +580,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     break;
                 //添加意见
                 case R.id.sign_add_advise:
-                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定把审批单的意见上传吗", "确定", "取消", getOnClick(4));
+                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确认请部门提意见吗？", "确定", "取消", getOnClick(4));
                     break;
                 //添加人员
                 case R.id.sign_add_person:
@@ -924,7 +924,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             if (!done) {
                 opType = 2;
-                DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "退出前请确认工作已保存", "确定", "不确定", dOnClickListener);
+                DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "退出前请确认工作已保存", "确定", "取消", dOnClickListener);
                 return false;
             }
         }
