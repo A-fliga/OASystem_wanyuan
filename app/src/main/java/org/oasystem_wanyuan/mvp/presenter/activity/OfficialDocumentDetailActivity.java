@@ -41,6 +41,7 @@ import org.oasystem_wanyuan.mvp.model.PublicModel;
 import org.oasystem_wanyuan.mvp.model.bean.AccessoryBean;
 import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
+import org.oasystem_wanyuan.mvp.model.bean.IsEraserMode;
 import org.oasystem_wanyuan.mvp.model.bean.IsSigningBean;
 import org.oasystem_wanyuan.mvp.model.bean.UpFileBean;
 import org.oasystem_wanyuan.mvp.view.OfficialDocumentDetailDelegate;
@@ -80,7 +81,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private LinearLayout save_ll, pen_ll, clear_ll, yinzhang_ll, biaozhu_ll;
+    private LinearLayout save_ll, pen_ll, eraser_ll, yinzhang_ll, biaozhu_ll;
     private List<LinearLayout> linearList = new ArrayList<>();
     private List<String> contentTv;
     private TbsReaderView sign_fileView;
@@ -125,7 +126,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             }
         }
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img, R.id.biaozhu_img);
+        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -183,17 +184,17 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         }
     }
 
-//    //是否是橡皮擦状态
-//    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
-//    public void isEraserMode(IsEraserMode bean) {
-//        if (bean.eraserMode) {
-//            eraser = true;
-//            setSelectedSates(viewDelegate.get(R.id.clear_ll));
-//            mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
-//        } else {
-//
-//        }
-//    }
+    //是否是橡皮擦状态
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void isEraserMode(IsEraserMode bean) {
+        if (bean.eraserMode) {
+            eraser = true;
+            setSelectedSates(viewDelegate.get(R.id.clear_img));
+            mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
+        } else {
+
+        }
+    }
 
     private void showFile(int id, String type) {
         File fileDir = new File(OFFICE_PATH);
@@ -397,14 +398,14 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
         save_ll = viewDelegate.get(R.id.save_img);
         pen_ll = viewDelegate.get(R.id.pen_img);
-        clear_ll = viewDelegate.get(R.id.clear_img);
+        eraser_ll = viewDelegate.get(R.id.clear_img);
         yinzhang_ll = viewDelegate.get(R.id.yinzhang_img);
-        biaozhu_ll = viewDelegate.get(R.id.biaozhu_img);
+//        biaozhu_ll = viewDelegate.get(R.id.biaozhu_img);
         linearList.add(save_ll);
         linearList.add(pen_ll);
-        linearList.add(clear_ll);
+        linearList.add(eraser_ll);
         linearList.add(yinzhang_ll);
-        linearList.add(biaozhu_ll);
+//        linearList.add(biaozhu_ll);
         recyclerView = viewDelegate.get(R.id.sign_right_list);
         //需要代码创建view才可以显示多次
         createSignView();
@@ -535,26 +536,26 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     break;
                 //橡皮擦
                 case R.id.clear_img:
-//                    eraser = !eraser;
-//                    if (eraser) {
-//                        setSelectedSates(view);
-//                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
-//                    } else {
-//                        setSelectedSates(viewDelegate.get(R.id.pen_ll));
-//                        mSignatureView.setPenColor(color);
-//                        mSignatureView.setPenWidth(width);
-//                    }
-                    opType = 4;
-                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除签字吗？", "确定", "取消", dOnClickListener);
+                    eraser = !eraser;
+                    if (eraser) {
+                        setSelectedSates(view);
+                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
+                    } else {
+                        setSelectedSates(viewDelegate.get(R.id.pen_img));
+                        mSignatureView.setPenColor(color);
+                        mSignatureView.setPenWidth(width);
+                    }
+//                    opType = 2;
+//                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除吗？", "确定", "取消", dOnClickListener);
                     break;
                 //选择印章
                 case R.id.yinzhang_img:
                     setSelectedSates(view);
                     break;
-                //选择标注
-                case R.id.biaozhu_img:
-                    setSelectedSates(view);
-                    break;
+//                //选择标注
+//                case R.id.biaozhu_img:
+//                    setSelectedSates(view);
+//                    break;
                 //确认笔记颜色
                 case R.id.confirm_color:
                     if (tagWidth != width && tagWidth != -1) {
@@ -607,7 +608,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         isSigning = true;
         isSigning();
         mSignatureView.setCanSigning(true);
-//        mSignatureView.resetZoomWithAnimation();
+        mSignatureView.resetZoomWithAnimation();
     }
 
     private void isSigning() {
@@ -904,13 +905,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 }
                 if (opType == 2) {
                     finish();
+//                    accessoryList.clear();
+//                    accessoryList.addAll(tagAccessoryList);
                 }
                 if (opType == 3) {
                     clearCanvas(null);
-                    noSigning();
-                }
-                if(opType == 4){
-                    clearCanvas(null);
+//                    accessoryList.clear();
+//                    accessoryList.addAll(tagAccessoryList);
                     noSigning();
                 }
             }
@@ -950,15 +951,15 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         if (path != null)
             mSignatureView.clearCanvas(new File(path));
         else {
-//            mSignatureView.clearCanvas(null);
-            mSignatureView.setNewPath("");
-            mSignatureView.clearCanvas(new File(getPath(id, type)));
+            mSignatureView.clearCanvas(null);
+//            mSignatureView.setNewPath("");
+//            mSignatureView.clearCanvas(new File(getPath(id, type)));
         }
     }
 
     private void saveImg(final Boolean needUpLoad) {
         if (mSignatureView != null) {
-            LogUtil.d("pianyi", "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
+//            LogUtil.d("pianyi", "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
             mSignatureView.addSignature2Pdf(TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()
                     , false, new SignatureView.DataFinishListener() {
                         @Override
