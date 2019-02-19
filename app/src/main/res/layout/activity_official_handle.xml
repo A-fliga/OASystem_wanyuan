@@ -91,7 +91,7 @@
             android:src="@mipmap/read_normal" />
     </RelativeLayout>
 
-    <org.oasystem_dazhu.mvp.view.customView.NoScrollViewPager
+    <org.oasystem_wanyuan.mvp.view.customView.NoScrollViewPager
         android:id="@+id/bottom_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

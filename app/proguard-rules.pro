@@ -119,8 +119,8 @@
 -keep class * implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator *;
 }
--keep class org.oasystem_dazhu.mvp.model.bean.**{ *; }
--keep public class * implements org.oasystem_dazhu.mvp.view.IDelegate
+-keep class org.oasystem_wanyuan.mvp.model.bean.**{ *; }
+-keep public class * implements org.oasystem_wanyuan.mvp.view.IDelegate
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
@@ -189,6 +189,9 @@
   **[] $VALUES;
   public *;
 }
+
+#保持itext不被混淆
+-keep class com.lowagie.** {*; }
 
 
 -ignorewarnings

@@ -19,7 +19,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "28.0.2"
     defaultConfig {
-        applicationId "org.oasystem_dazhu"
+        applicationId "org.oasystem_wanyuan"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
@@ -59,7 +59,7 @@ android {
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith(".apk")) {
                     //这里修改apk文件名
-                    def fileName = "dazhu-${defaultConfig.versionName}-${releaseTime()}.apk"
+                    def fileName = "wanyuan-${defaultConfig.versionName}-${releaseTime()}.apk"
 //                    def fileName = "Release-Version-${defaultConfig.versionName}-${releaseTime()}.apk"
                     output.outputFile = new File(outputFile.parent, fileName)
                 }
@@ -70,17 +70,17 @@ android {
 
         debug {
             //万源
-//            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
             //大竹
 //            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
-            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
+//            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
         }
 
         release {
             //万源
-//            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
             //大竹
-            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
+//            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
 //            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
             signingConfig android.signingConfigs.release
             minifyEnabled true

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <org.oasystem_dazhu.mvp.view.SignView.SignatureView
+        <org.oasystem_wanyuan.mvp.view.SignView.SignatureView
             android:id="@+id/mSignatureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
