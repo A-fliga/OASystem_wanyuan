@@ -117,7 +117,6 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
                 case R.id.screen_reset:
                     opType = 1;
                     DialogUtil.showDialog(ScreenActivity.this, "您确定要重置吗？", "确定", "取消", mOnClickListener);
-
                     break;
                 //确定
                 case R.id.screen_sure:
@@ -132,8 +131,9 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
             List<Map<Integer, Boolean>> list = adapter.getList();
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).get(i + 1)) {
-                    sb.append((i + 1) + ",");
+                if (list.get(i).get(FirmingTypeManager.getInstance().getTypeIdList().get(i))) {
+                    sb.append(FirmingTypeManager.getInstance().getTypeIdList().get(i));
+                    sb.append(",");
                 }
             }
             if (sb.length() >= 1)
