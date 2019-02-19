@@ -1,13 +1,11 @@
 package org.oasystem_wanyuan.mvp.view;
 
-import android.app.Notification;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.oasystem_wanyuan.R;
-import org.oasystem_wanyuan.application.MyApplication;
 import org.oasystem_wanyuan.manager.FirmingTypeManager;
 import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.adapter.HomeTypeAdapter;
@@ -15,7 +13,6 @@ import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.UserInfo;
 import org.oasystem_wanyuan.mvp.view.baseDelegate.ViewDelegate;
 import org.oasystem_wanyuan.utils.LoadImgUtil;
-import org.oasystem_wanyuan.utils.badger.BadgeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,19 +57,12 @@ public class OfficialDelegate extends ViewDelegate {
     public HomeTypeAdapter initTypeList() {
 
 
-        int totalCount = 0;
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
         List<HomeTypeBean.DataBean> beanList = FirmingTypeManager.getInstance().getBeanList();
         for (int i = 0; i < beanList.size(); i++) {
             typeContentList.add(beanList.get(i).getName());
             imgIdList.add(beanList.get(i).getImg());
-            totalCount += beanList.get(i).getDispatch_flow_list_count();
-        }
-        if (totalCount > 0) {
-            //设置成桌面图标小红点
-//            ShortcutBadger.applyCount(MyApplication.getAppContext(), totalCount); //for 1.1.4+
-            setNotification(totalCount);
         }
         if (UserManager.getInstance().getUserInfo().getIs_monitoring() == 1) {
             typeContentList.add("文件监控");
@@ -83,18 +73,18 @@ public class OfficialDelegate extends ViewDelegate {
         return adapter;
     }
 
-    public void setNotification(int count) {
-        //实例化通知构建器对象
-        Notification.Builder builder = new Notification.Builder(this.getActivity());
-        //设置通知的图标
-        builder.setSmallIcon(R.mipmap.mlogo);
-        //设置通知的标题
-        builder.setContentTitle("政务OA系统");
-        //设置通知的内容
-        builder.setContentText("您有" + count + "条未处理文件");
-        Notification notification = builder.build();
-        BadgeUtil.sendBadgeNotification(notification, 1, MyApplication.getAppContext(), count, count);
-    }
+//    public void setNotification(int count) {
+//        //实例化通知构建器对象
+//        Notification.Builder builder = new Notification.Builder(this.getActivity());
+//        //设置通知的图标
+//        builder.setSmallIcon(R.mipmap.mlogo);
+//        //设置通知的标题
+//        builder.setContentTitle("政务OA系统");
+//        //设置通知的内容
+//        builder.setContentText("您有" + count + "条未处理文件");
+//        Notification notification = builder.build();
+//        BadgeUtil.sendBadgeNotification(notification, 1, MyApplication.getAppContext(), count, count);
+//    }
 
     private void setRecyclerView(RecyclerView recyclerView, HomeTypeAdapter adapter) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());
