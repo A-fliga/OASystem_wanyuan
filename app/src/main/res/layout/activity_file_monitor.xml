@@ -33,7 +33,7 @@
             android:layout_toLeftOf="@+id/to_sort_update"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:text="发文" />
+            android:text="发文时间" />
 
         <TextView
             android:id="@+id/to_sort_update"
@@ -44,7 +44,7 @@
             android:layout_toLeftOf="@+id/to_screen"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:text="操作" />
+            android:text="最后操作" />
 
 
         <ImageView
