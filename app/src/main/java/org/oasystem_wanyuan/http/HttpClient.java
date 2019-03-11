@@ -208,6 +208,16 @@ public final class HttpClient {
         toSubscribe(observable, subscriber);
     }
 
+
+    /**
+     * 修改密码
+     */
+    public void updatePwd(Subscriber<BaseEntity> subscriber, String ypass, String npass) {
+        Observable observable = mApi.updatePwd(addToken(),
+                getMapRequestBody(getBodyMap(getStrings("ypass,npass"), getStrings(ypass, npass))));
+        toSubscribe(observable, subscriber);
+    }
+
     /**
      * 获取用户信息
      */

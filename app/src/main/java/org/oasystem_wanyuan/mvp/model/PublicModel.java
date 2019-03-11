@@ -41,6 +41,13 @@ public class PublicModel implements IModel {
     public void login(Subscriber<BaseEntity<LoginBean>> subscriber, String username, String password) {
         HttpClient.getInstance().login(subscriber, username, password);
     }
+    /**
+     * 修改密码
+     */
+    public void updatePwd(Subscriber<BaseEntity> subscriber, String ypass, String npass) {
+        HttpClient.getInstance().updatePwd(subscriber, ypass, npass);
+    }
+
 
     /**
      * 获取用户信息

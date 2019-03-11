@@ -41,6 +41,16 @@ public interface Api {
     @POST("auth/login")
     Observable<BaseEntity<LoginBean>> login(@Body RequestBody register);
 
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("user/update_pass")
+    Observable<BaseEntity> updatePwd(@Header("Authorization") String token,@Body RequestBody pwd);
+
     /**
      * 获取用户信息
      *
