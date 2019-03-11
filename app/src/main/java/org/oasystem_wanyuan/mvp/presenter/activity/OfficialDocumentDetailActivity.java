@@ -82,7 +82,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private LinearLayout save_ll, pen_ll, eraser_ll, yinzhang_ll, biaozhu_ll;
+    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll, biaozhu_ll;
     private List<LinearLayout> linearList = new ArrayList<>();
     private List<String> contentTv;
     private TbsReaderView sign_fileView;
@@ -95,7 +95,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private AlertDialog dialog, addAccessoryDialog;
     private float width = PenWidth.DEFAULT.getWidth(), tagWidth;
     private List<AllUserBean.DataBean> userBeanList;
-
+    public List<String> cacheFileList = new ArrayList<>();
     @Override
     public Class<OfficialDocumentDetailDelegate> getDelegateClass() {
         return OfficialDocumentDetailDelegate.class;
@@ -121,13 +121,15 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         itemId = dataBean.getId();
         accessoryList = new ArrayList<>();
         accessoryList.add(dispatchBean.getForm_source_id());
+        cacheFileList.add("");
         if (dispatchBean.getAccessory_list() != null) {
             for (int i = 0; i < dispatchBean.getAccessory_list().size(); i++) {
                 accessoryList.add(Integer.parseInt(dispatchBean.getAccessory_list().get(i).getSource_id()));
+                cacheFileList.add("");
             }
         }
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.clear_img, R.id.yinzhang_img);
+        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.eraser_ll, R.id.clear_ll);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -190,7 +192,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     public void isEraserMode(IsEraserMode bean) {
         if (bean.eraserMode) {
             eraser = true;
-            setSelectedSates(viewDelegate.get(R.id.clear_img));
+            setSelectedSates(viewDelegate.get(R.id.eraser_ll));
             mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
         } else {
 
@@ -207,7 +209,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 //用自己的view加载
                 viewDelegate.get(R.id.mSignatureView).setVisibility(View.VISIBLE);
                 viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
-                disPlayBySignView(new File(getPath(id, type)));
+                if (!cacheFileList.get(tagPosition).isEmpty())
+                    disPlayBySignView(new File(cacheFileList.get(tagPosition)));
+                else
+                    disPlayBySignView(new File(getPath(id, type)));
             } else {
                 viewDelegate.get(R.id.mSignatureView).setVisibility(View.GONE);
                 viewDelegate.get(R.id.tbs_contentView).setVisibility(View.VISIBLE);
@@ -417,13 +422,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
         save_ll = viewDelegate.get(R.id.save_img);
         pen_ll = viewDelegate.get(R.id.pen_img);
-        eraser_ll = viewDelegate.get(R.id.clear_img);
-        yinzhang_ll = viewDelegate.get(R.id.yinzhang_img);
+        eraser_ll = viewDelegate.get(R.id.eraser_ll);
+        clear_ll = viewDelegate.get(R.id.clear_ll);
 //        biaozhu_ll = viewDelegate.get(R.id.biaozhu_img);
         linearList.add(save_ll);
         linearList.add(pen_ll);
         linearList.add(eraser_ll);
-        linearList.add(yinzhang_ll);
+        linearList.add(clear_ll);
 //        linearList.add(biaozhu_ll);
         recyclerView = viewDelegate.get(R.id.sign_right_list);
         //需要代码创建view才可以显示多次
@@ -475,7 +480,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     //切换界面要恢复一下设置
                     if (mSignatureView != null) {
                         mSignatureView.resetConfig();
-                        mSignatureView.setNewPath("");
+                        mSignatureView.setNewPath(cacheFileList.get(position));
                     }
                     tagPosition = position;
                     //回收掉原来的tbsView，否则不能显示
@@ -529,7 +534,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             switch (view.getId()) {
                 //判断是否是签字状态
                 case R.id.toolBar_img_right:
-                    setSelectedSates(view);
                     if (isSigning) {
                         opType = 3;
                         DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要取消吗？", "确定", "不确定", dOnClickListener);
@@ -554,7 +558,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     setSelectedSates(view);
                     break;
                 //橡皮擦
-                case R.id.clear_img:
+                case R.id.eraser_ll:
                     eraser = !eraser;
                     if (eraser) {
                         setSelectedSates(view);
@@ -564,17 +568,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         mSignatureView.setPenColor(color);
                         mSignatureView.setPenWidth(width);
                     }
-//                    opType = 2;
-//                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除吗？", "确定", "取消", dOnClickListener);
                     break;
-                //选择印章
-                case R.id.yinzhang_img:
-                    setSelectedSates(view);
+                //清除
+                case R.id.clear_ll:
+                    opType = 4;
+                    DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要清除签字吗？", "确定", "取消", dOnClickListener);
                     break;
-//                //选择标注
-//                case R.id.biaozhu_img:
-//                    setSelectedSates(view);
-//                    break;
                 //确认笔记颜色
                 case R.id.confirm_color:
                     if (tagWidth != width && tagWidth != -1) {
@@ -920,17 +919,22 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             if (i == -1) {
                 //要做对应的操作
                 if (opType == 1) {
+                    setSelectedSates(viewDelegate.get(R.id.pen_img));
                     saveImg(true);
                 }
                 if (opType == 2) {
                     finish();
-//                    accessoryList.clear();
-//                    accessoryList.addAll(tagAccessoryList);
                 }
                 if (opType == 3) {
+                    setSelectedSates(viewDelegate.get(R.id.toolBar_img_right));
+                    if (cacheFileList.get(tagPosition).isEmpty())
+                        clearCanvas(null);
+                    else
+                        clearCanvas(cacheFileList.get(tagPosition));
+                    noSigning();
+                }
+                if (opType == 4) {
                     clearCanvas(null);
-//                    accessoryList.clear();
-//                    accessoryList.addAll(tagAccessoryList);
                     noSigning();
                 }
             }
@@ -967,12 +971,17 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     }
 
     private void clearCanvas(String path) {
-        if (path != null)
+        if (path != null) {
+            //签字完成后保存一下文件路径
+            cacheFileList.set(tagPosition, path);
             mSignatureView.clearCanvas(new File(path));
-        else {
-            mSignatureView.clearCanvas(null);
-//            mSignatureView.setNewPath("");
-//            mSignatureView.clearCanvas(new File(getPath(id, type)));
+        } else {
+            //清除字迹的时候要清除掉缓存的文件路径
+            if (cacheFileList != null && cacheFileList.size() != 0) {
+                cacheFileList.set(tagPosition, "");
+            }
+            mSignatureView.setNewPath("");
+            mSignatureView.clearCanvas(new File(getPath(id, type)));
         }
     }
 
@@ -1027,7 +1036,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 linearList.get(i).setSelected(false);
             } else linearList.get(i).setSelected(true);
         }
-        if (view.getId() != R.id.clear_img) {
+        if (view.getId() != R.id.eraser_ll) {
             if (eraser) {
                 eraser = !eraser;
                 mSignatureView.setPenColor(color);
@@ -1059,6 +1068,9 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         File file = new File(SIGN_RESULT);
         FileUtil.deleteFile(file);
         EventBus.getDefault().unregister(this);
+        if (cacheFileList != null) {
+            cacheFileList.clear();
+        }
     }
 
 
