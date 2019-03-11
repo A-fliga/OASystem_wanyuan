@@ -356,12 +356,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                             } else tempFile.createNewFile();
 
                             fos = new FileOutputStream(tempFile);
-//                            long sum = 0;
                             while ((len = is.read(buf)) != -1) {
                                 fos.write(buf, 0, len);
-//                                sum += len;
-//                                int progress = (int) (sum * 1.0f / total * 100);
-//                                LogUtil.d(TAG, "写入缓存文件" + tempFile.getName() + "进度: " + progress);
                             }
                             fos.flush();
                             tempFile.renameTo(new File(getPath(id, type)));
