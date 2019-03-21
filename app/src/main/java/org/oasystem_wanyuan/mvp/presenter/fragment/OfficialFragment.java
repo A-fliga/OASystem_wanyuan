@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -15,15 +12,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.oasystem_wanyuan.R;
 import org.oasystem_wanyuan.http.MSubscribe;
 import org.oasystem_wanyuan.manager.FirmingTypeManager;
-import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.adapter.HomeTypeAdapter;
 import org.oasystem_wanyuan.mvp.adapter.OfficialDocumentAdapter;
 import org.oasystem_wanyuan.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_wanyuan.mvp.model.BaseEntity;
 import org.oasystem_wanyuan.mvp.model.PublicModel;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
+import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.ScreenBean;
 import org.oasystem_wanyuan.mvp.presenter.activity.FileMonitorActivity;
+import org.oasystem_wanyuan.mvp.presenter.activity.MeetingsActivity;
 import org.oasystem_wanyuan.mvp.presenter.activity.OfficialDocumentDetailActivity;
 import org.oasystem_wanyuan.mvp.presenter.activity.OfficialHandleActivity;
 import org.oasystem_wanyuan.mvp.presenter.activity.ScreenActivity;
@@ -71,7 +69,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
         viewDelegate.setOnClickListener(onClickListener,
                 R.id.to_screen, R.id.to_sort_create, R.id.to_sort_update, R.id.refresh);
         setOnItemClickListener();
-        Glide.with(this).load(UserManager.getInstance().getUserInfo().getCompany().getCompany_logo()).into((ImageView) viewDelegate.get(R.id.home_logo));
+//        Glide.with(this).load(UserManager.getInstance().getUserInfo().getCompany().getCompany_logo()).into((ImageView) viewDelegate.get(R.id.home_logo));
     }
 
     private void setOnItemClickListener() {
@@ -79,9 +77,14 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
             @Override
             public void onItemClick(int position) {
                 //这些是固定分类
-                if (position <= FirmingTypeManager.getInstance().getBeanList().size() - 1)
-                    start2Activity(FirmingTypeManager.getInstance().getBeanList().get(position).getId());
-                    //有多的代表有文件监控
+                if (position <= FirmingTypeManager.getInstance().getBeanList().size() - 1) {
+                    List<HomeTypeBean.DataBean> beanList = FirmingTypeManager.getInstance().getBeanList();
+                    if (beanList.get(position).getName().equals("会议管理"))
+                        startMyActivity(MeetingsActivity.class, null);
+                    else
+                        start2Activity(FirmingTypeManager.getInstance().getBeanList().get(position).getId());
+                }
+                //有多的代表有文件监控
                 else {
                     startMyActivity(FileMonitorActivity.class, null);
                 }
@@ -97,7 +100,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                 super.onNext(bean);
                 if (bean.getCode() == 0) {
                     if (bean.getData().getData().size() == 0) {
-                        ToastUtil.l("暂无数据");
+                        ToastUtil.s("暂无数据");
                     }
                     List<DocumentBean.DataBean> beanList = bean.getData().getData();
                     newBeanList = new ArrayList<DocumentBean.DataBean>();

@@ -4,7 +4,6 @@ package org.oasystem_wanyuan.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
 import org.oasystem_wanyuan.BuildConfig;
 import org.oasystem_wanyuan.application.MyApplication;
 import org.oasystem_wanyuan.constants.Constants;
@@ -14,6 +13,8 @@ import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.LoginBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingDetailBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.ScreenBean;
@@ -44,6 +45,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static org.oasystem_wanyuan.constants.Constants.LOGIN_INFO;
+
 
 /**
  * Created by www on 2017/11/13.
@@ -208,7 +210,6 @@ public final class HttpClient {
         toSubscribe(observable, subscriber);
     }
 
-
     /**
      * 修改密码
      */
@@ -338,6 +339,7 @@ public final class HttpClient {
                 getStrings(String.valueOf(id), user_id))));
         toSubscribe(observable, subscriber);
     }
+
     /**
      * 获取固定分类
      */
@@ -345,6 +347,7 @@ public final class HttpClient {
         Observable observable = mApi.getType(addToken());
         toSubscribe(observable, subscriber);
     }
+
     /**
      * 文件监控
      */
@@ -353,7 +356,30 @@ public final class HttpClient {
         HashMap<String, String> bodyMap = new HashMap<>();
         bodyMap.put("param", data);
 
-        Observable observable = mApi.getMonitorList(addToken(),getMapRequestBody(bodyMap));
+        Observable observable = mApi.getMonitorList(addToken(), getMapRequestBody(bodyMap));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取会议列表
+     */
+    public void getMeetingList(Subscriber<BaseEntity<MeetingListBean>> subscriber, String status) {
+        Observable observable = mApi.getMeetingList(addToken(), getMapRequestBody(getBodyMap(getStrings("status"), getStrings(status))));
+        toSubscribe(observable, subscriber);
+    }
+    /**
+     * 获取会议详情
+     */
+    public void getMeetingDetail(Subscriber<BaseEntity<MeetingDetailBean>> subscriber, String id) {
+        Observable observable = mApi.getMeetingDetail(addToken(), getMapRequestBody(getBodyMap(getStrings("id"), getStrings(id))));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 会议签到
+     */
+    public void countersign(Subscriber<BaseEntity> subscriber, String id,String status,String remark) {
+        Observable observable = mApi.countersign(addToken(), getMapRequestBody(getBodyMap(getStrings("id","status","remark"), getStrings(id,status,remark))));
         toSubscribe(observable, subscriber);
     }
 }

@@ -6,6 +6,8 @@ import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.LoginBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingDetailBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.ScreenBean;
@@ -41,13 +43,13 @@ public class PublicModel implements IModel {
     public void login(Subscriber<BaseEntity<LoginBean>> subscriber, String username, String password) {
         HttpClient.getInstance().login(subscriber, username, password);
     }
+
     /**
      * 修改密码
      */
     public void updatePwd(Subscriber<BaseEntity> subscriber, String ypass, String npass) {
         HttpClient.getInstance().updatePwd(subscriber, ypass, npass);
     }
-
 
     /**
      * 获取用户信息
@@ -137,11 +139,12 @@ public class PublicModel implements IModel {
     public void getAllUser(Subscriber<BaseEntity<AllUserBean>> subscriber) {
         HttpClient.getInstance().getAllUser(subscriber);
     }
+
     /**
      * 加签
      */
     public void add_countersign(Subscriber<BaseEntity> subscriber, int id, String user_id) {
-        HttpClient.getInstance().add_countersign(subscriber,id,user_id);
+        HttpClient.getInstance().add_countersign(subscriber, id, user_id);
     }
 
     /**
@@ -155,6 +158,27 @@ public class PublicModel implements IModel {
      * 文件监控
      */
     public void getMonitorList(Subscriber<BaseEntity<DocumentBean>> subscriber, ScreenBean bean) {
-        HttpClient.getInstance().getMonitorList(subscriber,bean);
+        HttpClient.getInstance().getMonitorList(subscriber, bean);
+    }
+
+    /**
+     * 获取会议列表
+     */
+    public void getMeetingList(Subscriber<BaseEntity<MeetingListBean>> subscriber, String status) {
+        HttpClient.getInstance().getMeetingList(subscriber, status);
+    }
+
+    /**
+     * 获取会议详情
+     */
+    public void getMeetingDetail(Subscriber<BaseEntity<MeetingDetailBean>> subscriber, String id) {
+        HttpClient.getInstance().getMeetingDetail(subscriber, id);
+    }
+
+    /**
+     * 会议签到
+     */
+    public void countersign(Subscriber<BaseEntity> subscriber, String id,String status,String remark) {
+        HttpClient.getInstance().countersign(subscriber, id,status,remark);
     }
 }

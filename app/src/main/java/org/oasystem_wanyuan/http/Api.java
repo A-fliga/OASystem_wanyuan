@@ -1,12 +1,13 @@
 package org.oasystem_wanyuan.http;
 
 
-
 import org.oasystem_wanyuan.mvp.model.BaseEntity;
 import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.LoginBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingDetailBean;
+import org.oasystem_wanyuan.mvp.model.bean.MeetingListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeListBean;
 import org.oasystem_wanyuan.mvp.model.bean.OfficeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.UpFileBean;
@@ -41,7 +42,6 @@ public interface Api {
     @POST("auth/login")
     Observable<BaseEntity<LoginBean>> login(@Body RequestBody register);
 
-
     /**
      * 修改密码
      *
@@ -49,7 +49,8 @@ public interface Api {
      */
     @Headers({"Content-Type: application/json"})
     @POST("user/update_pass")
-    Observable<BaseEntity> updatePwd(@Header("Authorization") String token,@Body RequestBody pwd);
+    Observable<BaseEntity> updatePwd(@Header("Authorization") String token, @Body RequestBody pwd);
+
 
     /**
      * 获取用户信息
@@ -169,5 +170,26 @@ public interface Api {
      */
     @Headers({"Content-Type: application/json"})
     @POST("dispatch/monitoring")
-    Observable<BaseEntity<DocumentBean>> getMonitorList(@Header("Authorization") String token,@Body RequestBody body);
+    Observable<BaseEntity<DocumentBean>> getMonitorList(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 获取会议列表
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("conference/index")
+    Observable<BaseEntity<MeetingListBean>> getMeetingList(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 获取会议详情
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("conference/details")
+    Observable<BaseEntity<MeetingDetailBean>> getMeetingDetail(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 会议签到
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("conference/countersign")
+    Observable<BaseEntity> countersign(@Header("Authorization") String token, @Body RequestBody body);
 }
