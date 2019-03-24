@@ -57,6 +57,11 @@
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.ChangePassWordActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.MeetingsActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.MeetingDetailActivity" />
+        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.CarManagementActivity"/>
+        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AddCarApplyActivity"/>
+        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.CarApplyDetailActivity"/>
+
+        
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.TestActivity"></activity>
 
         <provider
