@@ -10,6 +10,8 @@ import org.oasystem_wanyuan.constants.Constants;
 import org.oasystem_wanyuan.http.cookie.CookiesManager;
 import org.oasystem_wanyuan.mvp.model.BaseEntity;
 import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
+import org.oasystem_wanyuan.mvp.model.bean.AttendanceBean;
+import org.oasystem_wanyuan.mvp.model.bean.AttendanceStatisticsBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyDetailBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyListBean;
@@ -443,6 +445,31 @@ public final class HttpClient {
      */
     public void approveReject(Subscriber<BaseEntity> subscriber,String examine_id,String text) {
         Observable observable = mApi.approveReject(addToken(),getMapRequestBody(getBodyMap(getStrings("examine_id","text"),getStrings(examine_id,text))));
+        toSubscribe(observable, subscriber);
+    }
+
+
+    /**
+     * 考勤详情
+     */
+    public void getAttendanceInfo(Subscriber<BaseEntity<AttendanceBean>> subscriber, String date) {
+        Observable observable = mApi.getAttendanceInfo(addToken(), getMapRequestBody(getBodyMap(getStrings("date"), getStrings(date))));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 提交打卡
+     */
+    public void addAttendance(Subscriber<BaseEntity> subscriber, String type, String date, String lat, String lng) {
+        Observable observable = mApi.addAttendance(addToken(), getMapRequestBody(getBodyMap(getStrings("type,date,lat,lng"), getStrings(type, date, lat, lng))));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     * 获取考勤统计
+     */
+    public void getAttendanceStatistics(Subscriber<BaseEntity<AttendanceStatisticsBean>> subscriber, String start_time, String end_time) {
+        Observable observable = mApi.getAttendanceStatistics(addToken(), getMapRequestBody(getBodyMap(getStrings("start_time,end_time"), getStrings(start_time, end_time))));
         toSubscribe(observable, subscriber);
     }
 }

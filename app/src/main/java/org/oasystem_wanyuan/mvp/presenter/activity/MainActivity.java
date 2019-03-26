@@ -81,10 +81,9 @@ public class MainActivity extends ActivityPresenter {
         String[] s = version.split("\\.");
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length; i++) {
-            if(i == 0){
+            if (i == 0) {
                 sb.append(s[i]).append(".");
-            }
-            else sb.append(s[i]);
+            } else sb.append(s[i]);
         }
         if (Float.parseFloat(AppUtil.getVersionName()) < Float.parseFloat(sb.toString())) {
             //开始下载更新并安装
@@ -200,14 +199,13 @@ public class MainActivity extends ActivityPresenter {
                 beanList.addAll(bean.getData().getData());
                 for (int i = 0; i < 3; i++) {
                     HomeTypeBean.DataBean bean1 = new HomeTypeBean.DataBean();
-                    if(i == 0){
-
+                    if (i == 0) {
                         bean1.setName("会议管理");
                     }
-                    if(i == 1){
+                    if (i == 1) {
                         bean1.setName("考勤管理");
                     }
-                    if(i == 2){
+                    if (i == 2) {
                         bean1.setName("用车管理");
                     }
                     bean1.setDispatch_flow_list_count(0);
@@ -225,8 +223,7 @@ public class MainActivity extends ActivityPresenter {
                 != PackageManager.PERMISSION_GRANTED) {
             // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_CODE);
-        }
-        else {
+        } else {
             getUserInfo();
         }
     }

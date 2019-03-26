@@ -78,7 +78,7 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
-
+-keepattributes EnclosingMethod
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet);
 }
