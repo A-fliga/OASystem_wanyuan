@@ -30,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,6 +72,15 @@ public abstract class ViewDelegate implements IDelegate {
         }
         return viewDelegate;
     }
+
+    public EditText getEt(int id){
+        return get(id);
+    }
+
+    public TextView getTv(int id){
+        return get(id);
+    }
+
 
     public void startMyActivity(Class<?> pClass, Bundle pBundle) {
         Intent intent = new Intent(getActivity(), pClass);

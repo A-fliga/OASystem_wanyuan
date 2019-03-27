@@ -3,6 +3,8 @@ package org.oasystem_wanyuan.http;
 
 import org.oasystem_wanyuan.mvp.model.BaseEntity;
 import org.oasystem_wanyuan.mvp.model.bean.AllUserBean;
+import org.oasystem_wanyuan.mvp.model.bean.AskForLeaveDetailBean;
+import org.oasystem_wanyuan.mvp.model.bean.AskLeaveBean;
 import org.oasystem_wanyuan.mvp.model.bean.AttendanceBean;
 import org.oasystem_wanyuan.mvp.model.bean.AttendanceStatisticsBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyDetailBean;
@@ -267,4 +269,48 @@ public interface Api {
     @Headers({"Content-Type: application/json"})
     @POST("attendance/clock_statistics")
     Observable<BaseEntity<AttendanceStatisticsBean>> getAttendanceStatistics(@Header("Authorization") String token, @Body RequestBody body);
+
+
+    /**
+     * 获取请假列表
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/index")
+    Observable<BaseEntity<AskLeaveBean>> getAskLeaveBean(@Header("Authorization") String token);
+
+
+    /**
+     * 获取请假详情
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/details")
+    Observable<BaseEntity<AskForLeaveDetailBean>> getAskLeaveDetailBean(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 请假审批列表
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/lists")
+    Observable<BaseEntity<AskLeaveBean>> getLeaveApprove(@Header("Authorization") String token);
+
+    /**
+     * 同意请假
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/agree")
+    Observable<BaseEntity> leaveAgree(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 获取请假类型
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/typelist")
+    Observable<CarTypeListBean> getLeaveTypeList(@Header("Authorization") String token);
+
+    /**
+     * 新增请假
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("attendance/create")
+    Observable<BaseEntity> addLeaveApply(@Header("Authorization") String token, @Body RequestBody body);
 }
