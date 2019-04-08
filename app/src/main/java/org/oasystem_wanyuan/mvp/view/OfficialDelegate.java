@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 public class OfficialDelegate extends ViewDelegate {
-    private ImageView home_user_icon;
+    public ImageView home_user_icon;
     private TextView home_user_name, home_user_unit;
     private RecyclerView typeRecyclerView;
 
