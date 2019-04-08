@@ -42,20 +42,20 @@ public class ProgressDialogUtil {
                 case START_DIALOG:// 启动加载框
                     message = (String) msg.obj;
                     if (dialog != null) {
-                        stopLoad();
+                        updateMsg(message);
 //                        startLoad(message);
 //                        return;
-                    }
-                    init(message);
+                    } else
+                        init(message);
 //                    canceledOnTouchOutside(true);
                     break;
                 case START_EMPTY_DIALOG:
                     if (dialog != null) {
-                        stopLoad();
+                        updateMsg("");
 //                        startLoad();
 //                        return;
-                    }
-                    init(message);
+                    } else
+                        init(message);
 //                    canceledOnTouchOutside(true);
                 case UPDATE_DIALOG:// 更新加载框
                     message = (String) msg.obj;
@@ -77,7 +77,6 @@ public class ProgressDialogUtil {
                         dialog.dismiss();
                         dialog.cancel();
                         dialog = null;
-                        title = null;
                     }
                     break;
                 default:
@@ -148,8 +147,6 @@ public class ProgressDialogUtil {
     }
 
 
-
-
     /**
      * @param
      * @方法说明:启动对话框
@@ -192,7 +189,7 @@ public class ProgressDialogUtil {
      * @方法名称:UpdateMsg
      * @返回值:void
      */
-    public void UpdateMsg(String msg) {
+    private void updateMsg(String msg) {
         Message message = new Message();
         message.what = UPDATE_DIALOG;
         message.obj = msg;

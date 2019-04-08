@@ -1029,6 +1029,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
     private void upLoadFile(final String path) {
         File file = new File(path);
+        ProgressDialogUtil.instance().startLoad("上传中");
         PublicModel.getInstance().upload_file(new MSubscribe<BaseEntity<UpFileBean>>() {
             @Override
             public void onNext(BaseEntity<UpFileBean> bean) {
