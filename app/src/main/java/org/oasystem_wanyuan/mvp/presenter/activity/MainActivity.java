@@ -289,7 +289,7 @@ public class MainActivity extends ActivityPresenter {
         viewPager = viewDelegate.get(R.id.content_pager);
         mFragmentPagerAdapter mFragmentPagerAdapter = new mFragmentPagerAdapter(getSupportFragmentManager(), getFragments());
         viewPager.setAdapter(mFragmentPagerAdapter);
-         navigation = viewDelegate.get(R.id.navigation);
+        navigation = viewDelegate.get(R.id.navigation);
         navigation.inflateMenu(R.menu.navigation_btn);
         disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -369,6 +369,7 @@ public class MainActivity extends ActivityPresenter {
             return false;
         }
     };
+
 
 
     @Override

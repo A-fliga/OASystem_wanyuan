@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 public class OfficialDelegate extends ViewDelegate {
-    public ImageView home_user_icon;
+    private ImageView home_user_icon;
     private TextView home_user_name, home_user_unit;
     private RecyclerView typeRecyclerView;
 
@@ -55,7 +55,6 @@ public class OfficialDelegate extends ViewDelegate {
 
 
     public HomeTypeAdapter initTypeList() {
-
 
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
