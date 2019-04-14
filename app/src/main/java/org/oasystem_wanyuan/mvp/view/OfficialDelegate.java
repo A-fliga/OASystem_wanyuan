@@ -8,7 +8,9 @@ import android.widget.TextView;
 import org.oasystem_wanyuan.R;
 import org.oasystem_wanyuan.manager.FirmingTypeManager;
 import org.oasystem_wanyuan.manager.UserManager;
+import org.oasystem_wanyuan.mvp.adapter.HomeBusinessManagerAdapter;
 import org.oasystem_wanyuan.mvp.adapter.HomeTypeAdapter;
+import org.oasystem_wanyuan.mvp.model.bean.HomeBusinessManagerBean;
 import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.UserInfo;
 import org.oasystem_wanyuan.mvp.view.baseDelegate.ViewDelegate;
@@ -24,7 +26,8 @@ import java.util.List;
 public class OfficialDelegate extends ViewDelegate {
     private ImageView home_user_icon;
     private TextView home_user_name, home_user_unit;
-    private RecyclerView typeRecyclerView;
+    private RecyclerView typeRecyclerView,businessManagerRecycler;
+
 
     @Override
     public void onDestroy() {
@@ -40,6 +43,7 @@ public class OfficialDelegate extends ViewDelegate {
     @Override
     public void initWidget() {
         typeRecyclerView = get(R.id.home_type_recyclerView);
+        businessManagerRecycler = get(R.id.home_manager_recyclerView);
         home_user_icon = get(R.id.home_user_icon);
         home_user_name = get(R.id.home_user_name);
         home_user_unit = get(R.id.home_user_unit);
@@ -55,7 +59,6 @@ public class OfficialDelegate extends ViewDelegate {
 
 
     public HomeTypeAdapter initTypeList() {
-
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
         List<HomeTypeBean.DataBean> beanList = FirmingTypeManager.getInstance().getBeanList();
@@ -72,6 +75,32 @@ public class OfficialDelegate extends ViewDelegate {
         return adapter;
     }
 
+    public HomeBusinessManagerAdapter initManagerAdaper() {
+        List<HomeBusinessManagerBean> beanList = new ArrayList<>();
+        HomeBusinessManagerBean bean = null;
+        for (int i = 0; i < 3; i++) {
+            if (i == 0) {
+                bean = new HomeBusinessManagerBean();
+                bean.name = "考勤管理";
+                bean.resId = R.mipmap.ask_for_leave_icon;
+            }
+            if (i == 1) {
+                bean = new HomeBusinessManagerBean();
+                bean.name = "会议管理";
+                bean.resId = R.mipmap.meeting_icon;
+            }
+            if (i == 2) {
+                bean = new HomeBusinessManagerBean();
+                bean.name = "用车申请";
+                bean.resId = R.mipmap.car_apply_icon;
+            }
+            beanList.add(bean);
+        }
+        HomeBusinessManagerAdapter adapter = new HomeBusinessManagerAdapter(beanList,this.getActivity());
+        setRecyclerView(businessManagerRecycler, adapter);
+        return adapter;
+    }
+
 //    public void setNotification(int count) {
 //        //实例化通知构建器对象
 //        Notification.Builder builder = new Notification.Builder(this.getActivity());
@@ -85,7 +114,7 @@ public class OfficialDelegate extends ViewDelegate {
 //        BadgeUtil.sendBadgeNotification(notification, 1, MyApplication.getAppContext(), count, count);
 //    }
 
-    private void setRecyclerView(RecyclerView recyclerView, HomeTypeAdapter adapter) {
+    private void setRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);

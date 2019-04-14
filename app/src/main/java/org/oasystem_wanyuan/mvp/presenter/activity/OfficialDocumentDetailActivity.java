@@ -84,7 +84,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll, biaozhu_ll;
+    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll, yinzhang_ll;
     private List<LinearLayout> linearList = new ArrayList<>();
     private List<String> contentTv;
     private TbsReaderView sign_fileView;
@@ -139,7 +139,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         }
 
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.save_img, R.id.pen_img, R.id.eraser_ll, R.id.clear_ll);
+        viewDelegate.setOnClickListener(onClickListener, R.id.save_ll, R.id.pen_ll, R.id.eraser_ll, R.id.clear_ll);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -442,16 +442,16 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void initView(final Boolean done) {
         sign_right_ll = viewDelegate.get(R.id.sign_right_ll);
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
-        save_ll = viewDelegate.get(R.id.save_img);
-        pen_ll = viewDelegate.get(R.id.pen_img);
+        save_ll = viewDelegate.get(R.id.save_ll);
+        pen_ll = viewDelegate.get(R.id.pen_ll);
         eraser_ll = viewDelegate.get(R.id.eraser_ll);
         clear_ll = viewDelegate.get(R.id.clear_ll);
-//        biaozhu_ll = viewDelegate.get(R.id.biaozhu_img);
+        yinzhang_ll = viewDelegate.get(R.id.yinzhang_ll);
         linearList.add(save_ll);
         linearList.add(pen_ll);
         linearList.add(eraser_ll);
         linearList.add(clear_ll);
-//        linearList.add(biaozhu_ll);
+        linearList.add(yinzhang_ll);
         recyclerView = viewDelegate.get(R.id.sign_right_list);
         //需要代码创建view才可以显示多次
         createSignView();
@@ -568,13 +568,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     }
                     break;
                 //保存签字图片
-                case R.id.save_img:
+                case R.id.save_ll:
                     setSelectedSates(view);
                     opType = 1;
                     DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要保存签批吗？", "确定", "取消", dOnClickListener);
                     break;
                 //选择笔的样式
-                case R.id.pen_img:
+                case R.id.pen_ll:
                     if (isPen)
                         showSettingView();
                     setSelectedSates(view);
@@ -586,7 +586,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         setSelectedSates(view);
                         mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
                     } else {
-                        setSelectedSates(viewDelegate.get(R.id.pen_img));
+                        setSelectedSates(viewDelegate.get(R.id.pen_ll));
                         mSignatureView.setPenColor(color);
                         mSignatureView.setPenWidth(width);
                     }
@@ -658,7 +658,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         sign_full_fl.setVisibility(View.VISIBLE);
         sign_right_ll.setVisibility(View.GONE);
         viewDelegate.get(R.id.sign_left_ll).setVisibility(View.GONE);
-        setSelectedSates(viewDelegate.get(R.id.pen_img));
+        setSelectedSates(viewDelegate.get(R.id.pen_ll));
         mSignatureView.setPenColor(color);
         mSignatureView.setPenWidth(width);
     }
@@ -968,7 +968,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             if (i == -1) {
                 //要做对应的操作
                 if (opType == 1) {
-                    setSelectedSates(viewDelegate.get(R.id.pen_img));
+                    setSelectedSates(viewDelegate.get(R.id.pen_ll));
                     saveImg(true);
                 }
                 if (opType == 2) {
@@ -1092,10 +1092,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 mSignatureView.setPenWidth(width);
             }
         }
-        if (view.getId() != R.id.pen_img) {
+        if (view.getId() != R.id.pen_ll) {
             isPen = false;
         }
-        if (view.getId() == R.id.pen_img) {
+        if (view.getId() == R.id.pen_ll) {
             isPen = true;
         }
     }
