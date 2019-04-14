@@ -55,6 +55,7 @@ import org.oasystem_wanyuan.utils.LogUtil;
 import org.oasystem_wanyuan.utils.NetUtil;
 import org.oasystem_wanyuan.utils.ProgressDialogUtil;
 import org.oasystem_wanyuan.utils.RealPathFromUriUtils;
+import org.oasystem_wanyuan.utils.SharedPreferencesUtil;
 import org.oasystem_wanyuan.utils.ToastUtil;
 
 import java.io.File;
@@ -89,12 +90,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private TbsReaderView sign_fileView;
     private SignatureView mSignatureView;
     private String[] permissionStr = {"内存卡", "读取手机"};
-    private int id, tagPosition, opType = 0, itemId, color = Color.BLACK, tagColor;
+    private int id, tagPosition, opType = 0, itemId, color, tagColor;
     private ArrayList<Integer> accessoryList;
     private String type;
     private static String OFFICE_PATH;
     private AlertDialog dialog, addAccessoryDialog;
-    private float width = PenWidth.DEFAULT.getWidth(), tagWidth;
+    private float width, tagWidth;
     private List<AllUserBean.DataBean> userBeanList;
     public List<String> cacheFileList = new ArrayList<>();
     private MSubscribe<ResponseBody> subscribe;
@@ -118,6 +119,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     }
 
     private void initAllData() {
+        initPenWidthAndColor();
         done = getIntent().getExtras().getBoolean("done");
         dataBean = (DocumentBean.DataBean) getIntent().getExtras().getSerializable("DocumentDataBean");
         dispatchBean = dataBean.getDispatch();
@@ -145,6 +147,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             getAllUserBean();
         }
     }
+
+    private void initPenWidthAndColor() {
+        width = SharedPreferencesUtil.getWidth() == -1f ? PenWidth.DEFAULT.getWidth() : SharedPreferencesUtil.getWidth();
+        color = SharedPreferencesUtil.getColor() == -1 ? Color.BLACK : SharedPreferencesUtil.getColor();
+    }
+
 
     private void getAllUserBean() {
         userBeanList = new ArrayList<>();
@@ -576,7 +584,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     eraser = !eraser;
                     if (eraser) {
                         setSelectedSates(view);
-                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 30f);
+                        mSignatureView.initEraserMode(Color.TRANSPARENT, width + 40f);
                     } else {
                         setSelectedSates(viewDelegate.get(R.id.pen_img));
                         mSignatureView.setPenColor(color);
@@ -593,10 +601,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     if (tagWidth != width && tagWidth != -1) {
                         width = tagWidth;
                         mSignatureView.setPenWidth(width);
+                        SharedPreferencesUtil.savePenWidth(width);
                     }
                     if (tagColor != color && tagColor != -1) {
                         color = tagColor;
                         mSignatureView.setPenColor(color);
+                        SharedPreferencesUtil.savePenColor(color);
                     }
                     if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
@@ -864,7 +874,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (TextUtils.isEmpty(remarkEt.getText().toString())) {
-                            ToastUtil.s("必须填写原因");
+                            ToastUtil.l("必须填写原因");
                         } else
                             toExamine(status, form_source_id, accessoryId, remarkEt.getText().toString());
                     }
@@ -997,8 +1007,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void noSigning() {
         isSigning = false;
         eraser = false;
-        width = PenWidth.DEFAULT.getWidth();
-        color = Color.BLACK;
+        initPenWidthAndColor();
         viewDelegate.setToolBarRightImg(R.mipmap.sign);
         viewDelegate.get(R.id.sign_left_ll).setVisibility(View.VISIBLE);
         sign_full_fl.setVisibility(View.GONE);

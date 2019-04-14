@@ -35,6 +35,8 @@ public final class Constants {
     public static final String OA_SYSTEM = PACKAGE_PATH;
     public static final String CONTENT_TYPE = "application/json;charset=UTF-8";
 
+    public static final String PEN_WIDTH = "PEN_WIDTH";
+    public static final String PEN_COLOR = "PEN_COLOR";
     //调用相机请求码
     public static final int TAKE_PHOTO_REQUEST_CODE = 2000;
 
