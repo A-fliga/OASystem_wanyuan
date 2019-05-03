@@ -155,7 +155,7 @@ public class DocumentBean implements Serializable {
         private int id;
         private String user_id;
         private int dispatch_id;
-        private int level;
+        private String level;
         private int company_id;
         private String created_at;
         private String updated_at;
@@ -214,7 +214,7 @@ public class DocumentBean implements Serializable {
             private int id;
             private int user_id;
             private int dispatch_id;
-            private int level;
+            private String level;
             private int company_id;
             private String created_at;
             private String updated_at;
@@ -257,11 +257,11 @@ public class DocumentBean implements Serializable {
                 this.dispatch_id = dispatch_id;
             }
 
-            public int getLevel() {
+            public String getLevel() {
                 return level;
             }
 
-            public void setLevel(int level) {
+            public void setLevel(String level) {
                 this.level = level;
             }
 
@@ -500,11 +500,11 @@ public class DocumentBean implements Serializable {
             this.dispatch_id = dispatch_id;
         }
 
-        public int getLevel() {
+        public String getLevel() {
             return level;
         }
 
-        public void setLevel(int level) {
+        public void setLevel(String level) {
             this.level = level;
         }
 
@@ -677,7 +677,7 @@ public class DocumentBean implements Serializable {
 
                 private int id;
                 private String name;
-                private int level;
+                private String level;
                 private int company_id;
                 private String created_at;
                 private String updated_at;
@@ -698,11 +698,11 @@ public class DocumentBean implements Serializable {
                     this.name = name;
                 }
 
-                public int getLevel() {
+                public String getLevel() {
                     return level;
                 }
 
-                public void setLevel(int level) {
+                public void setLevel(String level) {
                     this.level = level;
                 }
 
@@ -747,7 +747,7 @@ public class DocumentBean implements Serializable {
                 private String name;
                 private int parent_id;
                 private int sort;
-                private int level;
+                private String level;
                 private int company_id;
                 private String created_at;
                 private String updated_at;
@@ -784,11 +784,11 @@ public class DocumentBean implements Serializable {
                     this.sort = sort;
                 }
 
-                public int getLevel() {
+                public String getLevel() {
                     return level;
                 }
 
-                public void setLevel(int level) {
+                public void setLevel(String level) {
                     this.level = level;
                 }
 
@@ -1714,7 +1714,7 @@ public class DocumentBean implements Serializable {
 //                private int id;
 //                private String user_id;
 //                private int dispatch_id;
-//                private int level;
+//                private String level;
 //                private int company_id;
 //                private String created_at;
 //                private String updated_at;
@@ -1752,7 +1752,7 @@ public class DocumentBean implements Serializable {
 //                    return level;
 //                }
 //
-//                public void setLevel(int level) {
+//                public void setLevel(String level) {
 //                    this.level = level;
 //                }
 //
