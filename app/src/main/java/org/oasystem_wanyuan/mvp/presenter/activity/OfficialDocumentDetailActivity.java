@@ -35,6 +35,7 @@ import org.oasystem_wanyuan.application.MyApplication;
 import org.oasystem_wanyuan.constants.Constants;
 import org.oasystem_wanyuan.http.HttpClient;
 import org.oasystem_wanyuan.http.MSubscribe;
+import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.adapter.SignOfficialAdapter;
 import org.oasystem_wanyuan.mvp.adapter.itemClickListener.OnItemClickListener;
 import org.oasystem_wanyuan.mvp.model.BaseEntity;
@@ -45,6 +46,7 @@ import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.IsEraserMode;
 import org.oasystem_wanyuan.mvp.model.bean.IsSigningBean;
 import org.oasystem_wanyuan.mvp.model.bean.UpFileBean;
+import org.oasystem_wanyuan.mvp.model.bean.UserInfo;
 import org.oasystem_wanyuan.mvp.view.OfficialDocumentDetailDelegate;
 import org.oasystem_wanyuan.mvp.view.SignView.PenColor;
 import org.oasystem_wanyuan.mvp.view.SignView.PenWidth;
@@ -464,7 +466,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         } else {
             viewDelegate.setToolBarRightImg(R.mipmap.sign);
             viewDelegate.getToolBarRightImg().setOnClickListener(onClickListener);
-            viewDelegate.hideLeftBtn(dataBean.getAuth());
+            UserInfo.SysAuthBean authBean = UserManager.getInstance().getUserInfo().getAuthBean();
+            if(authBean != null){
+                viewDelegate.hideLeftBtn(authBean.getApp_auth());
+            }
             OFFICE_PATH = Constants.SIGN_OFFICIAL;
         }
         viewDelegate.getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
