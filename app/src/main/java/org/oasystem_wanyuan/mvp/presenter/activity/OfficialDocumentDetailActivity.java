@@ -99,6 +99,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private AlertDialog dialog, addAccessoryDialog;
     private float width, tagWidth;
     private List<AllUserBean.DataBean> userBeanList;
+    private List<AllUserBean.DataBean> daiqianUserBeanList;
+    private int daiqianIndex = -1;
     public List<String> cacheFileList = new ArrayList<>();
     private MSubscribe<ResponseBody> subscribe;
     private EditText remarkEt;
@@ -642,11 +644,76 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     break;
                 //代签
                 case R.id.sign_daiqian:
+                    showUserDialog();
                     break;
 
             }
         }
     };
+
+    private void showUserDialog() {
+        AllUserBean bean = UserManager.getInstance().getAllUserInfo();
+        daiqianUserBeanList = new ArrayList<>();
+        for (int i = 0; i < bean.getData().size(); i++) {
+            if (bean.getData().get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
+                daiqianUserBeanList.add(bean.getData().get(i));
+            }
+        }
+        String[] peopleList = new String[daiqianUserBeanList.size()];
+        for (int i = 0; i < daiqianUserBeanList.size(); i++) {
+            peopleList[i] = daiqianUserBeanList.get(i).getName();
+        }
+        daiqianIndex = -1;
+        DialogUtil.showSingleChoiceDialog(this, "请选择代签人员", "确定", "取消", peopleList,
+                getmOnClickListener(false, -1));
+    }
+
+    public DialogInterface.OnClickListener getmOnClickListener(final Boolean sure, final int user_id) {
+        DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i >= 0) {
+                    daiqianIndex = i;
+                }
+                if (i == -1) {
+                    if (!sure) {
+                        showDaiqianConfirmDialog(daiqianIndex);
+                    } else {
+                        toDaiqian(user_id);
+                    }
+                    dialogInterface.dismiss();
+                }
+
+            }
+        };
+        return mOnClickListener;
+    }
+
+    private void toDaiqian(int user_id) {
+        if (user_id < 0) {
+            ToastUtil.s("非法Id");
+        } else {
+            PublicModel.getInstance().addDaiqian(new MSubscribe<BaseEntity>() {
+                @Override
+                public void onNext(BaseEntity bean) {
+                    super.onNext(bean);
+                    if (bean.getCode() == 0) {
+                        ToastUtil.s("操作成功");
+                        EventBus.getDefault().post("upLoadSuccess");
+                        finish();
+                    }
+                }
+            }, String.valueOf(itemId), String.valueOf(user_id));
+        }
+    }
+
+
+    private void showDaiqianConfirmDialog(int index) {
+        if (index >= 0) {
+            DialogUtil.showDialog(this, "确定 \"" + daiqianUserBeanList.get(index).getName() + "\" 帮您代签吗？"
+                    , "确定", "取消", getmOnClickListener(true, daiqianUserBeanList.get(index).getId()));
+        }
+    }
 
 
     private void setSigningStatus() {

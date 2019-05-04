@@ -59,6 +59,17 @@ public class DialogUtil {
     }
 
     /**
+     * 单选对话框
+     */
+    public static void showSingleChoiceDialog(Context context, String title,String sure,
+                                              String cancel,String[] data,
+                                              DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title).setCancelable(false).setPositiveButton(sure, listener).
+                setNegativeButton(cancel, listener).setSingleChoiceItems(data,-1,listener).show();
+    }
+
+    /**
      * 显示定位权限被拒绝对话框
      */
     public static void showLocIgnoredDialog(final Context context) {

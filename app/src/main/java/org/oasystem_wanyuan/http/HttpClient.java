@@ -525,4 +525,12 @@ public final class HttpClient {
         Observable observable = mApi.addLeaveApply(addToken(),getObjRequestBody(bean));
         toSubscribe(observable, subscriber);
     }
+
+    /**
+     *申请代签
+     */
+    public void addDaiqian(Subscriber<BaseEntity> subscriber,String id,String user_id) {
+        Observable observable = mApi.addDaiqian(addToken(),getMapRequestBody(getBodyMap(getStrings("id,user_id"),getStrings(id,user_id))));
+        toSubscribe(observable, subscriber);
+    }
 }

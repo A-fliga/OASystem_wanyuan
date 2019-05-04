@@ -313,4 +313,11 @@ public interface Api {
     @Headers({"Content-Type: application/json"})
     @POST("attendance/create")
     Observable<BaseEntity> addLeaveApply(@Header("Authorization") String token, @Body RequestBody body);
+
+    /**
+     * 代签
+     */
+    @Headers({"Content-Type: application/json"})
+    @POST("dispatch/add_daiqian")
+    Observable<BaseEntity> addDaiqian(@Header("Authorization") String token ,@Body RequestBody body);
 }
