@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import org.oasystem_wanyuan.R;
+import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.adapter.SignatureBottomAdapter;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.SignFlowsBean;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 
 public class OfficialDocumentDetailDelegate extends ViewDelegate {
-    private LinearLayout sign_bottom_ll;
+    private LinearLayout sign_left_ll;
     private RecyclerView sign_bottom;
     @Override
     public void onDestroy() {
@@ -34,15 +35,18 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
     @Override
     public void initWidget() {
         getTitleView().setText("会签");
-        sign_bottom_ll = get(R.id.sign_left_ll);
+        sign_left_ll = get(R.id.sign_left_ll);
         sign_bottom = get(R.id.sign_bottom);
     }
 
     public void hideLeftBtn(String auth) {
-        for (int i = 0; i < sign_bottom_ll.getChildCount(); i++) {
+        for (int i = 0; i < sign_left_ll.getChildCount()-1; i++) {
             if (!auth.contains(i + 1 + "")) {
-                sign_bottom_ll.getChildAt(i).setVisibility(View.GONE);
+                sign_left_ll.getChildAt(i).setVisibility(View.GONE);
             }
+        }
+        if (Integer.parseInt(UserManager.getInstance().getUserInfo().getIs_daiqian()) == 0) {
+            sign_left_ll.getChildAt(sign_left_ll.getChildCount() - 1).setVisibility(View.GONE);
         }
     }
     public void initBottomRecyclerView(DocumentBean.DataBean bean,Boolean done){
