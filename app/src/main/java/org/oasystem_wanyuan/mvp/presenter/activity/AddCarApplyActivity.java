@@ -228,12 +228,12 @@ public class AddCarApplyActivity extends ActivityPresenter<AddCarApplyDelegate> 
 
 
     private void getUserData() {
-        AllUserBean bean = UserManager.getInstance().getAllUserInfo();
-        if (bean != null) {
+        userBeanList = UserManager.getInstance().getAllUserInfo();
+        if (userBeanList != null) {
             //这里要剔除掉自己的那一个数据
-            for (int i = 0; i < bean.getData().size(); i++) {
-                if (bean.getData().get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
-                    userBeanList.add(bean.getData().get(i));
+            for (int i = 0; i < userBeanList.size(); i++) {
+                if (userBeanList.get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
+                    userBeanList.add(userBeanList.get(i));
                 }
             }
             for (int i = 0; i < userBeanList.size(); i++) {
