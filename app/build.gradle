@@ -26,20 +26,13 @@ android {
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        //X5兼容64位手机
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            abiFilters "armeabi","armeabi-v7a"
         }
     }
     sourceSets {
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
-        }
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -52,6 +45,7 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
+
 
     //修改打包过后的apk名称
     applicationVariants.all { variant ->
@@ -79,20 +73,21 @@ android {
 
         release {
             //万源
-            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+//            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
             //大竹
 //            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
-//            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
+            buildConfigField "String", "HOST", '"http://oa.zycnb.net/api/"'
             signingConfig android.signingConfigs.release
             minifyEnabled true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
-        }
+}
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -127,4 +122,10 @@ dependencies {
     //    compile 'com.bm.photoview:library:1.4.1'
     testCompile 'junit:junit:4.12'
     compile files('libs/BaiduLBS_Android.jar')
+    compile(name: 'inkapi-release', ext: 'aar')
+    compile(name: 'inkframework-release', ext: 'aar')
+    compile(name: 'inkutils-release', ext: 'aar')
+    compile(name: 'and42-release', ext: 'aar')
+    compile(name: 'utils-release', ext: 'aar')
+    compile(name: 'recognizer-release', ext: 'aar')
 }

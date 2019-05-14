@@ -64,6 +64,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -412,6 +413,58 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
     private void downLoadFile(final int id, final String type) {
         PublicModel.getInstance().getSource(getSubscribe(id, type), id + "");
+//        downLoadBgm("http://112.35.1.224:9099/cs.pdf");
+    }
+
+    private void downLoadBgm(final String bgmUrl) {
+        ProgressDialogUtil.instance().stopLoad();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LogUtil.d(TAG, "下载文件-->onResponse");
+                InputStream is = null;
+                byte[] buf = new byte[2048];
+                int len = 0;
+                FileOutputStream fos = null;
+                try {
+                    URL url = new URL(bgmUrl);
+                    is = url.openStream();
+//                            long total = bean.contentLength();
+                    File tempFile = new File(getTempPath(id));
+                    if (tempFile.exists()) {
+                        tempFile.delete();
+                    } else tempFile.createNewFile();
+
+                    fos = new FileOutputStream(tempFile);
+                    while ((len = is.read(buf)) != -1) {
+                        fos.write(buf, 0, len);
+                        LogUtil.d("itemId", "下载中");
+                    }
+                    fos.flush();
+                    tempFile.renameTo(new File(getPath(id, type)));
+                    ProgressDialogUtil.instance().stopLoad();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showFile(id, type);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    LogUtil.d(TAG, "文件下载异常 = " + e.toString());
+                } finally {
+                    ProgressDialogUtil.instance().stopLoad();
+                    try {
+                        if (is != null)
+                            is.close();
+                        if (fos != null)
+                            fos.close();
+                    } catch (IOException ignored) {
+                    }
+
+                }
+            }
+        }).start();
     }
 
 
@@ -464,7 +517,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             viewDelegate.setToolBarRightImg(R.mipmap.sign);
             viewDelegate.getToolBarRightImg().setOnClickListener(onClickListener);
             UserInfo.SysAuthBean authBean = UserManager.getInstance().getUserInfo().getAuthBean();
-            if(authBean != null){
+            if (authBean != null) {
                 viewDelegate.hideLeftBtn(authBean.getApp_auth());
             }
             OFFICE_PATH = Constants.SIGN_OFFICIAL;
@@ -487,7 +540,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     }
 
     private void initNotDoneView() {
-        viewDelegate.setOnClickListener(onClickListener, R.id.sign_add_advise, R.id.sign_add_person, R.id.sign_agree, R.id.sign_refuse, R.id.sign_close,R.id.sign_daiqian);
+        viewDelegate.setOnClickListener(onClickListener, R.id.sign_add_advise, R.id.sign_add_person, R.id.sign_agree, R.id.sign_refuse, R.id.sign_close, R.id.sign_daiqian);
         contentTv = new ArrayList<>();
         contentTv.add("审批单");
         if (dispatchBean.getAccessory_list() != null) {
@@ -720,7 +773,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         isSigning = true;
         isSigning();
         mSignatureView.setCanSigning(true);
-        mSignatureView.resetZoomWithAnimation();
     }
 
     private void isSigning() {

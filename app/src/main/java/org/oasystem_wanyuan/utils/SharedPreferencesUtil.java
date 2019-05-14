@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import org.oasystem_wanyuan.application.MyApplication;
 import org.oasystem_wanyuan.constants.Constants;
+import org.oasystem_wanyuan.mvp.view.SignView.PenColor;
+import org.oasystem_wanyuan.mvp.view.SignView.PenWidth;
 
 
 import static org.oasystem_wanyuan.constants.Constants.PEN_COLOR;
@@ -75,7 +77,7 @@ public class SharedPreferencesUtil {
             sharedPreference = MyApplication.getContext()
                     .getSharedPreferences(Constants.OA_SYSTEM, Context.MODE_PRIVATE);
         }
-        return sharedPreference.getFloat(PEN_WIDTH, -1f);
+        return sharedPreference.getFloat(PEN_WIDTH, PenWidth.DEFAULT.getWidth());
     }
 
     public static int getColor(){
@@ -83,7 +85,7 @@ public class SharedPreferencesUtil {
             sharedPreference = MyApplication.getContext()
                     .getSharedPreferences(Constants.OA_SYSTEM, Context.MODE_PRIVATE);
         }
-        return sharedPreference.getInt(PEN_COLOR, -1);
+        return sharedPreference.getInt(PEN_COLOR, PenColor.BLACK.getColor());
     }
 
 

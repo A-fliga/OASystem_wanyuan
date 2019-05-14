@@ -66,7 +66,6 @@
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AttendanceStatisticsActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AddLeaveActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AskForLeaveDetailActivity" />
-        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.TestActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
