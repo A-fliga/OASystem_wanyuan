@@ -46,9 +46,9 @@ public class UserManager {
     public List<AllUserBean.DataBean> getAllUserInfo(){
         List<AllUserBean.DataBean> beanList = new ArrayList<>();
         for (int i = 0; i < allUserBean.getData().size(); i++) {
-            if (allUserBean.getData().get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
+//            if (allUserBean.getData().get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
                 beanList.add(allUserBean.getData().get(i));
-            }
+//            }
         }
         return beanList;
     }
