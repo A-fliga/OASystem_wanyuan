@@ -48,12 +48,14 @@ public class SignOfficialAdapter extends RecyclerView.Adapter<SignOfficialAdapte
                 if (itemClickListener != null) {
                     itemClickListener.onItemClick(position);
                 }
-                holder.sign_right_fl.setBackgroundResource(R.mipmap.sign_right_selected);
-                holder.sign_list_tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
-                for (int i = 0; i < frameLayoutList.size(); i++) {
-                    if(i!= position){
-                        frameLayoutList.get(i).setBackgroundResource(R.mipmap.sign_right_back);
-                        textViewList.get(i).setTextColor(context.getResources().getColor(R.color.color_000000));
+                if (position < contentTv.size() - 1) {
+                    holder.sign_right_fl.setBackgroundResource(R.mipmap.sign_right_selected);
+                    holder.sign_list_tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
+                    for (int i = 0; i < frameLayoutList.size(); i++) {
+                        if (i != position) {
+                            frameLayoutList.get(i).setBackgroundResource(R.mipmap.sign_right_back);
+                            textViewList.get(i).setTextColor(context.getResources().getColor(R.color.color_000000));
+                        }
                     }
                 }
             }

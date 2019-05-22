@@ -18,6 +18,7 @@ import org.oasystem_wanyuan.mvp.model.bean.CarApplyBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyDetailBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarApplyListBean;
 import org.oasystem_wanyuan.mvp.model.bean.CarTypeListBean;
+import org.oasystem_wanyuan.mvp.model.bean.DealWithOptionBean;
 import org.oasystem_wanyuan.mvp.model.bean.DocumentBean;
 import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.LeaveApplyBean;
@@ -533,6 +534,31 @@ public final class HttpClient {
      */
     public void addDaiqian(Subscriber<BaseEntity> subscriber,String id,String user_id) {
         Observable observable = mApi.addDaiqian(addToken(),getMapRequestBody(getBodyMap(getStrings("id,user_id"),getStrings(id,user_id))));
+        toSubscribe(observable, subscriber);
+    }
+
+
+    /**
+     *办理意见
+     */
+    public void getFormList(Subscriber<BaseEntity<DealWithOptionBean>> subscriber, String id) {
+        Observable observable = mApi.getFormList(addToken(),getMapRequestBody(getBodyMap(getStrings("id"),getStrings(id))));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     *增加意见
+     */
+    public void addOptionData(Subscriber<BaseEntity> subscriber, String id,String content) {
+        Observable observable = mApi.addOptionData(addToken(),getMapRequestBody(getBodyMap(getStrings("id,content"),getStrings(id,content))));
+        toSubscribe(observable, subscriber);
+    }
+
+    /**
+     *删除意见
+     */
+    public void DeleteOptionData(Subscriber<BaseEntity> subscriber, String id) {
+        Observable observable = mApi.DeleteOptionData(addToken(),getMapRequestBody(getBodyMap(getStrings("id"),getStrings(id))));
         toSubscribe(observable, subscriber);
     }
 }

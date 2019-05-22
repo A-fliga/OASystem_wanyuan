@@ -66,7 +66,8 @@
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AttendanceStatisticsActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AddLeaveActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AskForLeaveDetailActivity" />
-
+        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.DealWithOptionFormActivity" />
+        <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AddOptionFormActivity" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="org.oasystem_wanyuan.fileprovider"
