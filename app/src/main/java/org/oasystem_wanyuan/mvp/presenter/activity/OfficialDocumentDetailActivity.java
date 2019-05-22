@@ -87,7 +87,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll, yinzhang_ll;
+    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll;
     private List<LinearLayout> linearList = new ArrayList<>();
     private List<String> contentTv;
     private TbsReaderView sign_fileView;
@@ -498,12 +498,10 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         pen_ll = viewDelegate.get(R.id.pen_ll);
         eraser_ll = viewDelegate.get(R.id.eraser_ll);
         clear_ll = viewDelegate.get(R.id.clear_ll);
-        yinzhang_ll = viewDelegate.get(R.id.yinzhang_ll);
         linearList.add(save_ll);
         linearList.add(pen_ll);
         linearList.add(eraser_ll);
         linearList.add(clear_ll);
-        linearList.add(yinzhang_ll);
         recyclerView = viewDelegate.get(R.id.sign_right_list);
         //需要代码创建view才可以显示多次
         createSignView();

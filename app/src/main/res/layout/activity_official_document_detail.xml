@@ -119,6 +119,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/sign_daiqian"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
@@ -238,34 +239,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:text="清除"
+                        android:text="重写"
                         android:textColor="@color/color_ffffff"
                         android:textSize="11sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/yinzhang_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/yinzhang_ll"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:clickable="true"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="vertical">-->
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="2dp"
-                        android:src="@drawable/sign_clear_selector" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="30dp"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:layout_marginTop="2dp"-->
+                        <!--android:src="@drawable/sign_clear_selector" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:text="印章"
-                        android:textColor="@color/color_ffffff"
-                        android:textSize="11sp" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginBottom="2dp"-->
+                        <!--android:text="印章"-->
+                        <!--android:textColor="@color/color_ffffff"-->
+                        <!--android:textSize="11sp" />-->
+                <!--</LinearLayout>-->
 
             </LinearLayout>
 
