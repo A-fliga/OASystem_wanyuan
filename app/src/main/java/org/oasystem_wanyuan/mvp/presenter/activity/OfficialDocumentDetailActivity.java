@@ -546,13 +546,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 contentTv.add("附件" + (i + 1));
             }
         }
-        contentTv.add("办理意见");
+//        contentTv.add("办理意见");
         SignOfficialAdapter adapter = new SignOfficialAdapter(contentTv, this);
         viewDelegate.setRecycler(recyclerView, adapter, true);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (position < contentTv.size() - 1) {
+//                if (position < contentTv.size() - 1) {
                     if (tagPosition != position) {
                         //切换界面要恢复一下设置
                         if (mSignatureView != null) {
@@ -582,13 +582,13 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         }
                         tagPosition = position;
                     }
-                }
-                //办理意见
-                else {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("itemId", itemId);
-                    startMyActivity(DealWithOptionFormActivity.class, bundle);
-                }
+//                }
+//                //办理意见
+//                else {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("itemId", itemId);
+//                    startMyActivity(DealWithOptionFormActivity.class, bundle);
+//                }
             }
         });
     }
