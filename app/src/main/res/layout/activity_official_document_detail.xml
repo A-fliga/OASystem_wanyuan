@@ -274,11 +274,10 @@
         </FrameLayout>
     </FrameLayout>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/sign_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="@color/color_f5f5f5"
         android:paddingLeft="5dp"

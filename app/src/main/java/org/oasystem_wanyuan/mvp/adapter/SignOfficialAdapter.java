@@ -26,6 +26,7 @@ public class SignOfficialAdapter extends RecyclerView.Adapter<SignOfficialAdapte
     private OnItemClickListener itemClickListener;
     private List<FrameLayout> frameLayoutList = new ArrayList<>();
     private List<TextView> textViewList = new ArrayList<>();
+
     public SignOfficialAdapter(List<String> contentTv, Context context) {
         this.contentTv = contentTv;
         this.context = context;
@@ -40,35 +41,33 @@ public class SignOfficialAdapter extends RecyclerView.Adapter<SignOfficialAdapte
     public void onBindViewHolder(final SignOfficialViewHolder holder, final int position) {
         frameLayoutList.add(holder.sign_right_fl);
         textViewList.add(holder.sign_list_tv);
-        if(position == 0){
+        if (position == 0) {
             frameLayoutList.get(position).setBackgroundResource(R.mipmap.sign_right_selected);
             textViewList.get(position).setTextColor(context.getResources().getColor(R.color.color_ffffff));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!AppUtil.isFastDoubleClick(1000)) {
+                if (!AppUtil.isFastDoubleClick(1000)) {
                     if (itemClickListener != null) {
                         itemClickListener.onItemClick(position);
                     }
-                    if (position < contentTv.size() - 1) {
-                        holder.sign_right_fl.setBackgroundResource(R.mipmap.sign_right_selected);
-                        holder.sign_list_tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
-                        for (int i = 0; i < frameLayoutList.size(); i++) {
-                            if (i != position) {
-                                frameLayoutList.get(i).setBackgroundResource(R.mipmap.sign_right_back);
-                                textViewList.get(i).setTextColor(context.getResources().getColor(R.color.color_000000));
-                            }
+                    holder.sign_right_fl.setBackgroundResource(R.mipmap.sign_right_selected);
+                    holder.sign_list_tv.setTextColor(context.getResources().getColor(R.color.color_ffffff));
+                    for (int i = 0; i < frameLayoutList.size(); i++) {
+                        if (i != position) {
+                            frameLayoutList.get(i).setBackgroundResource(R.mipmap.sign_right_back);
+                            textViewList.get(i).setTextColor(context.getResources().getColor(R.color.color_000000));
                         }
                     }
-                }
-                else {
+                } else {
                     ToastUtil.s("请勿点击太快");
                 }
             }
         });
         holder.sign_list_tv.setText(contentTv.get(position));
     }
+
     @Override
     public int getItemCount() {
         return contentTv.size();
@@ -81,6 +80,7 @@ public class SignOfficialAdapter extends RecyclerView.Adapter<SignOfficialAdapte
     class SignOfficialViewHolder extends RecyclerView.ViewHolder {
         TextView sign_list_tv;
         public FrameLayout sign_right_fl;
+
         public SignOfficialViewHolder(View itemView) {
             super(itemView);
             sign_list_tv = itemView.findViewById(R.id.sign_list_tv);
