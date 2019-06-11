@@ -60,7 +60,7 @@ public class SignatureView extends FrameLayout {
     private int defaultPage = 0;
     private Boolean autoSave = false;
     private String tagPath = "";
-
+    private boolean isFirstViewChange = true;
 
     public SignatureView(@NonNull Context context) {
         super(context);
@@ -160,25 +160,23 @@ public class SignatureView extends FrameLayout {
         if (pdf_view != null) {
             pdf_view.recycle();
         }
+        if (penViewList != null) {
+            penViewList.clear();
+        }
         ProgressDialogUtil.instance().startLoad("加载文件中");
         this.autoSpacing = auto;
+
         fromFile(file)
                 .swipeHorizontal(true)
                 .pageSnap(true)
-                //注释掉这个  否则加载完成会偏移一下
-//                .autoSpacing(true)
                 .pageFling(true)
                 .enableDoubleTap(false)
-                .pageFitPolicy(FitPolicy.BOTH)
+                .pageFitPolicy(isFirstViewChange ? FitPolicy.BOTH : FitPolicy.WIDTH)
                 .setOnPageChangeListener()
                 .needSignature(true)
                 .setDefaultPage(defaultPage)
                 .setSwipeEnabled(false)
                 .load();
-    }
-
-    public NoAnimationViewPager getViewPager() {
-        return viewPager;
     }
 
 
@@ -207,25 +205,28 @@ public class SignatureView extends FrameLayout {
                 MPagerAdapter adapter = new MPagerAdapter(SignatureView.this);
                 viewPager.setAdapter(adapter);
             }
+            isFirstViewChange = false;
         }
     };
 
-    private void getSuitableSizeAndInitView(int nbPages, Document document) {
+    private void getSuitableSizeAndInitView(final int nbPages, final Document document) {
         int bitMapHeight;
         int bitMapWidth;
         if (document.getPageSize().getHeight() >= document.getPageSize().getWidth()) {
-            bitMapHeight = pdf_view.getHeight();
-            bitMapWidth = (int) ((pdf_view.getHeight() / document.getPageSize().getHeight()) * document.getPageSize().getWidth());
-            if (bitMapWidth > pdf_view.getWidth())
-                bitMapWidth = pdf_view.getWidth();
+            bitMapHeight = viewPager.getHeight();
+            bitMapWidth = (int) ((viewPager.getHeight() / document.getPageSize().getHeight()) * document.getPageSize().getWidth());
+            if (bitMapWidth > viewPager.getWidth()) {
+                bitMapWidth = viewPager.getWidth();
+            }
             if (bitMapWidth / document.getPageSize().getWidth() < bitMapHeight / document.getPageSize().getHeight()) {
                 bitMapHeight = (int) (bitMapWidth / document.getPageSize().getWidth() * document.getPageSize().getHeight());
             }
         } else {
-            bitMapWidth = pdf_view.getWidth();
+            bitMapWidth = viewPager.getWidth();
             bitMapHeight = (int) ((pdf_view.getWidth() / document.getPageSize().getWidth()) * document.getPageSize().getHeight());
-            if (bitMapHeight > pdf_view.getHeight())
-                bitMapHeight = pdf_view.getHeight();
+            if (bitMapHeight > viewPager.getHeight()) {
+                bitMapHeight = viewPager.getHeight();
+            }
             if (bitMapHeight / document.getPageSize().getHeight() < bitMapWidth / document.getPageSize().getWidth()) {
                 bitMapWidth = (int) (bitMapHeight / document.getPageSize().getHeight() * document.getPageSize().getWidth());
             }
