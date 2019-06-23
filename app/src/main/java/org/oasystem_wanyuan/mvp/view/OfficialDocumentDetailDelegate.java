@@ -34,9 +34,10 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
 
     @Override
     public void initWidget() {
-        getTitleView().setText("会签");
-        sign_left_ll = get(R.id.sign_left_ll);
+        sign_left_ll = get(R.id.sign_top_ll);
         sign_bottom = get(R.id.sign_bottom);
+        setToolBarRightImg(R.mipmap.save_sign);
+        getToolBarRightImg().setVisibility(View.GONE);
     }
 
     public void hideLeftBtn(String auth) {
@@ -65,32 +66,9 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
             fBean.setOpName(dataFlowsBean.getName());
             fBean.setUserId(dataFlowsBean.getUser_id());
             fBean.setOpTime(dataFlowsBean.getUpdated_at());
+            fBean.setStatus(dataFlowsBean.getStatus());
             beanList.add(fBean);
         }
-//        for (int i = 0; i < bean.getFlows().size(); i++) {
-//            DocumentBean.DataBean.DataFlowsBean dataFlowsBean = bean.getFlows().get(i);
-//            SignFlowsBean fBean = new SignFlowsBean();
-//            fBean.setName(dataFlowsBean.getUser().getName());
-//            fBean.setOpName(dataFlowsBean.getName());
-//            fBean.setUserId(dataFlowsBean.getUser_id());
-//            beanList.add(fBean);
-//        }
-//        for (int i = 0; i < bean.getFlows().size(); i++) {
-//            DocumentBean.DataBean.DataFlowsBean dataFlowsBean = bean.getFlows().get(i);
-//            SignFlowsBean fBean = new SignFlowsBean();
-//            fBean.setName(dataFlowsBean.getUser().getName());
-//            fBean.setOpName(dataFlowsBean.getName());
-//            fBean.setUserId(dataFlowsBean.getUser_id());
-//            beanList.add(fBean);
-//        }
-//        for (int i = 0; i < bean.getFlows().size(); i++) {
-//            DocumentBean.DataBean.DataFlowsBean dataFlowsBean = bean.getFlows().get(i);
-//            SignFlowsBean fBean = new SignFlowsBean();
-//            fBean.setName(dataFlowsBean.getUser().getName());
-//            fBean.setOpName(dataFlowsBean.getName());
-//            fBean.setUserId(dataFlowsBean.getUser_id());
-//            beanList.add(fBean);
-//        }
         SignatureBottomAdapter adapter = new SignatureBottomAdapter(this.getActivity(),beanList,done);
         setRecyclerView(sign_bottom,adapter);
     }

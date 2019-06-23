@@ -232,11 +232,6 @@ public class AddCarApplyActivity extends ActivityPresenter<AddCarApplyDelegate> 
         if (userBeanList != null) {
             //这里要剔除掉自己的那一个数据
             for (int i = 0; i < userBeanList.size(); i++) {
-                if (userBeanList.get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
-                    userBeanList.add(userBeanList.get(i));
-                }
-            }
-            for (int i = 0; i < userBeanList.size(); i++) {
                 userNameList.add(userBeanList.get(i).getName());
                 userIdList.add(userBeanList.get(i).getId() + "");
             }

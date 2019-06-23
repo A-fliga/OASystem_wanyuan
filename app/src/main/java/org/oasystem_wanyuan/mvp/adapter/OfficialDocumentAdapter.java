@@ -61,11 +61,25 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
         setText(holder.official_step, "流程步骤：" + bean.getName(), urgent);
         setText(holder.official_time, "发起时间：" + bean.getDispatch().getCreated_at(), urgent);
         setText(holder.official_last_time, "最后操作：" + bean.getDispatch().getUpdated_at(), urgent);
-        Glide.with(context).load(FirmingTypeManager.getInstance().getTypeImg(bean.getDispatch().getForm_type())).placeholder(R.mipmap.ic_launcher_round)
+        Glide.with(context).load(FirmingTypeManager.getInstance().getTypeImg(bean.getDispatch().getForm_type())).
+                placeholder(getDefaultResourceId(bean.getDispatch().getForm_type()))
                 .into(holder.official_left_img);
-
     }
 
+
+    private int getDefaultResourceId(int type){
+        if(type == 1){
+            return R.mipmap.shangjilaiwen;
+        }
+        if(type == 2){
+            return R.mipmap.pingjilaiwen;
+        }
+
+        if(type == 3){
+            return R.mipmap.xiajialaiwen;
+        }
+        return R.mipmap.wenjianjiankong;
+    }
     private void setText(TextView v, String content, int urgent) {
         if (urgent == 1) {
             v.setTextColor(context.getResources().getColor(R.color.color_f0000));

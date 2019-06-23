@@ -68,6 +68,7 @@
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AskForLeaveDetailActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.DealWithOptionFormActivity" />
         <activity android:name="org.oasystem_wanyuan.mvp.presenter.activity.AddOptionFormActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="org.oasystem_wanyuan.fileprovider"
@@ -81,10 +82,25 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"/>
+            android:process=":remote" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Tzi5kqUSDm2PLE8qPyE5lc8DprsPzFqK"/>
+            android:value="Tzi5kqUSDm2PLE8qPyE5lc8DprsPzFqK" />
+
+
+        <meta-data
+        android:name="design_width_in_dp"
+        android:value="360"/>
+        <meta-data
+        android:name="design_height_in_dp"
+        android:value="640"/>
+
+        <!--<meta-data-->
+            <!--android:name="design_width"-->
+            <!--android:value="1080"></meta-data>-->
+        <!--<meta-data-->
+            <!--android:name="design_height"-->
+            <!--android:value="1920"></meta-data>-->
 
     </application>
 

@@ -54,7 +54,6 @@ public class OfficialDelegate extends ViewDelegate {
             home_user_name.setText(userInfo.getName());
             home_user_unit.setText(userInfo.getCompany_name());
         }
-
     }
 
 
@@ -75,7 +74,7 @@ public class OfficialDelegate extends ViewDelegate {
         return adapter;
     }
 
-    public HomeBusinessManagerAdapter initManagerAdaper() {
+    public HomeBusinessManagerAdapter initManagerAdapter() {
         List<HomeBusinessManagerBean> beanList = new ArrayList<>();
         HomeBusinessManagerBean bean = null;
         for (int i = 0; i < 3; i++) {
@@ -100,19 +99,6 @@ public class OfficialDelegate extends ViewDelegate {
         setRecyclerView(businessManagerRecycler, adapter);
         return adapter;
     }
-
-//    public void setNotification(int count) {
-//        //实例化通知构建器对象
-//        Notification.Builder builder = new Notification.Builder(this.getActivity());
-//        //设置通知的图标
-//        builder.setSmallIcon(R.mipmap.mlogo);
-//        //设置通知的标题
-//        builder.setContentTitle("政务OA系统");
-//        //设置通知的内容
-//        builder.setContentText("您有" + count + "条未处理文件");
-//        Notification notification = builder.build();
-//        BadgeUtil.sendBadgeNotification(notification, 1, MyApplication.getAppContext(), count, count);
-//    }
 
     private void setRecyclerView(RecyclerView recyclerView, RecyclerView.Adapter adapter) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getActivity());

@@ -38,8 +38,8 @@ public class MeetingDetailDelegate extends ViewDelegate {
 
     public void initTopView(int status){
 //        if(status != 3){
-            setToolBarRightImg(R.mipmap.meeting_sign_in);
 //        }
+        setToolBarRightTv("回执");
     }
 
     public void initView(MeetingDetailBean bean){

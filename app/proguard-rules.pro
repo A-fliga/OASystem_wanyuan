@@ -486,6 +486,9 @@
   public static final android.os.Parcelable$Creator *;
 }
 
+ -keep class me.jessyan.autosize.** { *; }
+ -keep interface me.jessyan.autosize.** { *; }
+
 ##------------------  下方是共性的排除项目         ----------------
 ## 方法名中含有“JNI”字符的，认定是Java Native Interface方法，自动排除
 ## 方法名中含有“JRI”字符的，认定是Java Reflection Interface方法，自动排除

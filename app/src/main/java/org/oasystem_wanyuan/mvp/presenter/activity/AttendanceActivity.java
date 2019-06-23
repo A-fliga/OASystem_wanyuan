@@ -129,18 +129,19 @@ public class AttendanceActivity extends ActivityPresenter<AttendanceDelegate> {
     }
 
     private void toSignIn(String latitude, String longitude) {
-        PublicModel.getInstance().addAttendance(new MSubscribe<BaseEntity>() {
-                                                    @Override
-                                                    public void onNext(BaseEntity bean) {
-                                                        if (bean.getCode() == 0) {
-                                                            ToastUtil.s("成功");
-                                                            initWeight();
-                                                        } else {
-                                                            ToastUtil.s(bean.getMsg());
-                                                        }
-                                                    }
-                                                }, String.valueOf(viewDelegate.getSignType()), InitDateUtil.getDate(System.currentTimeMillis()).toString()
-                , latitude, longitude);
+        PublicModel.getInstance().
+                addAttendance(new MSubscribe<BaseEntity>() {
+                                  @Override
+                                  public void onNext(BaseEntity bean) {
+                                      if (bean.getCode() == 0) {
+                                          ToastUtil.s("成功");
+                                          initWeight();
+                                      } else {
+                                          ToastUtil.s(bean.getMsg());
+                                      }
+                                  }
+                              }, String.valueOf(viewDelegate.getSignType()),
+                        InitDateUtil.getDate(System.currentTimeMillis()).toString(), latitude, longitude);
     }
 
 

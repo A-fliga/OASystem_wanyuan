@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -70,6 +71,7 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 
+import static org.oasystem_wanyuan.R.id.toolbar_right_tv;
 import static org.oasystem_wanyuan.constants.Constants.CHOOSE_PHOTO_FROM_GALLERY_CODE;
 import static org.oasystem_wanyuan.constants.Constants.SIGN_RESULT;
 
@@ -79,30 +81,30 @@ import static org.oasystem_wanyuan.constants.Constants.SIGN_RESULT;
 
 public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDocumentDetailDelegate> implements TbsReaderView.ReaderCallback {
     private static String TAG = "wwwceshi";
+    private static String OFFICE_PATH;
     private final int WRITE_STORAGE_CODE = 1000;
     private final int REQUEST_CODE_WRITE_SETTINGS = 1002;
+    private int id, tagPosition, opType = 0, itemId, color, tagColor;
+    private float width, tagWidth;
+    private int daiqianIndex = -1;
     private DocumentBean.DataBean.DispatchBean dispatchBean;
     private DocumentBean.DataBean dataBean;
     private RecyclerView recyclerView;
     private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
-    private LinearLayout save_ll, pen_ll, eraser_ll, clear_ll;
-    private List<LinearLayout> linearList = new ArrayList<>();
-    private List<String> contentTv;
+    private ImageView pen_ll, eraser_ll, clear_ll;
     private TbsReaderView sign_fileView;
     private SignatureView mSignatureView;
     private String[] permissionStr = {"内存卡", "读取手机"};
-    private int id, tagPosition, opType = 0, itemId, color, tagColor;
-    private ArrayList<Integer> accessoryList;
     private String type;
-    private static String OFFICE_PATH;
     private AlertDialog dialog, addAccessoryDialog;
-    private float width, tagWidth;
+    public List<String> cacheFileList = new ArrayList<>();
+    private ArrayList<Integer> accessoryList;
     private List<AllUserBean.DataBean> userBeanList;
     private List<AllUserBean.DataBean> daiqianUserBeanList;
-    private int daiqianIndex = -1;
-    public List<String> cacheFileList = new ArrayList<>();
+    private List<ImageView> linearList = new ArrayList<>();
+    private List<String> contentTv;
     private MSubscribe<ResponseBody> subscribe;
     private EditText remarkEt;
     //加签用的
@@ -146,9 +148,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 cacheFileList.add("");
             }
         }
-
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.save_ll, R.id.pen_ll, R.id.eraser_ll, R.id.clear_ll);
+        viewDelegate.setOnClickListener(onClickListener, R.id.toolBar_img_right, R.id.pen_ll, R.id.eraser_ll, R.id.clear_ll);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -175,7 +176,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
             ActivityCompat.requestPermissions(OfficialDocumentDetailActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, WRITE_STORAGE_CODE);
         } else {
-//            requestWriteSettings();
             id = dispatchBean.getForm_source_id();
             String[] str = dispatchBean.getForm_source().getName().split("\\.");
             type = str[str.length - 1];
@@ -494,11 +494,9 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void initView(final Boolean done) {
         sign_right_ll = viewDelegate.get(R.id.sign_right_ll);
         sign_full_fl = viewDelegate.get(R.id.sign_full_fl);
-        save_ll = viewDelegate.get(R.id.save_ll);
         pen_ll = viewDelegate.get(R.id.pen_ll);
         eraser_ll = viewDelegate.get(R.id.eraser_ll);
         clear_ll = viewDelegate.get(R.id.clear_ll);
-        linearList.add(save_ll);
         linearList.add(pen_ll);
         linearList.add(eraser_ll);
         linearList.add(clear_ll);
@@ -509,11 +507,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             viewDelegate.get(R.id.tbs_contentView).setVisibility(View.VISIBLE);
             OFFICE_PATH = Constants.OFFICE_PREVIEW;
             viewDelegate.getToolBarRightImg().setVisibility(View.GONE);
-            viewDelegate.get(R.id.sign_left_ll).setVisibility(View.GONE);
+            viewDelegate.get(R.id.sign_top_ll).setVisibility(View.GONE);
+            viewDelegate.get(R.id.sign_bottom).setVisibility(View.GONE);
             viewDelegate.get(R.id.mSignatureView).setVisibility(View.GONE);
         } else {
-            viewDelegate.setToolBarRightImg(R.mipmap.sign);
-            viewDelegate.getToolBarRightImg().setOnClickListener(onClickListener);
+            viewDelegate.setToolBarRightTv("签批");
+            viewDelegate.getToolBarRightTv().setOnClickListener(onClickListener);
             UserInfo.SysAuthBean authBean = UserManager.getInstance().getUserInfo().getAuthBean();
             if (authBean != null) {
                 viewDelegate.hideLeftBtn(authBean.getApp_auth());
@@ -617,7 +616,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         public void onClick(View view) {
             switch (view.getId()) {
                 //判断是否是签字状态
-                case R.id.toolBar_img_right:
+                case R.id.toolbar_right_tv:
                     if (isSigning) {
                         opType = 3;
                         DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要取消吗？", "确定", "不确定", dOnClickListener);
@@ -630,7 +629,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     }
                     break;
                 //保存签字图片
-                case R.id.save_ll:
+                case R.id.toolBar_img_right:
                     setSelectedSates(view);
                     opType = 1;
                     DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要保存签批吗？", "确定", "取消", dOnClickListener);
@@ -777,10 +776,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     }
 
     private void isSigning() {
-        viewDelegate.setToolBarRightImg(R.mipmap.sign_cancel);
+        viewDelegate.setToolBarRightTv("取消");
         sign_full_fl.setVisibility(View.VISIBLE);
+        viewDelegate.getToolBarRightImg().setVisibility(View.VISIBLE);
         sign_right_ll.setVisibility(View.GONE);
-        viewDelegate.get(R.id.sign_left_ll).setVisibility(View.GONE);
+        viewDelegate.get(R.id.sign_top_ll).setVisibility(View.GONE);
+        viewDelegate.get(R.id.sign_bottom).setVisibility(View.GONE);
         setSelectedSates(viewDelegate.get(R.id.pen_ll));
         mSignatureView.setPenColor(color);
         mSignatureView.setPenWidth(width);
@@ -963,18 +964,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 dialogInterface.dismiss();
                 if (i == -1) {
                     nextOperation(mType);
-//                    if (mType == 1) {
-//                        nextOperation(1);
-//                    }
-//                    if (mType == 3) {
-//                        nextOperation(3);
-//                    }
-//                    if (mType == 2) {
-//
-//                    }
-//                    if(mType == 4){
-//
-//                    }
                 }
 
             }
@@ -1119,7 +1108,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     finish();
                 }
                 if (opType == 3) {
-                    setSelectedSates(viewDelegate.get(R.id.toolBar_img_right));
+                    setSelectedSates(viewDelegate.get(toolbar_right_tv));
                     if (cacheFileList.get(tagPosition).isEmpty())
                         clearCanvas(null);
                     else
@@ -1152,9 +1141,11 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         isSigning = false;
         eraser = false;
         initPenWidthAndColor();
-        viewDelegate.setToolBarRightImg(R.mipmap.sign);
-        viewDelegate.get(R.id.sign_left_ll).setVisibility(View.VISIBLE);
+        viewDelegate.setToolBarRightTv("签批");
+        viewDelegate.get(R.id.sign_top_ll).setVisibility(View.VISIBLE);
+        viewDelegate.get(R.id.sign_bottom).setVisibility(View.VISIBLE);
         sign_full_fl.setVisibility(View.GONE);
+        viewDelegate.getToolBarRightImg().setVisibility(View.GONE);
         sign_right_ll.setVisibility(View.VISIBLE);
         for (int j = 0; j < linearList.size(); j++) {
             linearList.get(j).setSelected(false);
