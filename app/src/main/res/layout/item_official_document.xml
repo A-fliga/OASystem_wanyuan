@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="17dp"
@@ -7,7 +8,7 @@
     android:layout_marginTop="15dp"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -16,6 +17,7 @@
             android:id="@+id/official_left_img"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="2dp"
             android:scaleType="fitCenter" />
 
@@ -23,22 +25,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/official_left_img"
+            android:layout_toStartOf="@+id/item_percent_circle"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
 
             <TextView
-                android:textColor="@color/color_666666"
                 android:id="@+id/official_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="标题"
+                android:textColor="@color/color_666666"
                 android:textSize="15sp" />
 
             <TextView
-                android:textColor="@color/color_666666"
                 android:id="@+id/official_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,30 +49,47 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="步骤"
+                android:textColor="@color/color_666666"
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/color_666666"
                 android:id="@+id/official_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:ellipsize="end"
                 android:text="发起时间"
+                android:textColor="@color/color_666666"
                 android:textSize="9sp" />
 
             <TextView
-                android:textColor="@color/color_666666"
                 android:id="@+id/official_last_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:ellipsize="middle"
                 android:text="最后操作"
-                android:textSize="9sp" />
+                android:textColor="@color/color_666666"
+                android:textSize="9dp" />
 
         </LinearLayout>
-    </LinearLayout>
+
+        <org.oasystem_wanyuan.mvp.view.customView.XCRoundProgressBar
+            android:id="@+id/item_percent_circle"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="15dp"
+            app:innerRoundColor="#66ffffff"
+            app:roundProgressColor="#37c22e"
+            app:roundColor="#b5b5b6"
+            app:max="100"
+            app:roundWidth="5dp"
+            app:textIsDisplayable="true"
+            app:textColor="#b5b5b6"
+            app:textSize="10sp" />
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

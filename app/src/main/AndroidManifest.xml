@@ -95,13 +95,6 @@
         android:name="design_height_in_dp"
         android:value="640"/>
 
-        <!--<meta-data-->
-            <!--android:name="design_width"-->
-            <!--android:value="1080"></meta-data>-->
-        <!--<meta-data-->
-            <!--android:name="design_height"-->
-            <!--android:value="1920"></meta-data>-->
-
     </application>
 
 </manifest>
