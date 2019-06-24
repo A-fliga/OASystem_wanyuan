@@ -68,7 +68,6 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            setCheckStates(view.getId());
             switch (view.getId()) {
                 case R.id.official_not_done_tab:
                     if (done) {
@@ -77,6 +76,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
                             viewPager.setCurrentItem(0);
                         }
                     }
+                    setCheckStates(view.getId());
                     break;
                 case R.id.official_done_tab:
                     if (!done) {
@@ -85,6 +85,7 @@ public class OfficialHandleActivity extends ActivityPresenter<OfficialHandleDele
                             viewPager.setCurrentItem(1);
                         }
                     }
+                    setCheckStates(view.getId());
                     break;
                 case R.id.to_screen:
                     Intent intent = new Intent(OfficialHandleActivity.this, ScreenActivity.class);

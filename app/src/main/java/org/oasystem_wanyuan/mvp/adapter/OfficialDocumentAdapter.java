@@ -85,7 +85,7 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
         }
 
         if(type == 3){
-            return R.mipmap.xiajialaiwen;
+            return R.mipmap.xiajilaiwen;
         }
         return R.mipmap.wenjianjiankong;
     }

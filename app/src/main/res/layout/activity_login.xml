@@ -12,7 +12,7 @@
         android:layout_height="250dp"
         android:gravity="center_horizontal"
         android:scaleType="fitXY"
-        android:src="@mipmap/login_top_wanyuan" />
+        android:src="@mipmap/login_top_img" />
 
     <LinearLayout
         android:layout_width="258dp"
