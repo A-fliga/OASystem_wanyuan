@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.bumptech.glide.Glide;
 import com.tencent.smtt.sdk.TbsReaderView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -220,22 +221,36 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             fileDir.mkdirs();
         }
         if (isFileExist(id, type)) {
-            if (!done && type.equals("pdf")) {
-                //用自己的view加载
-                viewDelegate.get(R.id.mSignatureView).setVisibility(View.VISIBLE);
-                viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
-                if (!cacheFileList.get(tagPosition).isEmpty())
-                    disPlayBySignView(new File(cacheFileList.get(tagPosition)));
-                else
-                    disPlayBySignView(new File(getPath(id, type)));
-            } else {
+            if (isPhoto(type)) {
+                ImageView img = viewDelegate.get(R.id.sign_img);
+                img.setVisibility(View.VISIBLE);
+                Glide.with(this).load(getPath(id, type)).into(img);
                 viewDelegate.get(R.id.mSignatureView).setVisibility(View.GONE);
-                viewDelegate.get(R.id.tbs_contentView).setVisibility(View.VISIBLE);
-                displayFile(new File(getPath(id, type)));
+                viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
+            } else {
+                viewDelegate.get(R.id.sign_img).setVisibility(View.GONE);
+                if (!done && type.equals("pdf")) {
+                    //用自己的view加载
+                    viewDelegate.get(R.id.mSignatureView).setVisibility(View.VISIBLE);
+                    viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
+                    if (!cacheFileList.get(tagPosition).isEmpty())
+                        disPlayBySignView(new File(cacheFileList.get(tagPosition)));
+                    else
+                        disPlayBySignView(new File(getPath(id, type)));
+                } else {
+                    viewDelegate.get(R.id.mSignatureView).setVisibility(View.GONE);
+                    viewDelegate.get(R.id.tbs_contentView).setVisibility(View.VISIBLE);
+                    displayFile(new File(getPath(id, type)));
+                }
             }
         } else {
             downLoadFile(id, type);
         }
+    }
+
+    private boolean isPhoto(String type) {
+        return type.toLowerCase().equals("jpg") || type.toLowerCase().equals("jpeg")
+                || type.toLowerCase().equals("png") || type.toLowerCase().equals("gif");
     }
 
 
@@ -416,7 +431,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     }
 
 
-
     private Boolean isFileExist(int id, String type) {
         File file = new File(getPath(id, type));
         if (file.length() == 0) {
@@ -501,35 +515,35 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             @Override
             public void onItemClick(int position) {
 //                if (position < contentTv.size() - 1) {
-                    if (tagPosition != position) {
-                        tagPosition = position;
-                        //切换界面要恢复一下设置
-                        if (mSignatureView != null) {
-                            mSignatureView.resetConfig();
-                            mSignatureView.setNewPath(cacheFileList.get(position));
-                        }
-
-                        //回收掉原来的tbsView，否则不能显示
-                        if (sign_fileView != null) {
-                            FrameLayout frameLayout = viewDelegate.get(R.id.tbs_contentView);
-                            frameLayout.removeAllViews();
-                            sign_fileView.onStop();
-                            sign_fileView = null;
-                            createSignView();
-                        }
-                        if (position == 0) {
-                            id = dispatchBean.getForm_source_id();
-                            String[] str = dispatchBean.getForm_source().getName().split("\\.");
-                            type = str[str.length - 1];
-                            showFile(dispatchBean.getForm_source_id(), str[str.length - 1]);
-
-                        } else {
-                            id = Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id());
-                            String[] str = dispatchBean.getAccessory_list().get(position - 1).getName().split("\\.");
-                            type = str[str.length - 1];
-                            showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id()), str[str.length - 1]);
-                        }
+                if (tagPosition != position) {
+                    tagPosition = position;
+                    //切换界面要恢复一下设置
+                    if (mSignatureView != null) {
+                        mSignatureView.resetConfig();
+                        mSignatureView.setNewPath(cacheFileList.get(position));
                     }
+
+                    //回收掉原来的tbsView，否则不能显示
+                    if (sign_fileView != null) {
+                        FrameLayout frameLayout = viewDelegate.get(R.id.tbs_contentView);
+                        frameLayout.removeAllViews();
+                        sign_fileView.onStop();
+                        sign_fileView = null;
+                        createSignView();
+                    }
+                    if (position == 0) {
+                        id = dispatchBean.getForm_source_id();
+                        String[] str = dispatchBean.getForm_source().getName().split("\\.");
+                        type = str[str.length - 1];
+                        showFile(dispatchBean.getForm_source_id(), str[str.length - 1]);
+
+                    } else {
+                        id = Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id());
+                        String[] str = dispatchBean.getAccessory_list().get(position - 1).getName().split("\\.");
+                        type = str[str.length - 1];
+                        showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id()), str[str.length - 1]);
+                    }
+                }
 //                }
 //                //办理意见
 //                else {
