@@ -22,12 +22,12 @@ android {
         applicationId "org.oasystem_wanyuan"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 7
-        versionName "1.6"
+        versionCode 9
+        versionName "1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
-            abiFilters "armeabi","armeabi-v7a","x86"
+            abiFilters "armeabi","armeabi-v7a"
         }
     }
     sourceSets {
