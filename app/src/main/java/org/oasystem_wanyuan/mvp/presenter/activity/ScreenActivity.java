@@ -17,13 +17,14 @@ import org.oasystem_wanyuan.mvp.model.bean.HomeTypeBean;
 import org.oasystem_wanyuan.mvp.model.bean.ScreenBean;
 import org.oasystem_wanyuan.mvp.view.ScreenDelegate;
 import org.oasystem_wanyuan.utils.DialogUtil;
-import org.oasystem_wanyuan.utils.HideIMEUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import me.jessyan.autosize.AutoSize;
 
 /**
  * Created by www on 2019/1/8.
@@ -53,7 +54,6 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HideIMEUtil.wrap(this);
         initView();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -119,6 +119,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
                 case R.id.screen_reset:
                     opType = 1;
                     DialogUtil.showDialog(ScreenActivity.this, "您确定要重置吗？", "确定", "取消", mOnClickListener);
+
                     break;
                 //确定
                 case R.id.screen_sure:
@@ -156,6 +157,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
 
 
     public void setDate() {
+        AutoSize.cancelAdapt(this);
         final Calendar calendar = Calendar.getInstance();
         //通过自定义控件AlertDialog实现
         AlertDialog.Builder builder = new AlertDialog.Builder(ScreenActivity.this);
@@ -172,7 +174,7 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
         builder.setTitle("请选择日期");
         builder.setPositiveButton("确  定", mOnClickListener);
         builder.setNegativeButton("取  消", mOnClickListener);
-        builder.create().show();
+        builder.show();
     }
 
     private DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
