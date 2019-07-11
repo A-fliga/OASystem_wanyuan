@@ -160,6 +160,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             getAllUserBean();
         }
     }
+
     private boolean hasFormData() {
         return dispatchBean.getForm_source_id() != 0;
     }
@@ -522,7 +523,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 contentTv.add("附件" + (i + 1));
             }
         }
-//        contentTv.add("办理意见");
+//         contentTv.add("办理\n情况");
         SignOfficialAdapter adapter = new SignOfficialAdapter(contentTv, this);
         viewDelegate.setRecycler(recyclerView, adapter, true);
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -586,8 +587,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 String[] str = dispatchBean.getAccessory_list().get(tagPosition - 1).getName().split("\\.");
                 type = str[str.length - 1];
             }
-        }
-        else {
+        } else {
             String[] str = dispatchBean.getAccessory_list().get(tagPosition).getName().split("\\.");
             type = str[str.length - 1];
         }
@@ -968,7 +968,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
     private String getAccessorySourceId() {
         StringBuffer sb = new StringBuffer();
-        if(hasFormData()) {
+        if (hasFormData()) {
             for (int i = 1; i < accessoryList.size(); i++) {
                 if (i == accessoryList.size() - 1) {
                     sb.append(accessoryList.get(i));
@@ -976,8 +976,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     sb.append(accessoryList.get(i)).append("#");
                 }
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < accessoryList.size(); i++) {
                 if (i == accessoryList.size() - 1) {
                     sb.append(accessoryList.get(i));
