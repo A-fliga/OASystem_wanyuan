@@ -227,6 +227,10 @@ public abstract class ViewDelegate implements IDelegate {
     }
 
 
+    public RelativeLayout getToolbarBackGround(){
+        return get(R.id.mToolbar_rl);
+    }
+
     @Override
     public View getRootView() {
         return rootView;

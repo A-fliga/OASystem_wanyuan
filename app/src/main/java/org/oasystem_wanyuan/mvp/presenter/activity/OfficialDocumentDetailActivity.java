@@ -53,6 +53,7 @@ import org.oasystem_wanyuan.mvp.view.OfficialDocumentDetailDelegate;
 import org.oasystem_wanyuan.mvp.view.SignView.PenColor;
 import org.oasystem_wanyuan.mvp.view.SignView.PenWidth;
 import org.oasystem_wanyuan.mvp.view.SignView.SignatureView;
+import org.oasystem_wanyuan.utils.AppUtil;
 import org.oasystem_wanyuan.utils.DialogUtil;
 import org.oasystem_wanyuan.utils.FileUtil;
 import org.oasystem_wanyuan.utils.LogUtil;
@@ -91,7 +92,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private DocumentBean.DataBean.DispatchBean dispatchBean;
     private DocumentBean.DataBean dataBean;
     private RecyclerView recyclerView;
-    private Boolean isShowing = true, isSigning = false, done = false, eraser = false, isPen = true;
+    private Boolean isShowing = true, isSigning = false,
+            done = false, eraser = false, isPen = true, hideWeight = false;
     private LinearLayout sign_right_ll;
     private FrameLayout sign_full_fl;
     private ImageView pen_ll, eraser_ll, clear_ll;
@@ -152,7 +154,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             }
         }
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.toolBar_img_right, R.id.pen_ll, R.id.eraser_ll, R.id.clear_ll);
+        viewDelegate.setOnClickListener(onClickListener, R.id.mToolbar_rl, R.id.toolbar_right_tv2, R.id.pen_ll, R.id.eraser_ll, R.id.clear_ll);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -358,7 +360,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 ToastUtil.l("请打开" + sb.toString() + "权限");
                 finish();
             }
-
         }
     }
 
@@ -482,9 +483,8 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         if (done) {
             viewDelegate.get(R.id.tbs_contentView).setVisibility(View.VISIBLE);
             OFFICE_PATH = Constants.OFFICE_PREVIEW;
-            viewDelegate.getToolBarRightImg().setVisibility(View.GONE);
-            viewDelegate.get(R.id.sign_top_ll).setVisibility(View.GONE);
-            viewDelegate.get(R.id.sign_bottom).setVisibility(View.GONE);
+            viewDelegate.getToolBarRightTv2().setVisibility(View.GONE);
+            hideWeight(true);
             viewDelegate.get(R.id.mSignatureView).setVisibility(View.GONE);
         } else {
             viewDelegate.setToolBarRightTv("签批");
@@ -617,7 +617,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     }
                     break;
                 //保存签字图片
-                case R.id.toolBar_img_right:
+                case R.id.toolbar_right_tv2:
                     setSelectedSates(view);
                     opType = 1;
                     DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要保存签批吗？", "确定", "取消", dOnClickListener);
@@ -694,6 +694,16 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                     showUserDialog();
                     break;
 
+                //双击可以隐藏侧边栏
+                case R.id.mToolbar_rl:
+                    if (AppUtil.isFastDoubleClick(500) && !done && !isSigning) {
+                        if (!hideWeight) {
+                            hideWeight(true);
+                        } else {
+                            hideWeight(false);
+                        }
+                    }
+                    break;
             }
         }
     };
@@ -766,13 +776,23 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
     private void isSigning() {
         viewDelegate.setToolBarRightTv("取消");
         sign_full_fl.setVisibility(View.VISIBLE);
-        viewDelegate.getToolBarRightImg().setVisibility(View.VISIBLE);
+        viewDelegate.getToolBarRightTv2().setVisibility(View.VISIBLE);
         sign_right_ll.setVisibility(View.GONE);
-        viewDelegate.get(R.id.sign_top_ll).setVisibility(View.GONE);
-        viewDelegate.get(R.id.sign_bottom).setVisibility(View.GONE);
+        hideWeight(true);
         setSelectedSates(viewDelegate.get(R.id.pen_ll));
         mSignatureView.setPenColor(color);
         mSignatureView.setPenWidth(width);
+    }
+
+    private void hideWeight(boolean hide) {
+        hideWeight = hide;
+        if (hide) {
+            viewDelegate.get(R.id.sign_top_ll).setVisibility(View.GONE);
+            viewDelegate.get(R.id.sign_bottom).setVisibility(View.GONE);
+        } else {
+            viewDelegate.get(R.id.sign_top_ll).setVisibility(View.VISIBLE);
+            viewDelegate.get(R.id.sign_bottom).setVisibility(View.VISIBLE);
+        }
     }
 
     private void toAdvise(String form_source_id, String accessoryId) {
@@ -1145,10 +1165,9 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         eraser = false;
         initPenWidthAndColor();
         viewDelegate.setToolBarRightTv("签批");
-        viewDelegate.get(R.id.sign_top_ll).setVisibility(View.VISIBLE);
-        viewDelegate.get(R.id.sign_bottom).setVisibility(View.VISIBLE);
+        hideWeight(false);
         sign_full_fl.setVisibility(View.GONE);
-        viewDelegate.getToolBarRightImg().setVisibility(View.GONE);
+        viewDelegate.getToolBarRightTv2().setVisibility(View.GONE);
         sign_right_ll.setVisibility(View.VISIBLE);
         for (int j = 0; j < linearList.size(); j++) {
             linearList.get(j).setSelected(false);
