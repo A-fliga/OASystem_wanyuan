@@ -3,6 +3,7 @@ package org.oasystem_wanyuan.mvp.view;
 import android.support.v7.widget.RecyclerView;
 
 import org.oasystem_wanyuan.R;
+import org.oasystem_wanyuan.constants.Constants;
 import org.oasystem_wanyuan.manager.FirmingTypeManager;
 import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.adapter.HomeTypeAdapter;
@@ -33,7 +34,7 @@ public class MoreTypeDelegate extends ViewDelegate {
 
     @Override
     public void initWidget() {
-        getTitleView().setText("全部应用");
+        getTitleView().setText("更多应用");
         regularRecyclerView = get(R.id.more_type_regular);
         customizeRecyclerView = get(R.id.more_type_customize);
     }
@@ -79,7 +80,7 @@ public class MoreTypeDelegate extends ViewDelegate {
         List<String> imgIdList = new ArrayList<>();
         List<String> typeContentList = new ArrayList<>();
         List<HomeTypeBean.DataBean> beanList = FirmingTypeManager.getInstance().getBeanList();
-        for (int i = 0; i < beanList.size(); i++) {
+        for (int i = Constants.TYPE_WIDTH_COUNT; i < beanList.size(); i++) {
             typeContentList.add(beanList.get(i).getName());
             imgIdList.add(beanList.get(i).getImg());
         }

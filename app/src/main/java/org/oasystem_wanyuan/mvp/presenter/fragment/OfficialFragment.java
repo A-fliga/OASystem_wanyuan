@@ -68,6 +68,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
         EventBus.getDefault().register(this);
         typeAdapter = viewDelegate.initTypeList();
         getFirmingType();
+        getNotDoneList(new ScreenBean());
         viewDelegate.setOnClickListener(onClickListener,
                 R.id.to_screen, R.id.to_sort_create, R.id.to_sort_update, R.id.refresh, R.id.home_user_icon);
         setOnItemClickListener();
@@ -147,7 +148,6 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                 FirmingTypeManager.getInstance().addBeanList(beanList);
                 typeAdapter = viewDelegate.initTypeList();
                 setOnItemClickListener();
-                getNotDoneList(new ScreenBean());
             }
         });
     }
@@ -156,6 +156,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     public void refreshList(String content) {
         if (content.equals("upLoadSuccess")) {
             getFirmingType();
+            getNotDoneList(new ScreenBean());
         }
     }
 
@@ -195,6 +196,7 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                         newBeanList.clear();
                     }
                     getFirmingType();
+                    getNotDoneList(new ScreenBean());
                     break;
 
                 case R.id.home_user_icon:
@@ -238,4 +240,5 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
     public Class<OfficialDelegate> getDelegateClass() {
         return OfficialDelegate.class;
     }
+
 }
