@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -59,7 +58,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import me.jessyan.autosize.AutoSize;
-import me.jessyan.autosize.AutoSizeCompat;
 
 
 public class MainActivity extends ActivityPresenter<MainDelegate> {
@@ -262,7 +260,7 @@ public class MainActivity extends ActivityPresenter<MainDelegate> {
         }
     };
 
-    public void setCheck(int position){
+    public void setCheck(int position) {
         viewDelegate.setCheck(position);
     }
 
@@ -356,13 +354,10 @@ public class MainActivity extends ActivityPresenter<MainDelegate> {
     }
 
 
-
-
     @Override
     public boolean isSetDisplayHomeAsUpEnabled() {
         return false;
     }
-
 
 
     @Override
@@ -397,11 +392,5 @@ public class MainActivity extends ActivityPresenter<MainDelegate> {
         if (async != null) {
             async.cancel(true);
         }
-    }
-
-    @Override
-    public Resources getResources() {
-        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));//如果没有自定义需求用这个方法
-        return super.getResources();
     }
 }
