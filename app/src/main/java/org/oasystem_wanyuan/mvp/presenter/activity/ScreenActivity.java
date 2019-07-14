@@ -31,7 +31,6 @@ import me.jessyan.autosize.AutoSize;
  */
 
 public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
-    //    private List<String> beanList;
     private ScreenBean screenBean;
     private ScreenTypeAdapter adapter;
     private TextView s_date, e_date;
@@ -119,7 +118,6 @@ public class ScreenActivity extends ActivityPresenter<ScreenDelegate> {
                 case R.id.screen_reset:
                     opType = 1;
                     DialogUtil.showDialog(ScreenActivity.this, "您确定要重置吗？", "确定", "取消", mOnClickListener);
-
                     break;
                 //确定
                 case R.id.screen_sure:
