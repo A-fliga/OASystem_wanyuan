@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import org.oasystem_wanyuan.utils.LogUtil;
 import org.oasystem_wanyuan.utils.ProgressDialogUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -32,8 +33,16 @@ public class SavePdf {
     private float currentXOffset;
     private float currentYOffset;
     private Bitmap bitmap = null;
+    private boolean isVertical = true;
     private float zoom;
 
+    public boolean isVertical() {
+        return isVertical;
+    }
+
+    public void setVertical(boolean vertical) {
+        isVertical = vertical;
+    }
 
     private int currentPage;
 
@@ -131,19 +140,28 @@ public class SavePdf {
 
                 if (getCurrentPage() == signatureList.get(i) && getZoom() > 1f) {
                     float xOffset;
+                    float yOffset;
+                    img.scaleAbsolute(rectangle.getWidth() / getZoom(), rectangle.getHeight() / getZoom());
                     if (getCurrentPage() == 0) {
                         // 乘以 (getZoom()-1)/getZoom() 这个系数至关重要！ 否则会出现偏移  也就是zoom越小 往左偏移越多，实际上就是减多了
                         xOffset = -getCurrentXOffset() / getZoom() - (pdfView.getWidth() - bitmap.getWidth()) / 2 * (getZoom() - 1) / getZoom();
+                        img.setAbsolutePosition(xOffset / imgZoom2, (bitmap.getHeight() * getZoom() + getCurrentYOffset() - bitmap.getHeight()) / getZoom() / imgZoom);
                     } else {
-                        xOffset = (-getCurrentXOffset() - (pdfView.getWidth() * getZoom() * getCurrentPage())) / getZoom() - (pdfView.getWidth() - bitmap.getWidth()) / 2 * (getZoom() - 1) / getZoom();
+                        if (isVertical()) {
+                            xOffset = -getCurrentXOffset() / getZoom() - (pdfView.getWidth() - bitmap.getWidth()) / 2 * (getZoom() - 1) / getZoom();
+                            yOffset = (-getCurrentYOffset() - (pdfView.getHeight() * getZoom() * getCurrentPage())) / getZoom();
+                            img.setAbsolutePosition(xOffset/imgZoom2, yOffset / imgZoom2);
+                            LogUtil.d("pianyi", "我是第" + pdfView.getHeight() + "页，我来位移了");
+                            LogUtil.d("pianyi", "原pdf大小 x:" + rectangle.getWidth() + " y: " + rectangle.getHeight());
+                            LogUtil.d("pianyi", "当前偏移量" + getCurrentXOffset() + "   " + getCurrentYOffset() + "   " + getZoom());
+                            LogUtil.d("pianyi", "缩放的图片 x: " + rectangle.getWidth() / getZoom() + "  y: " + rectangle.getHeight() / getZoom());
+                            LogUtil.d("pianyi", "要偏移y: " + ((-getCurrentYOffset() - (pdfView.getHeight() * getZoom() * getCurrentPage())) / getZoom() - (pdfView.getHeight() - bitmap.getHeight()) / 2 * (getZoom() - 1) / getZoom()));;
+                        } else {
+                            xOffset = (-getCurrentXOffset() - (pdfView.getWidth() * getZoom() * getCurrentPage())) / getZoom() - (pdfView.getWidth() - bitmap.getWidth()) / 2 * (getZoom() - 1) / getZoom();
+                            img.setAbsolutePosition(xOffset / imgZoom2, (bitmap.getHeight() * getZoom() + getCurrentYOffset() - bitmap.getHeight()) / getZoom() / imgZoom);
+                        }
                     }
-//                    LogUtil.d("pianyi", "我是第" + getCurrentPage() + "页，我来位移了");
-//                    LogUtil.d("pianyi", "原pdf大小 x:" + rectangle.getWidth() + " y: " + rectangle.getHeight());
-//                    LogUtil.d("pianyi", "当前偏移量" + getCurrentXOffset() + "   " + getCurrentYOffset() + "   " + getZoom());
-//                    LogUtil.d("pianyi", "缩放的图片 x: " + rectangle.getWidth() / getZoom() + "  y: " + rectangle.getHeight() / getZoom());
-//                    LogUtil.d("pianyi", "要偏移x: " + (xOffset / imgZoom2) + "  要偏移y: " + (bitmap.getHeight() * getZoom() + getCurrentYOffset() - bitmap.getHeight()) / getZoom() / imgZoom);
-                    img.scaleAbsolute(rectangle.getWidth() / getZoom(), rectangle.getHeight() / getZoom());
-                    img.setAbsolutePosition(xOffset / imgZoom2, (bitmap.getHeight() * getZoom() + getCurrentYOffset() - bitmap.getHeight()) / getZoom() / imgZoom);
+
                 } else {
 //                    LogUtil.d("pianyi", "我是第" + signatureList.get(i) + "页，我来复位了");
                     img.scaleAbsolute(rectangle.getWidth(), rectangle.getHeight());

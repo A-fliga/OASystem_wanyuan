@@ -25,6 +25,7 @@ import com.lowagie.text.pdf.PdfReader;
 import org.oasystem_wanyuan.R;
 import org.oasystem_wanyuan.mvp.model.bean.TransformBean;
 import org.oasystem_wanyuan.mvp.view.customView.NoAnimationViewPager;
+import org.oasystem_wanyuan.utils.LogUtil;
 import org.oasystem_wanyuan.utils.ProgressDialogUtil;
 import org.oasystem_wanyuan.utils.SharedPreferencesUtil;
 import org.oasystem_wanyuan.utils.ToastUtil;
@@ -51,6 +52,7 @@ public class SignatureView extends FrameLayout {
     private boolean needSignature = false;
     public boolean canSigning = false;
     private boolean autoSpacing = false;
+    private boolean isVertical = true;
     private Context context;
     private AtomicBoolean canSave = new AtomicBoolean(true);
     private String sourcePath, newPath;
@@ -113,6 +115,9 @@ public class SignatureView extends FrameLayout {
         @Override
         public void onError(Throwable t) {
             ToastUtil.l("文件已损坏");
+            if (sourceFile.exists()) {
+                sourceFile.delete();
+            }
             ProgressDialogUtil.instance().stopLoad();
         }
     };
@@ -122,7 +127,7 @@ public class SignatureView extends FrameLayout {
         public void onPageScrolled(int page, float positionOffset) {
             if (pdf_view.getZoom() > 1f && canSave.get()) {
                 canSave.set(false);
-//                LogUtil.d("pianyi", "签字文件的路径" + sourcePath);
+                LogUtil.d("pianyi", "当前偏移量： y = " + pdf_view.getCurrentYOffset());
                 addSignature2Pdf(sourcePath, true, new DataFinishListener() {
                     @Override
                     public void onFinished(String path) {
@@ -398,6 +403,7 @@ public class SignatureView extends FrameLayout {
         savePdf.setSignatureList(signPageList);
         savePdf.setPdfSourcePath(path);
         savePdf.setZoom(bean.getZoom());
+        savePdf.setVertical(isVertical);
         savePdf.setCurrentPage(bean.getCurrentPage());
         savePdf.setCurrentXOffset(bean.getCurrentXOffset());
         savePdf.setCurrentYOffset(bean.getCurrentYOffset());
@@ -461,6 +467,9 @@ public class SignatureView extends FrameLayout {
     }
 
     public SignatureView swipeHorizontal(Boolean b) {
+        if (b) {
+            isVertical = false;
+        }
         configurator.swipeHorizontal(b);
         return this;
     }
