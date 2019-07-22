@@ -14,6 +14,8 @@ import org.oasystem_wanyuan.mvp.presenter.activity.MySealActivity;
 import org.oasystem_wanyuan.mvp.view.UserCenterDelegate;
 import org.oasystem_wanyuan.simplecache.ACache;
 import org.oasystem_wanyuan.utils.DialogUtil;
+import org.oasystem_wanyuan.utils.FileUtil;
+import org.oasystem_wanyuan.utils.ToastUtil;
 
 
 /**
@@ -39,7 +41,7 @@ public class UserCenterFragment extends FragmentPresenter {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewDelegate.setOnClickListener(mOnClickListener, R.id.logout, R.id.mySeal, R.id.changePwd);
+        viewDelegate.setOnClickListener(mOnClickListener, R.id.logout, R.id.mySeal, R.id.changePwd, R.id.clear_cache);
 
     }
 
@@ -55,7 +57,12 @@ public class UserCenterFragment extends FragmentPresenter {
                     break;
 
                 case R.id.changePwd:
-                    startMyActivity(ChangePassWordActivity.class,null);
+                    startMyActivity(ChangePassWordActivity.class, null);
+                    break;
+
+                case R.id.clear_cache:
+                    FileUtil.clearCache();
+                    ToastUtil.s("清理完成");
                     break;
             }
         }
