@@ -153,7 +153,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
             }
         }
         initView(done);
-        viewDelegate.setOnClickListener(onClickListener, R.id.save_ll, R.id.pen_ll, R.id.clear_ll, R.id.eraser_ll,R.id.mToolbar_rl);
+        viewDelegate.setOnClickListener(onClickListener, R.id.save_ll, R.id.pen_ll, R.id.clear_ll, R.id.eraser_ll, R.id.mToolbar_rl);
         initNotDoneView();
         viewDelegate.initBottomRecyclerView(dataBean, done);
         checkLocationPermission();
@@ -525,56 +525,58 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 contentTv.add("附件" + (i + 1));
             }
         }
-//         contentTv.add("办理\n情况");
+        contentTv.add("办理\n情况");
         SignOfficialAdapter adapter = new SignOfficialAdapter(contentTv, this);
         viewDelegate.setRecycler(recyclerView, adapter, true);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-//                if (position < contentTv.size() - 1) {
-                if (tagPosition != position) {
-                    tagPosition = position;
-                    //切换界面要恢复一下设置
-                    if (mSignatureView != null) {
-                        mSignatureView.resetConfig();
-                        mSignatureView.setNewPath(cacheFileList.get(position));
-                    }
-
-                    //回收掉原来的tbsView，否则不能显示
-                    if (sign_fileView != null) {
-                        FrameLayout frameLayout = viewDelegate.get(R.id.tbs_contentView);
-                        frameLayout.removeAllViews();
-                        sign_fileView.onStop();
-                        sign_fileView = null;
-                        createSignView();
-                    }
-                    if (hasFormData()) {
-                        if (position == 0) {
-                            id = dispatchBean.getForm_source_id();
-                            String[] str = dispatchBean.getForm_source().getName().split("\\.");
-                            type = str[str.length - 1];
-                            showFile(dispatchBean.getForm_source_id(), str[str.length - 1]);
-
-                        } else {
-                            id = Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id());
-                            String[] str = dispatchBean.getAccessory_list().get(position - 1).getName().split("\\.");
-                            type = str[str.length - 1];
-                            showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id()), str[str.length - 1]);
+                if (position < contentTv.size() - 1) {
+                    if (tagPosition != position) {
+                        tagPosition = position;
+                        //切换界面要恢复一下设置
+                        if (mSignatureView != null) {
+                            mSignatureView.resetConfig();
+                            mSignatureView.setNewPath(cacheFileList.get(position));
                         }
-                    } else {
-                        id = Integer.parseInt(dispatchBean.getAccessory_list().get(position).getSource_id());
-                        String[] str = dispatchBean.getAccessory_list().get(position).getName().split("\\.");
-                        type = str[str.length - 1];
-                        showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position).getSource_id()), type);
+
+                        //回收掉原来的tbsView，否则不能显示
+                        if (sign_fileView != null) {
+                            FrameLayout frameLayout = viewDelegate.get(R.id.tbs_contentView);
+                            frameLayout.removeAllViews();
+                            sign_fileView.onStop();
+                            sign_fileView = null;
+                            createSignView();
+                        }
+                        if (hasFormData()) {
+                            if (position == 0) {
+                                id = dispatchBean.getForm_source_id();
+                                String[] str = dispatchBean.getForm_source().getName().split("\\.");
+                                type = str[str.length - 1];
+                                showFile(dispatchBean.getForm_source_id(), str[str.length - 1]);
+
+                            } else {
+                                id = Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id());
+                                String[] str = dispatchBean.getAccessory_list().get(position - 1).getName().split("\\.");
+                                type = str[str.length - 1];
+                                showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position - 1).getSource_id()), str[str.length - 1]);
+                            }
+                        } else {
+                            id = Integer.parseInt(dispatchBean.getAccessory_list().get(position).getSource_id());
+                            String[] str = dispatchBean.getAccessory_list().get(position).getName().split("\\.");
+                            type = str[str.length - 1];
+                            showFile(Integer.parseInt(dispatchBean.getAccessory_list().get(position).getSource_id()), type);
+                        }
                     }
                 }
-//                }
-//                //办理意见
-//                else {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt("itemId", itemId);
-//                    startMyActivity(DealWithOptionFormActivity.class, bundle);
-//                }
+                //办理意见
+                else {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("listId", dispatchBean.getId());
+                    bundle.putInt("itemId", itemId);
+                    bundle.putBoolean("done", done);
+                    startMyActivity(DealWithOptionFormActivity.class, bundle);
+                }
             }
         });
     }
