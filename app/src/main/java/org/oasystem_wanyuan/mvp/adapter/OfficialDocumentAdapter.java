@@ -57,8 +57,9 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
             }
         });
         DocumentBean.DataBean bean = beanList.get(position);
-        if (bean.getDispatch() != null)
+        if (bean.getDispatch() != null) {
             urgent = bean.getDispatch().getUrgent();
+        }
         setText(holder.official_title, bean.getDispatch().getName(), urgent);
         String serial = "-";
         if (!TextUtils.isEmpty(bean.getDispatch().getSerial())) {
@@ -96,7 +97,9 @@ public class OfficialDocumentAdapter extends RecyclerView.Adapter<OfficialDocume
     private void setText(TextView v, String content, int urgent) {
         if (urgent == 1) {
             v.setTextColor(context.getResources().getColor(R.color.color_f0000));
-        } else v.setTextColor(context.getResources().getColor(R.color.color_010101));
+        } else {
+            v.setTextColor(context.getResources().getColor(R.color.color_010101));
+        }
         v.setText(content);
 
     }
