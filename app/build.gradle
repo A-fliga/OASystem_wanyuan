@@ -22,8 +22,8 @@ android {
         applicationId "org.oasystem_wanyuan"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 16
-        versionName "2.6"
+        versionCode 18
+        versionName "2.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {

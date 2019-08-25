@@ -247,7 +247,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
             } else {
                 viewDelegate.get(R.id.sign_img).setVisibility(View.GONE);
-                if (!done && type.equals("pdf")) {
+                if (!done && type.toLowerCase().equals("pdf")) {
                     //用自己的view加载
                     viewDelegate.get(R.id.mSignatureView).setVisibility(View.VISIBLE);
                     viewDelegate.get(R.id.tbs_contentView).setVisibility(View.GONE);
@@ -262,7 +262,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 }
             }
         } else {
-            downLoadFile(id, type);
+            downLoadFile(id, type.toLowerCase());
         }
     }
 
@@ -613,7 +613,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         opType = 3;
                         DialogUtil.showDialog(OfficialDocumentDetailActivity.this, "您确定要取消吗？", "确定", "不确定", dOnClickListener);
                     } else {
-                        if (getNowType().equals("pdf")) {
+                        if (getNowType().toLowerCase().equals("pdf")) {
                             setSigningStatus();
                         } else {
                             ToastUtil.l("当前仅支持pdf文件");
