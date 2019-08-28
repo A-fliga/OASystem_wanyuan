@@ -26,7 +26,7 @@ import static org.oasystem_wanyuan.constants.Constants.SIGN_RESULT;
 
 public class SavePdf {
     private List<MPenLayout> penViewList;
-    private List<Integer> signatureList;
+    private List<Integer> mSignatureList;
     private String pdfPath;
     private String newPath;
     private PDFView pdfView;
@@ -98,13 +98,12 @@ public class SavePdf {
     }
 
     public void setSignatureList(List<Integer> signatureList) {
-        this.signatureList = signatureList;
+        this.mSignatureList = signatureList;
     }
 
     public void setPdfSourcePath(String pdfPath) {
         this.pdfPath = pdfPath;
     }
-
 
     public String addImg() {
         PdfReader reader;
@@ -128,9 +127,9 @@ public class SavePdf {
             newPath = SIGN_RESULT + File.separator + "newPDF" + System.currentTimeMillis() + ".pdf";
             PdfStamper stamp = new PdfStamper(reader, new FileOutputStream(newPath));
             // Create a stamper that will copy the document to a new file
-            for (int i = 0; i < signatureList.size(); i++) {
-                com.lowagie.text.Rectangle rectangle = reader.getPageSize(signatureList.get(i) + 1);
-                PdfContentByte over = stamp.getOverContent(signatureList.get(i) + 1);//////用于设置在第几页打印签名
+            for (int i = 0; i < mSignatureList.size(); i++) {
+                com.lowagie.text.Rectangle rectangle = reader.getPageSize(mSignatureList.get(i) + 1);
+                PdfContentByte over = stamp.getOverContent(mSignatureList.get(i) + 1);//////用于设置在第几页打印签名
                 bitmap = penViewList.get(i).export();
                 byte[] bytes = Bitmap2Bytes(bitmap);
                 Image img = Image.getInstance(bytes);//将要放到PDF的图片传过来，要设置为byte[]类型
@@ -138,7 +137,7 @@ public class SavePdf {
                 float imgZoom = bitmap.getHeight() / rectangle.getHeight();
                 float imgZoom2 = bitmap.getWidth() / rectangle.getWidth();
 
-                if (getCurrentPage() == signatureList.get(i) && getZoom() > 1f) {
+                if (getCurrentPage() == mSignatureList.get(i) && getZoom() > 1f) {
                     float xOffset;
                     float yOffset;
                     img.scaleAbsolute(rectangle.getWidth() / getZoom(), rectangle.getHeight() / getZoom());
