@@ -1,16 +1,16 @@
 package org.oasystem_wanyuan.mvp.view.SignView;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -23,9 +23,9 @@ import com.lowagie.text.Document;
 import com.lowagie.text.pdf.PdfReader;
 
 import org.oasystem_wanyuan.R;
+import org.oasystem_wanyuan.constants.Constants;
 import org.oasystem_wanyuan.mvp.model.bean.TransformBean;
-import org.oasystem_wanyuan.mvp.view.customView.NoAnimationViewPager;
-import org.oasystem_wanyuan.utils.LogUtil;
+import org.oasystem_wanyuan.utils.FileUtil;
 import org.oasystem_wanyuan.utils.ProgressDialogUtil;
 import org.oasystem_wanyuan.utils.SharedPreferencesUtil;
 import org.oasystem_wanyuan.utils.ToastUtil;
@@ -33,8 +33,8 @@ import org.oasystem_wanyuan.utils.ToastUtil;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -43,143 +43,154 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SignatureView extends FrameLayout {
     public static final String TAG = "SignatureView";
-    private NoAnimationViewPager viewPager;
-    private PDFView pdf_view;
-    private PDFView.Configurator configurator;
-    private List<MPenLayout> penViewList;
-    private LayoutInflater inflater;
-    private Save_Pdf_Async savePdfAsync;
-    private boolean needSignature = false;
-    public boolean canSigning = false;
-    private boolean autoSpacing = false;
-    private boolean isVertical = true;
-    private Context context;
-    private AtomicBoolean canSave = new AtomicBoolean(true);
-    private String sourcePath, newPath;
-    private MPenLayout penView;
-    private File sourceFile;
-    private TransformBean bean;
-    private int defaultPage = 0;
-    private Boolean autoSave = false;
-    private String tagPath = "";
-    private boolean isFirstViewChange = true;
+    public boolean mCanSigning = false;
+    private boolean mNeedSignature = false;
+    private boolean mAutoSpacing = false;
+    private boolean mAutoSave = false;
+    private boolean mIsFirstViewChange = true;
+    //翻页前的上一个页数标记
+    private int mPrePage = 0;
+    private PDFView.Configurator mConfigurator;
+    private LayoutInflater mInflater;
+    private Save_Pdf_Async mSavePdfAsync;
+    //保存签字笔迹文件的Map
+    private Map<Integer, String> mSaveSignMap = new HashMap<>();
+    private AtomicBoolean mCanSave = new AtomicBoolean(true);
+    private AtomicBoolean mCanSaveCache = new AtomicBoolean(true);
+    private String mSourcePath;
+    private String mNewPath;
+    private MPenLayout mPenView;
+    private PDFView mPdfView;
+    private File mSourceFile;
+    private TransformBean mBean;
+    private String mTagPath = "";
+    private String mSaveRootName;
+    private Handler mHandler;
 
     public SignatureView(@NonNull Context context) {
         super(context);
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.view_signature, this, true);
+        mInflater = LayoutInflater.from(context);
+        mInflater.inflate(R.layout.view_signature, this, true);
     }
 
     public SignatureView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         //加载视图的布局
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.view_signature, this, true);
+        mInflater = LayoutInflater.from(context);
+        mInflater.inflate(R.layout.view_signature, this, true);
     }
 
 
     public SignatureView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.view_signature, this, true);
+        mInflater = LayoutInflater.from(context);
+        mInflater.inflate(R.layout.view_signature, this, true);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        pdf_view = findViewById(R.id.pdf_view_sign);
+        mPdfView = findViewById(R.id.pdf_view_sign);
+        mPenView = findViewById(R.id.signature_penLayout);
+        mPenView.setSignatureView(this);
+        mHandler = new StaticHandler(this);
+    }
+
+    private static class StaticHandler extends Handler {
+        private WeakReference<SignatureView> mWeakSignView;
+
+        public StaticHandler(SignatureView signatureView) {
+            mWeakSignView = new WeakReference<SignatureView>(signatureView);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
     }
 
     @NonNull
     public PDFView getPDFView() {
-        return pdf_view;
+        return mPdfView;
     }
 
 
     private SignatureView fromFile(File file) {
-        sourceFile = file;
+        mSourceFile = file;
+        mPenView.setSignatureView(this);
         ProgressDialogUtil.instance().startLoad();
-        sourcePath = sourceFile.getAbsolutePath();
-        canSave.set(true);
-        configurator = pdf_view.fromFile(sourceFile)
+        mSourcePath = mSourceFile.getAbsolutePath();
+        mCanSave.set(true);
+        mConfigurator = mPdfView.fromFile(mSourceFile)
                 .onLoad(completeListener)
-                .onError(errorListener)
-                .onPageScroll(pageScrollListener);
+                .onError(mErrorListener)
+                .onPageScroll(mPageScrollListener);
         return this;
     }
 
-    private OnErrorListener errorListener = new OnErrorListener() {
+    private OnErrorListener mErrorListener = new OnErrorListener() {
         @Override
         public void onError(Throwable t) {
             ToastUtil.l("文件已损坏");
-            if (sourceFile.exists()) {
-                sourceFile.delete();
+            if (mSourceFile.exists()) {
+                mSourceFile.delete();
             }
             ProgressDialogUtil.instance().stopLoad();
         }
     };
 
-    private OnPageScrollListener pageScrollListener = new OnPageScrollListener() {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
+    private OnPageScrollListener mPageScrollListener = new OnPageScrollListener() {
         @Override
         public void onPageScrolled(int page, float positionOffset) {
-            if (pdf_view.getZoom() > 1f && canSave.get()) {
-                canSave.set(false);
-                LogUtil.d("pianyi", "当前偏移量： y = " + pdf_view.getCurrentYOffset());
-                addSignature2Pdf(sourcePath, true, new DataFinishListener() {
+            if (mPdfView.getZoom() > 1f && (mCanSave.getAndSet(false))) {
+                addSignature2Pdf(mSourcePath, true, new DataFinishListener() {
                     @Override
                     public void onFinished(String path) {
-//                        LogUtil.d("pianyi", "签完字后的路径" + path);
-                        tagPath = path;
-                        defaultPage = getCurrentPage();
-                        canSave.set(true);
+                        mTagPath = path;
+                        mCanSave.set(true);
                         loadFile(new File(path), true);
                     }
 
                     @Override
                     public void nothingChange() {
-                        canSave.set(true);
+                        mCanSave.set(true);
                     }
 
                     @Override
                     public void onFailed() {
-                        canSave.set(true);
+                        mCanSave.set(true);
                     }
                 });
             }
         }
     };
 
-    public void resetConfig() {
-        defaultPage = 0;
-    }
-
-
     public void loadFile(File file) {
         loadFile(file, false);
     }
 
     public void loadFile(File file, Boolean auto) {
-        if (pdf_view != null) {
-            pdf_view.recycle();
-        }
-        if (penViewList != null) {
-            penViewList.clear();
-        }
+        stopFling();
         ProgressDialogUtil.instance().startLoad("加载文件中");
-        this.autoSpacing = auto;
+        this.mAutoSpacing = auto;
 
         fromFile(file)
                 .swipeHorizontal(true)
                 .pageSnap(true)
                 .pageFling(true)
                 .enableDoubleTap(false)
-                .pageFitPolicy(isFirstViewChange ? FitPolicy.BOTH : FitPolicy.WIDTH)
+                .pageFitPolicy(mIsFirstViewChange ? FitPolicy.BOTH : FitPolicy.WIDTH)
                 .setOnPageChangeListener()
+                .setDefaultPage(mPrePage)
                 .needSignature(true)
-                .setDefaultPage(defaultPage)
                 .setSwipeEnabled(false)
                 .load();
     }
@@ -188,186 +199,144 @@ public class SignatureView extends FrameLayout {
     private OnLoadCompleteListener completeListener = new OnLoadCompleteListener() {
         @Override
         public void loadComplete(int nbPages) {
+
             //如果不是自动保存的 就清空一下设置
-            if (!autoSpacing) {
-                resetConfig();
-            }
             resetZoomWithAnimation();
             ProgressDialogUtil.instance().stopLoad();
             Document document = null;
-            if (needSignature) {
+            if (mNeedSignature) {
                 PdfReader reader;
                 try {
-                    reader = new PdfReader(sourceFile.getAbsolutePath());
+                    reader = new PdfReader(mSourceFile.getAbsolutePath());
+                    //这里是第几页，不能写0
                     document = new Document(reader.getPageSize(1));
+                    getSuitableSizeAndInitView(nbPages, document.getPageSize().getHeight(), document.getPageSize().getWidth());
                     reader.close();
+                    document.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                penViewList = new ArrayList<>();
-                viewPager = findViewById(R.id.signature_viewpager);
-                getSuitableSizeAndInitView(nbPages, document);
-                MPagerAdapter adapter = new MPagerAdapter(SignatureView.this);
-                viewPager.setAdapter(adapter);
             }
-            isFirstViewChange = false;
+            mIsFirstViewChange = false;
         }
     };
 
-    private void getSuitableSizeAndInitView(final int nbPages, final Document document) {
+    private void getSuitableSizeAndInitView(final int nbPages, float height, float width) {
         int bitMapHeight;
         int bitMapWidth;
-        if (document.getPageSize().getHeight() >= document.getPageSize().getWidth()) {
-            bitMapHeight = viewPager.getHeight();
-            bitMapWidth = (int) ((viewPager.getHeight() / document.getPageSize().getHeight()) * document.getPageSize().getWidth());
-            if (bitMapWidth > viewPager.getWidth()) {
-                bitMapWidth = viewPager.getWidth();
+        if (height >= width) {
+            bitMapHeight = mPenView.getHeight();
+            bitMapWidth = (int) ((mPenView.getHeight() / height) * width);
+            if (bitMapWidth > mPenView.getWidth()) {
+                bitMapWidth = mPenView.getWidth();
             }
-            if (bitMapWidth / document.getPageSize().getWidth() < bitMapHeight / document.getPageSize().getHeight()) {
-                bitMapHeight = (int) (bitMapWidth / document.getPageSize().getWidth() * document.getPageSize().getHeight());
+            if (bitMapWidth / width < bitMapHeight / height) {
+                bitMapHeight = (int) (bitMapWidth / width * height);
             }
         } else {
-            bitMapWidth = viewPager.getWidth();
-            bitMapHeight = (int) ((pdf_view.getWidth() / document.getPageSize().getWidth()) * document.getPageSize().getHeight());
-            if (bitMapHeight > viewPager.getHeight()) {
-                bitMapHeight = viewPager.getHeight();
+            bitMapWidth = mPenView.getWidth();
+            bitMapHeight = (int) ((mPdfView.getWidth() / width) * height);
+            if (bitMapHeight > mPenView.getHeight()) {
+                bitMapHeight = mPenView.getHeight();
             }
-            if (bitMapHeight / document.getPageSize().getHeight() < bitMapWidth / document.getPageSize().getWidth()) {
-                bitMapWidth = (int) (bitMapHeight / document.getPageSize().getHeight() * document.getPageSize().getWidth());
+            if (bitMapHeight / height < bitMapWidth / width) {
+                bitMapWidth = (int) (bitMapHeight / height * width);
             }
         }
-        LayoutParams params = (LayoutParams) pdf_view.getLayoutParams();
+        LayoutParams params = (LayoutParams) mPdfView.getLayoutParams();
         params.width = bitMapWidth;
         params.height = bitMapHeight;
-        pdf_view.setLayoutParams(params);
-        //pdf加载完成后 先准备对应页数的签字页面，放入viewpager中
-        for (int i = 0; i < nbPages; i++) {
-            penView = new MPenLayout(context, bitMapWidth, bitMapHeight);
-            penView.setSignatureView(this);
-            penViewList.add(penView);
-            penView = null;
-        }
+        mPdfView.setLayoutParams(params);
+        //加载完成后，通知签字的view裁剪bitMap时合适的宽高
+        mPenView.setHeightAndWidth(bitMapHeight, bitMapWidth);
         initPenAfterAutoSpacing();
     }
 
     private void initPenAfterAutoSpacing() {
-        if (autoSpacing) {
+        if (mAutoSpacing) {
             setPenColor(SharedPreferencesUtil.getColor());
             setPenWidth(SharedPreferencesUtil.getWidth());
         }
     }
 
     public void setCanSigning(Boolean isSigning) {
-        canSigning = isSigning;
+        mCanSigning = isSigning;
     }
 
     public Boolean getCanSigning() {
-        return canSigning;
+        return mCanSigning;
     }
 
     public SignatureView setDefaultPage(int page) {
-        configurator.defaultPage(page);
+        mConfigurator.defaultPage(page);
         return this;
     }
 
-
-    private static class MPagerAdapter extends PagerAdapter {
-        private WeakReference<SignatureView> weakSignView;
-        private List<MPenLayout> penViewList;
-
-        public MPagerAdapter(SignatureView signView) {
-            super();
-            this.weakSignView = new WeakReference<SignatureView>(signView);
-            penViewList = new ArrayList<>();
-            if (weakSignView.get() != null) {
-                penViewList.addAll(weakSignView.get().penViewList);
-            }
-        }
-
-
-        @Override
-        public int getCount() {
-            return penViewList.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            MPenLayout penView = penViewList.get(position);
-            container.addView(penView);
-            return penView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((MPenLayout) object);
-        }
+    public SignatureView setDocumentId(String id) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(Constants.SIGN_CACHE).append(File.separator).append(id).append("_");
+        this.mSaveRootName = sb.toString();
+        return this;
     }
 
     public void setPenWidth(float width) {
-        for (int i = 0; i < penViewList.size(); i++) {
-            penViewList.get(i).setStrokeWidth(width);
-            penViewList.get(i).setEraserMode(false);
-        }
+        mPenView.setStrokeWidth(width);
+        mPenView.setEraserMode(false);
     }
 
     public void setPenColor(int penColor) {
-        for (int i = 0; i < penViewList.size(); i++) {
-            penViewList.get(i).setStrokeColor(penColor);
-            penViewList.get(i).setEraserMode(false);
-        }
+        mPenView.setStrokeColor(penColor);
+        mPenView.setEraserMode(false);
     }
 
     public void initEraserMode(int color, float width) {
-        for (int i = 0; i < penViewList.size(); i++) {
-            penViewList.get(i).setEraserMode(true);
-            penViewList.get(i).setStrokeWidth(width);
-            penViewList.get(i).setStrokeColor(color);
-        }
+        mPenView.setEraserMode(true);
+        mPenView.setStrokeWidth(width);
+        mPenView.setStrokeColor(color);
     }
 
     public void clearCanvas(File file) {
         setCanSigning(false);
-        for (int i = 0; i < penViewList.size(); i++) {
-            synchronized (SignatureView.class) {
-                penViewList.get(i).clear();
-            }
-        }
-        if (file != null)
+        mPenView.clear();
+        if (file != null) {
             loadFile(file);
+        }
     }
 
     public void addSignature2Pdf(String path, Boolean auto, DataFinishListener listener) {
         //得到有签字痕迹的页面
-        if (needSignature) {
-            MPenLayout penView;
-            List<MPenLayout> newDrawPenViewList = new ArrayList<>();
-            List<Integer> signPageList = new ArrayList<>();
-            for (int i = 0; i < penViewList.size(); i++) {
-                penView = penViewList.get(i);
-                if (penView.isDataModified()) {
-                    signPageList.add(i);
-                    newDrawPenViewList.add(penView);
+        if (mNeedSignature) {
+            //保存时需要判断当前页面有无数据，有数据，需要添加进去，且要保存下来。没有数据了，需要移除
+            if (mPenView.getData().length != 0) {
+                mSaveSignMap.put(mPrePage, mSaveRootName + mPrePage);
+                if (new File(mSaveSignMap.get(mPrePage)).exists()) {
+                    new File(mSaveSignMap.get(mPrePage)).delete();
+                }
+                mPenView.save(mSaveSignMap.get(mPrePage));
+            } else {
+                if (mSaveSignMap.containsKey(mPrePage)) {
+                    if (new File(mSaveSignMap.get(mPrePage)).exists()) {
+                        new File(mSaveSignMap.get(mPrePage)).delete();
+                    }
+                }
+                if (mSaveSignMap.containsKey(mPrePage)) {
+                    mSaveSignMap.remove(mPrePage);
                 }
             }
-            if (signPageList.size() == 0) {
+            //因为有自动保存 和手动点击保存两种保存方式，所以需要区分一下上一次保存是什么类型的
+            if (mSaveSignMap.size() == 0) {
                 //先判断这次的保存模式，如果是点击保存按钮的，就要判断上一次的模式
                 if (!auto) {
                     //如果上一次没有自动保存过，就弹框提示
-                    if (!autoSave) {
+                    if (!mAutoSave) {
                         ToastUtil.l("没有新签字的页面");
                     }
                     //如果上一次有自动保存过，那么点击后直接把保存后的路径返回
                     else {
-                        autoSave = false;
-                        if (listener != null && !TextUtils.isEmpty(tagPath)) {
-                            listener.onFinished(tagPath);
-                            tagPath = "";
+                        mAutoSave = false;
+                        if (listener != null && !TextUtils.isEmpty(mTagPath)) {
+                            listener.onFinished(mTagPath);
+                            mTagPath = "";
                         }
                     }
                 } else {
@@ -376,18 +345,32 @@ public class SignatureView extends FrameLayout {
                     }
                 }
             } else {
+                //有签字数据时，如果是自己点击保存的，需要保存一下当前的参数
                 TransformBean bean;
                 if (!auto) {
                     bean = new TransformBean();
-                    bean.setZoom(pdf_view.getZoom());
+                    bean.setZoom(mPdfView.getZoom());
                     bean.setCurrentPage(getCurrentPage());
-                    bean.setCurrentXOffset(pdf_view.getCurrentXOffset());
-                    bean.setCurrentYOffset(pdf_view.getCurrentYOffset());
+                    bean.setCurrentXOffset(mPdfView.getCurrentXOffset());
+                    bean.setCurrentYOffset(mPdfView.getCurrentYOffset());
                 } else {
-                    bean = this.bean;
+                    //如果是自动保存的，就获取上一次的参数
+                    bean = this.mBean;
                 }
-                toSaveSignature(path, bean, listener, newDrawPenViewList, signPageList);
-                autoSave = auto;
+
+                /**
+                 *   开始保存，去遍历map，用penView加载得到bitMap，此时可以先把penView隐藏起来，
+                 *   避免加载过程中看到页面误以为加载错误，操作完成后再显示。
+                 */
+                mPenView.setVisibility(INVISIBLE);
+                Map<Integer, Bitmap> signResultMap = new HashMap<>();
+                for (int page : mSaveSignMap.keySet()) {
+                    if (mPenView.load(mSaveSignMap.get(page))) {
+                        signResultMap.put(page, mPenView.export());
+                    }
+                }
+                toSaveSignature(path, bean, listener, signResultMap);
+                mAutoSave = auto;
             }
 
         } else {
@@ -396,19 +379,17 @@ public class SignatureView extends FrameLayout {
     }
 
 
-    private void toSaveSignature(String path, TransformBean bean, DataFinishListener listener, List<MPenLayout> newDrawPenViewList, List<Integer> signPageList) {
+    private void toSaveSignature(String path, TransformBean bean, DataFinishListener listener, Map<Integer, Bitmap> beanMap) {
         SavePdf savePdf = new SavePdf();
         savePdf.setPdfView(getPDFView());
-        savePdf.setPenViewList(newDrawPenViewList);
-        savePdf.setSignatureList(signPageList);
+        savePdf.setSignatureBeanMap(beanMap);
         savePdf.setPdfSourcePath(path);
         savePdf.setZoom(bean.getZoom());
-        savePdf.setVertical(isVertical);
         savePdf.setCurrentPage(bean.getCurrentPage());
         savePdf.setCurrentXOffset(bean.getCurrentXOffset());
         savePdf.setCurrentYOffset(bean.getCurrentYOffset());
-        savePdfAsync = new Save_Pdf_Async(savePdf, listener);
-        savePdfAsync.execute();
+        mSavePdfAsync = new Save_Pdf_Async(savePdf, listener);
+        mSavePdfAsync.execute();
     }
 
 
@@ -439,137 +420,177 @@ public class SignatureView extends FrameLayout {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            newPath = savePdf.addImg();
+            mNewPath = savePdf.addImg();
             return null;
         }
 
         @Override
         protected void onPostExecute(Object o) {
-            if (TextUtils.isEmpty(newPath)) {
+            if (TextUtils.isEmpty(mNewPath)) {
                 if (listener != null) {
+                    mPenView.clear();
+                    mPenView.setVisibility(VISIBLE);
+                    mSaveSignMap.clear();
                     listener.onFailed();
                 }
             } else {
-                if (listener != null)
-                    listener.onFinished(newPath);
+                if (listener != null) {
+                    mPenView.clear();
+                    mPenView.setVisibility(VISIBLE);
+                    mSaveSignMap.clear();
+                    listener.onFinished(mNewPath);
+                }
             }
-
         }
-
     }
 
     public String getNewPath() {
-        return newPath;
+        return mNewPath;
     }
 
-    public void setNewPath(String newPath) {
-        this.newPath = newPath;
+    public void setNewPath(String mNewPath) {
+        this.mNewPath = mNewPath;
     }
 
     public SignatureView swipeHorizontal(Boolean b) {
-        if (b) {
-            isVertical = false;
-        }
-        configurator.swipeHorizontal(b);
+        mConfigurator.swipeHorizontal(b);
         return this;
     }
 
     public SignatureView autoSpacing(Boolean b) {
-        configurator.autoSpacing(b);
+        mConfigurator.autoSpacing(b);
         return this;
     }
 
     public void setMaxZoom(float zoom) {
-        pdf_view.setMaxZoom(zoom);
+        mPdfView.setMaxZoom(zoom);
     }
 
     public SignatureView pageSnap(Boolean b) {
-        configurator.pageSnap(b);
+        mConfigurator.pageSnap(b);
         return this;
     }
 
     public SignatureView pageFling(Boolean b) {
-        configurator.pageFling(b);
+        mConfigurator.pageFling(b);
         return this;
     }
 
     public SignatureView needSignature(Boolean b) {
-        this.needSignature = b;
+        this.mNeedSignature = b;
         return this;
     }
 
     public SignatureView enableDoubleTap(Boolean b) {
-        configurator.enableDoubletap(b);
+        mConfigurator.enableDoubletap(b);
         return this;
     }
 
 
     public SignatureView pageFitPolicy(FitPolicy pageFitPolicy) {
-        configurator.pageFitPolicy(pageFitPolicy);
+        mConfigurator.pageFitPolicy(pageFitPolicy);
         return this;
     }
 
+    public void resetCacheMap() {
+        if (mSaveSignMap != null) {
+            mSaveSignMap.clear();
+        }
+    }
+
     public SignatureView setOnPageChangeListener() {
-        configurator.onPageChange(new OnPageChangeListener() {
+        mConfigurator.onPageChange(new OnPageChangeListener() {
             @Override
             public void onPageChanged(int page, int pageCount) {
-                if (viewPager != null)
-                    viewPager.setCurrentItem(page);
-                if (pdf_view.isZooming()) {
-                    pdf_view.resetZoomWithAnimation();
+                if ((mPenView != null) && (mPrePage != page)) {
+                    if (mCanSaveCache.getAndSet(false)) {
+                        //翻页时，判断当前页面有无笔迹，有的话，就保存成文件，然后清空笔迹，再去取翻页后的缓存笔迹文件
+                        if (mPenView.getData().length != 0) {
+                            //删掉原来有的缓存
+                            if (new File(mSaveRootName + mPrePage).exists()) {
+                                new File(mSaveRootName + mPrePage).delete();
+                            }
+                            //保存翻页前签字的缓存文件，然后清空面板
+                            if (mPenView.save(mSaveRootName + mPrePage)) {
+                                mSaveSignMap.put(mPrePage, mSaveRootName + mPrePage);
+                                mPenView.clear();
+                            } else {
+                                ToastUtil.s("保存签字出错");
+                            }
+                        } else {
+                            //这种情况是翻页前的页面用橡皮擦擦干净了，然后翻页。此时要从map里剔除,并且删掉缓存文件
+                            if (mSaveSignMap.containsKey(mPrePage)) {
+                                mSaveSignMap.remove(mPrePage);
+                            }
+                            if (new File(mSaveRootName + mPrePage).exists()) {
+                                new File(mSaveRootName + mPrePage).delete();
+                            }
+                        }
+                        //如果翻页的页面有缓存的话，就去加载出来
+                        if (new File(mSaveRootName + page).exists()) {
+                            mPenView.load(mSaveRootName + page);
+                        } else {
+                            mPenView.clear();
+                        }
+                    }
+                    //翻页之后，要恢复可保存的状态
+                    mCanSaveCache.set(true);
                 }
-
+                if (mPdfView.isZooming()) {
+                    mPdfView.resetZoomWithAnimation();
+                }
+                mPrePage = page;
             }
         });
         return this;
     }
 
     public void load() {
-        configurator.load();
+        mConfigurator.load();
     }
 
     public void stopFling() {
-        pdf_view.stopFling();
-        pdf_view.recycle();
-        if (penViewList != null) {
-            for (int i = 0; i < penViewList.size(); i++) {
-                penViewList.get(i).setSignatureView(null);
-                penViewList.get(i).clear();
-            }
-            penViewList.clear();
+        if (mPdfView != null) {
+            mPdfView.stopFling();
+            mPdfView.recycle();
         }
-        resetConfig();
-        if (savePdfAsync != null) {
-            savePdfAsync.cancel(true);
+        if (mPenView != null) {
+            mPenView.setSignatureView(null);
+            mPenView.clear();
         }
+        if (mSavePdfAsync != null) {
+            mSavePdfAsync.cancel(true);
+        }
+        //需要清除掉所有的签字临时缓存
+        FileUtil.deleteFile(new File(Constants.SIGN_CACHE));
+        new File(Constants.SIGN_CACHE).mkdirs();
     }
 
 
     public void resetZoomWithAnimation() {
-        if (pdf_view != null) {
-            pdf_view.resetZoomWithAnimation();
+        if (mPdfView != null) {
+            mPdfView.resetZoomWithAnimation();
         }
     }
 
     public SignatureView setSwipeEnabled(Boolean b) {
-        pdf_view.setSwipeEnabled(b);
+        mPdfView.setSwipeEnabled(b);
         return this;
     }
 
     @NonNull
     public int getCurrentPage() {
-        return pdf_view.getCurrentPage();
+        return mPdfView.getCurrentPage();
     }
 
 
     public void setTransformBean(TransformBean bean) {
-        this.bean = bean;
+        this.mBean = bean;
     }
-
 
     public void startSignature() {
-        if (viewPager != null)
-            viewPager.setVisibility(VISIBLE);
+        if (mPenView != null) {
+            mPenView.setVisibility(VISIBLE);
+        }
     }
-
 }

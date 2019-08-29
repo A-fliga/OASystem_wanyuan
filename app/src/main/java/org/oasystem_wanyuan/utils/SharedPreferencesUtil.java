@@ -22,20 +22,6 @@ public class SharedPreferencesUtil {
     private static SharedPreferences sharedPreference = null;
     private static SharedPreferences.Editor editor = null;
 
-
-    /**
-     * 保存登录的用户信息
-     */
-    public static void saveUserStatus(String status) {
-        if (sharedPreference == null) {
-            sharedPreference = MyApplication.getContext()
-                    .getSharedPreferences(Constants.OA_SYSTEM, Context.MODE_PRIVATE);
-        }
-        editor = sharedPreference.edit();
-        editor.putString(Constants.LOGIN_TYPE, status);
-        editor.apply();
-    }
-
     /**
      * 保存用户上次登录的用户名
      *
@@ -102,11 +88,4 @@ public class SharedPreferencesUtil {
         return sharedPreference.getString(USER_NAME, null);
     }
 
-    public static String getUserStatus() {
-        if (sharedPreference == null) {
-            sharedPreference = MyApplication.getContext()
-                    .getSharedPreferences(Constants.OA_SYSTEM, Context.MODE_PRIVATE);
-        }
-        return sharedPreference.getString(Constants.LOGIN_TYPE, null);
-    }
 }

@@ -24,7 +24,4 @@ public class FileMonitorDelegate extends ViewDelegate {
         getTitleView().setText("文件监控");
     }
 
-    public void initMonitorList(){
-
-    }
 }

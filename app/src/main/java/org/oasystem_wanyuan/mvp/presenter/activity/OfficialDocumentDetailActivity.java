@@ -1,6 +1,7 @@
 package org.oasystem_wanyuan.mvp.presenter.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -81,10 +83,9 @@ import static org.oasystem_wanyuan.constants.Constants.SIGN_RESULT;
  */
 
 public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDocumentDetailDelegate> implements TbsReaderView.ReaderCallback {
-    private static String TAG = "wwwceshi";
+    private static String TAG = "OfficialDocumentDetailActivity";
     private static String OFFICE_PATH;
     private final int WRITE_STORAGE_CODE = 1000;
-    private final int REQUEST_CODE_WRITE_SETTINGS = 1002;
     private int id, tagPosition, opType = 0, itemId, color, tagColor;
     private float width, tagWidth;
     private int daiqianIndex = -1;
@@ -273,12 +274,19 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
 
     private void disPlayBySignView(File file) {
-        if (mSignatureView != null) {
-            mSignatureView.stopFling();
-            mSignatureView = null;
-        }
         mSignatureView = viewDelegate.get(R.id.mSignatureView);
+        mSignatureView.setDocumentId(String.valueOf(id));
         mSignatureView.loadFile(file);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     public void displayFile(File mFile) {
@@ -536,7 +544,6 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                         tagPosition = position;
                         //切换界面要恢复一下设置
                         if (mSignatureView != null) {
-                            mSignatureView.resetConfig();
                             mSignatureView.setNewPath(cacheFileList.get(position));
                         }
 
@@ -1138,10 +1145,11 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
                 }
                 if (opType == 3) {
                     setSelectedSates(viewDelegate.get(R.id.toolBar_img_right));
-                    if (cacheFileList.get(tagPosition).isEmpty())
+                    if (cacheFileList.get(tagPosition).isEmpty()) {
                         clearCanvas(null);
-                    else
+                    } else {
                         clearCanvas(cacheFileList.get(tagPosition));
+                    }
                     noSigning();
                 }
                 if (opType == 4) {
@@ -1178,7 +1186,7 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
         for (int j = 0; j < linearList.size(); j++) {
             linearList.get(j).setSelected(false);
         }
-//        mSignatureView.resetZoomWithAnimation();
+        mSignatureView.resetCacheMap();
     }
 
     private void clearCanvas(String path) {
@@ -1198,12 +1206,12 @@ public class OfficialDocumentDetailActivity extends ActivityPresenter<OfficialDo
 
     private void saveImg(final Boolean needUpLoad) {
         if (mSignatureView != null) {
-//            LogUtil.d("pianyi", "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
+//            LogUtil.d(TAG, "签字文件的路径" + (TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()));
             mSignatureView.addSignature2Pdf(TextUtils.isEmpty(mSignatureView.getNewPath()) ? getPath(id, getNowType()) : mSignatureView.getNewPath()
                     , false, new SignatureView.DataFinishListener() {
                         @Override
                         public void onFinished(String path) {
-                            LogUtil.d("pianyi", "签完字后的路径" + path);
+                            LogUtil.d(TAG, "签完字后的路径" + path);
                             if (needUpLoad)
                                 upLoadFile(path);
                         }
