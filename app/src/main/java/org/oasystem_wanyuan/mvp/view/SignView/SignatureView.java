@@ -201,6 +201,9 @@ public class SignatureView extends FrameLayout {
         public void loadComplete(int nbPages) {
 
             //如果不是自动保存的 就清空一下设置
+            if (!mAutoSpacing) {
+                resetConfig();
+            }
             resetZoomWithAnimation();
             ProgressDialogUtil.instance().stopLoad();
             Document document = null;
@@ -443,6 +446,11 @@ public class SignatureView extends FrameLayout {
             }
         }
     }
+
+    public void resetConfig() {
+        mPrePage = 0;
+    }
+
 
     public String getNewPath() {
         return mNewPath;
