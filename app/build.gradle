@@ -22,8 +22,8 @@ android {
         applicationId "org.oasystem_wanyuan"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 19
-        versionName "2.9"
+        versionCode 20
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -72,9 +72,9 @@ android {
             //大竹
 //            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
             //渠县
-            buildConfigField "String", "HOST", '"http://112.33.63.90:9098/api/"'
+//            buildConfigField "String", "HOST", '"http://112.33.63.90:9098/api/"'
             //测试
-//            buildConfigField "String", "HOST", '"http://106.12.106.117/api/"'
+            buildConfigField "String", "HOST", '"http://106.12.106.117/api/"'
         }
 
         release {
@@ -129,7 +129,6 @@ dependencies {
     //eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.necer.ncalendar:ncalendar:3.4.1'
-    //    compile 'com.bm.photoview:library:1.4.1'
     testCompile 'junit:junit:4.12'
     compile files('libs/BaiduLBS_Android.jar')
     compile(name: 'inkapi-release', ext: 'aar')
@@ -139,5 +138,5 @@ dependencies {
     compile(name: 'utils-release', ext: 'aar')
     compile(name: 'recognizer-release', ext: 'aar')
     compile 'me.jessyan:autosize:1.1.2'
-//    compile 'com.zhy:autolayout:1.4.5'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
 }

@@ -145,21 +145,6 @@ public final class HttpClient {
         return sHttpClient;
     }
 
-//    /**
-//     * @return return {@link HttpClient} 单例
-//     */
-//    public static HttpClient getNewInstance() {
-//        if (sHttpClient == null) {
-//            synchronized (HttpClient.class) {
-//                if (sHttpClient == null) {
-//                    sHttpClient = new HttpClient(BuildConfig.HOST,1);
-//                }
-//            }
-//        }
-//        httpTaskNum.incrementAndGet();
-//        return sHttpClient;
-//    }
-
 
     public static void finishRequest() {
         httpTaskNum.decrementAndGet();
@@ -264,10 +249,13 @@ public final class HttpClient {
     /**
      * 待我审批
      */
-    public void getNotDoneDocument(Subscriber<BaseEntity<DocumentBean>> subscriber, ScreenBean bean) {
+    public void getNotDoneDocument(Subscriber<BaseEntity<DocumentBean>> subscriber, ScreenBean bean, int page) {
         String data = new Gson().toJson(bean);
         HashMap<String, String> bodyMap = new HashMap<>();
         bodyMap.put("param", data);
+        if (page > 0) {
+            bodyMap.put("page", String.valueOf(page));
+        }
         Observable observable = mApi.getNotDoneDocument(addToken(), getMapRequestBody(bodyMap));
         toSubscribe(observable, subscriber);
     }
@@ -296,9 +284,9 @@ public final class HttpClient {
     /**
      * 审批接口
      */
-    public void examine(Subscriber<BaseEntity> subscriber, String id, String status, String accessory_source_id, String form_source_id,String reason) {
-        Observable observable = mApi.examine(addToken(), getMapRequestBody(getBodyMap(getStrings("id", "status", "accessory_source_id", "form_source_id","reason")
-                , getStrings(id, status, accessory_source_id, form_source_id,reason))));
+    public void examine(Subscriber<BaseEntity> subscriber, String id, String status, String accessory_source_id, String form_source_id, String reason) {
+        Observable observable = mApi.examine(addToken(), getMapRequestBody(getBodyMap(getStrings("id", "status", "accessory_source_id", "form_source_id", "reason")
+                , getStrings(id, status, accessory_source_id, form_source_id, reason))));
         toSubscribe(observable, subscriber);
     }
 
@@ -345,10 +333,10 @@ public final class HttpClient {
      * 加签
      */
     public void add_countersign(Subscriber<BaseEntity> subscriber, int id,
-                                String user_id,String form_source_id,String accessory_source_id) {
+                                String user_id, String form_source_id, String accessory_source_id) {
         Observable observable = mApi.add_countersign(addToken(),
-                getMapRequestBody(getBodyMap(getStrings("id","user_id","form_source_id","accessory_source_id"),
-                getStrings(String.valueOf(id), user_id,form_source_id,accessory_source_id))));
+                getMapRequestBody(getBodyMap(getStrings("id", "user_id", "form_source_id", "accessory_source_id"),
+                        getStrings(String.valueOf(id), user_id, form_source_id, accessory_source_id))));
         toSubscribe(observable, subscriber);
     }
 
@@ -378,6 +366,7 @@ public final class HttpClient {
         Observable observable = mApi.getMeetingList(addToken(), getMapRequestBody(getBodyMap(getStrings("status"), getStrings(status))));
         toSubscribe(observable, subscriber);
     }
+
     /**
      * 获取会议详情
      */
@@ -389,11 +378,10 @@ public final class HttpClient {
     /**
      * 会议签到
      */
-    public void countersign(Subscriber<BaseEntity> subscriber, String id,String status,String remark) {
-        Observable observable = mApi.countersign(addToken(), getMapRequestBody(getBodyMap(getStrings("id","status","remark"), getStrings(id,status,remark))));
+    public void countersign(Subscriber<BaseEntity> subscriber, String id, String status, String remark) {
+        Observable observable = mApi.countersign(addToken(), getMapRequestBody(getBodyMap(getStrings("id", "status", "remark"), getStrings(id, status, remark))));
         toSubscribe(observable, subscriber);
     }
-
 
 
     /**
@@ -416,7 +404,7 @@ public final class HttpClient {
      * 获取申请详情
      */
     public void getApplyDetailBean(Subscriber<BaseEntity<CarApplyDetailBean>> subscriber, String id) {
-        Observable observable = mApi.getApplyDetailBean(addToken(),getMapRequestBody(getBodyMap(getStrings("id"),getStrings(id))));
+        Observable observable = mApi.getApplyDetailBean(addToken(), getMapRequestBody(getBodyMap(getStrings("id"), getStrings(id))));
         toSubscribe(observable, subscriber);
     }
 
@@ -431,8 +419,8 @@ public final class HttpClient {
     /**
      * 新增用车申请
      */
-    public void car_apply(Subscriber<BaseEntity> subscriber,CarApplyBean bean) {
-        Observable observable = mApi.car_apply(addToken(),getObjRequestBody(bean));
+    public void car_apply(Subscriber<BaseEntity> subscriber, CarApplyBean bean) {
+        Observable observable = mApi.car_apply(addToken(), getObjRequestBody(bean));
         toSubscribe(observable, subscriber);
     }
 
@@ -440,16 +428,16 @@ public final class HttpClient {
     /**
      * 审批用车通过
      */
-    public void approveAgree(Subscriber<BaseEntity> subscriber,String examine_id,String id) {
-        Observable observable = mApi.approveAgree(addToken(),getMapRequestBody(getBodyMap(getStrings("examine_id","id"),getStrings(examine_id,id))));
+    public void approveAgree(Subscriber<BaseEntity> subscriber, String examine_id, String id) {
+        Observable observable = mApi.approveAgree(addToken(), getMapRequestBody(getBodyMap(getStrings("examine_id", "id"), getStrings(examine_id, id))));
         toSubscribe(observable, subscriber);
     }
 
     /**
      * 审批用车不通过
      */
-    public void approveReject(Subscriber<BaseEntity> subscriber,String examine_id,String text) {
-        Observable observable = mApi.approveReject(addToken(),getMapRequestBody(getBodyMap(getStrings("examine_id","text"),getStrings(examine_id,text))));
+    public void approveReject(Subscriber<BaseEntity> subscriber, String examine_id, String text) {
+        Observable observable = mApi.approveReject(addToken(), getMapRequestBody(getBodyMap(getStrings("examine_id", "text"), getStrings(examine_id, text))));
         toSubscribe(observable, subscriber);
     }
 
@@ -524,40 +512,40 @@ public final class HttpClient {
      * 新增请假
      */
     public void addLeaveApply(Subscriber<BaseEntity> subscriber, LeaveApplyBean bean) {
-        Observable observable = mApi.addLeaveApply(addToken(),getObjRequestBody(bean));
+        Observable observable = mApi.addLeaveApply(addToken(), getObjRequestBody(bean));
         toSubscribe(observable, subscriber);
     }
 
     /**
-     *申请代签
+     * 申请代签
      */
-    public void addDaiqian(Subscriber<BaseEntity> subscriber,String id,String user_id) {
-        Observable observable = mApi.addDaiqian(addToken(),getMapRequestBody(getBodyMap(getStrings("id,user_id"),getStrings(id,user_id))));
+    public void addDaiqian(Subscriber<BaseEntity> subscriber, String id, String user_id) {
+        Observable observable = mApi.addDaiqian(addToken(), getMapRequestBody(getBodyMap(getStrings("id,user_id"), getStrings(id, user_id))));
         toSubscribe(observable, subscriber);
     }
 
 
     /**
-     *办理意见
+     * 办理意见
      */
     public void getFormList(Subscriber<BaseEntity<DealWithOptionBean>> subscriber, String id) {
-        Observable observable = mApi.getFormList(addToken(),getMapRequestBody(getBodyMap(getStrings("id"),getStrings(id))));
+        Observable observable = mApi.getFormList(addToken(), getMapRequestBody(getBodyMap(getStrings("id"), getStrings(id))));
         toSubscribe(observable, subscriber);
     }
 
     /**
-     *增加意见
+     * 增加意见
      */
-    public void addOptionData(Subscriber<BaseEntity> subscriber, String id,String content) {
-        Observable observable = mApi.addOptionData(addToken(),getMapRequestBody(getBodyMap(getStrings("id,content"),getStrings(id,content))));
+    public void addOptionData(Subscriber<BaseEntity> subscriber, String id, String content) {
+        Observable observable = mApi.addOptionData(addToken(), getMapRequestBody(getBodyMap(getStrings("id,content"), getStrings(id, content))));
         toSubscribe(observable, subscriber);
     }
 
     /**
-     *删除意见
+     * 删除意见
      */
     public void DeleteOptionData(Subscriber<BaseEntity> subscriber, String id) {
-        Observable observable = mApi.DeleteOptionData(addToken(),getMapRequestBody(getBodyMap(getStrings("id"),getStrings(id))));
+        Observable observable = mApi.DeleteOptionData(addToken(), getMapRequestBody(getBodyMap(getStrings("id"), getStrings(id))));
         toSubscribe(observable, subscriber);
     }
 }
