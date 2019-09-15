@@ -274,21 +274,21 @@ public class OfficialFragment extends FragmentPresenter<OfficialDelegate> {
                     mIsPositiveCreate = !mIsPositiveCreate;
                     mIsPositiveUpdate = false;
                     mNewBeanList = SortUtl.sort(mNewBeanList, mIsPositiveCreate ? POSITIVE : REVERSE, true);
-                    mAdapter.setBeanList(mNewBeanList);
+                    mAdapter.setmBeanList(mNewBeanList);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case R.id.to_sort_update:
                     mIsPositiveCreate = false;
                     mIsPositiveUpdate = !mIsPositiveUpdate;
                     mNewBeanList = SortUtl.sort(mNewBeanList, mIsPositiveUpdate ? POSITIVE : REVERSE, false);
-                    mAdapter.setBeanList(mNewBeanList);
+                    mAdapter.setmBeanList(mNewBeanList);
                     mAdapter.notifyDataSetChanged();
                     break;
 
                 case R.id.home_user_icon:
                     MainActivity activity = (MainActivity) getActivity();
                     if (activity != null) {
-                        activity.viewPager.setCurrentItem(1);
+                        activity.mViewPager.setCurrentItem(1);
                         activity.setCheck(1);
                     }
                     break;

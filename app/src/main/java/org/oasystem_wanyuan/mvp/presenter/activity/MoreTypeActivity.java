@@ -50,13 +50,13 @@ public class MoreTypeActivity extends ActivityPresenter<MoreTypeDelegate> {
 
     private void initCustomize() {
         if (FirmingTypeManager.getInstance().getBeanList().size() > Constants.TYPE_WIDTH_COUNT) {
-            mCustomizeAdapter = viewDelegate.initCustomizeList();
+            mCustomizeAdapter = mViewDelegate.initCustomizeList();
             setCustomizeClick();
         }
     }
 
     private void initRegular() {
-        mRegularAdapter = viewDelegate.initRegularAdapter();
+        mRegularAdapter = mViewDelegate.initRegularAdapter();
         setRegularClick();
     }
 
@@ -107,7 +107,7 @@ public class MoreTypeActivity extends ActivityPresenter<MoreTypeDelegate> {
         mCustomizeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                start2Activity(mCustomizeAdapter.getBeanList().get(position).getId());
+                start2Activity(mCustomizeAdapter.getmBeanList().get(position).getId());
             }
         });
     }

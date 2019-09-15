@@ -18,13 +18,13 @@ import java.util.List;
 
 public class CarApplyFlowAdapter extends RecyclerView.Adapter<CarApplyFlowAdapter.CarApplyFlowViewHolder> {
 
-    private List<CarApplyDetailBean.CarUseExamineBean> beanList;
-    private CarApplyDetailBean bean;
-    private Boolean firstAgree = false;
+    private List<CarApplyDetailBean.CarUseExamineBean> mBeanList;
+    private CarApplyDetailBean mBean;
+    private boolean mFirstAgree = false;
 
     public CarApplyFlowAdapter(CarApplyDetailBean bean) {
-        this.bean = bean;
-        this.beanList = bean.getCar_use_examine();
+        this.mBean = bean;
+        this.mBeanList = bean.getCar_use_examine();
         this.userBean = bean.getUser();
     }
 
@@ -39,11 +39,11 @@ public class CarApplyFlowAdapter extends RecyclerView.Adapter<CarApplyFlowAdapte
     public void onBindViewHolder(CarApplyFlowViewHolder holder, int position) {
         if (position == 0) {
             holder.user_name.setText("申请人：" + userBean.getName());
-            holder.update_time.setText(bean.getCreated_at());
+            holder.update_time.setText(mBean.getCreated_at());
             holder.status_img.setImageResource(R.mipmap.already_sign);
             holder.line_img.setImageResource(R.mipmap.sign_line);
         } else {
-            CarApplyDetailBean.CarUseExamineBean bean = beanList.get(position - 1);
+            CarApplyDetailBean.CarUseExamineBean bean = mBeanList.get(position - 1);
             holder.user_name.setText(bean.getUser().getName());
             holder.flow_name.setText(getFlowName(bean.getStatus()));
             //除了待审批以外的状态才显示时间,
@@ -53,12 +53,12 @@ public class CarApplyFlowAdapter extends RecyclerView.Adapter<CarApplyFlowAdapte
                 holder.line_img.setImageResource(R.mipmap.sign_line);
             }
             //待审核状态  之后的条条都是灰色
-            if (Integer.parseInt(bean.getStatus()) == 1 && !firstAgree) {
-                firstAgree = true;
+            if (Integer.parseInt(bean.getStatus()) == 1 && !mFirstAgree) {
+                mFirstAgree = true;
                 holder.status_img.setImageResource(R.mipmap.is_signing);
             }
             //最后一个的 需要隐藏掉
-            if (position == beanList.size()) {
+            if (position == mBeanList.size()) {
                 holder.line_img.setVisibility(View.GONE);
             }
         }
@@ -66,7 +66,7 @@ public class CarApplyFlowAdapter extends RecyclerView.Adapter<CarApplyFlowAdapte
 
     @Override
     public int getItemCount() {
-        return beanList.size() + 1;
+        return mBeanList.size() + 1;
     }
 
     private String getFlowName(String status) {

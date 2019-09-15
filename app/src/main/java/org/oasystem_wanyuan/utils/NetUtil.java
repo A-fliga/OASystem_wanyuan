@@ -16,8 +16,8 @@ public class NetUtil {
      *
      * @return state -1无网；0:WIFI网络；1:其他网络
      */
-    public static Boolean isConnect() {
-        Boolean state = false;
+    public static boolean isConnect() {
+        boolean state = false;
         try {
             ConnectivityManager cm = (ConnectivityManager) ContextUtil.getContext()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);// 获取系统的连接服务
@@ -36,8 +36,8 @@ public class NetUtil {
         return state;
     }
 
-    public static Boolean isConnectNoToast() {
-        Boolean state = false;
+    public static boolean isConnectNoToast() {
+        boolean state = false;
         try {
             ConnectivityManager cm = (ConnectivityManager) ContextUtil.getContext()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);// 获取系统的连接服务

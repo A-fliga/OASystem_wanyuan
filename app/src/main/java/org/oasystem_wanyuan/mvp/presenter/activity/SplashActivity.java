@@ -11,7 +11,7 @@ import org.oasystem_wanyuan.mvp.view.SplashDelegate;
  */
 
 public class SplashActivity extends ActivityPresenter {
-    private Handler handler;
+    private Handler sHandler;
 
     @Override
     public Class getDelegateClass() {
@@ -26,8 +26,8 @@ public class SplashActivity extends ActivityPresenter {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new Handler();
-        handler.postDelayed(mRun, 1500);
+        sHandler = new Handler();
+        sHandler.postDelayed(mRun, 1500);
     }
 
 
@@ -44,6 +44,6 @@ public class SplashActivity extends ActivityPresenter {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(mRun);
+        sHandler.removeCallbacks(mRun);
     }
 }

@@ -20,8 +20,8 @@ import java.util.List;
  */
 
 public class OfficialDocumentDetailDelegate extends ViewDelegate {
-    private LinearLayout sign_left_ll;
-    private RecyclerView sign_bottom;
+    private LinearLayout mSignLeftLL;
+    private RecyclerView mSignBottom;
     @Override
     public void onDestroy() {
 
@@ -34,20 +34,20 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
 
     @Override
     public void initWidget() {
-        sign_left_ll = get(R.id.sign_left_ll);
-        sign_bottom = get(R.id.sign_bottom);
+        mSignLeftLL = get(R.id.sign_left_ll);
+        mSignBottom = get(R.id.sign_bottom);
         setToolBarRightTv2("保存");
         getToolBarRightTv2().setVisibility(View.GONE);
     }
 
     public void hideLeftBtn(String auth) {
-        for (int i = 0; i < sign_left_ll.getChildCount()-1; i++) {
+        for (int i = 0; i < mSignLeftLL.getChildCount()-1; i++) {
             if (!auth.contains(i + 1 + "")) {
-                sign_left_ll.getChildAt(i).setVisibility(View.GONE);
+                mSignLeftLL.getChildAt(i).setVisibility(View.GONE);
             }
         }
         if (Integer.parseInt(UserManager.getInstance().getUserInfo().getIs_daiqian()) == 0) {
-            sign_left_ll.getChildAt(sign_left_ll.getChildCount() - 1).setVisibility(View.GONE);
+            mSignLeftLL.getChildAt(mSignLeftLL.getChildCount() - 1).setVisibility(View.GONE);
         }
     }
     public void initBottomRecyclerView(DocumentBean.DataBean bean,Boolean done){
@@ -70,7 +70,7 @@ public class OfficialDocumentDetailDelegate extends ViewDelegate {
             beanList.add(fBean);
         }
         SignatureBottomAdapter adapter = new SignatureBottomAdapter(this.getActivity(),beanList,done);
-        setRecyclerView(sign_bottom,adapter);
+        setRecyclerView(mSignBottom,adapter);
     }
 
     private void setRecyclerView(RecyclerView recyclerView,SignatureBottomAdapter adapter){

@@ -15,8 +15,8 @@ import android.widget.FrameLayout;
  */
 public class AutoHideIMEFrameLayout extends FrameLayout {
 
-    private Boolean isLongPress = false;
-    private Boolean isFirstPress = true;
+    private boolean mIsLongPress = false;
+    private boolean mIsFirstPress = true;
 
     public AutoHideIMEFrameLayout(Context context) {
         super(context);
@@ -49,16 +49,16 @@ public class AutoHideIMEFrameLayout extends FrameLayout {
 
     private void whenActionDown(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            isFirstPress = false;
+            mIsFirstPress = false;
         }
     }
 
     private void whenActionUp(MotionEvent ev, View focusView) {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
-            if (focusView != null && shouldHideInputMethod(focusView, ev) && !isLongPress) {
+            if (focusView != null && shouldHideInputMethod(focusView, ev) && !mIsLongPress) {
                 hideInputMethod(focusView);
             }
-            isLongPress = false;
+            mIsLongPress = false;
         }
     }
 
@@ -67,7 +67,7 @@ public class AutoHideIMEFrameLayout extends FrameLayout {
             focusView.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    isLongPress = true;
+                    mIsLongPress = true;
                     return false;
                 }
             });
@@ -104,7 +104,7 @@ public class AutoHideIMEFrameLayout extends FrameLayout {
         if (currentFocus == null) {
             return;
         }
-        if (!isFirstPress && !isLongPress) {
+        if (!mIsFirstPress && !mIsLongPress) {
             InputMethodManager imm = (InputMethodManager) currentFocus.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             if (currentFocus instanceof EditText) {

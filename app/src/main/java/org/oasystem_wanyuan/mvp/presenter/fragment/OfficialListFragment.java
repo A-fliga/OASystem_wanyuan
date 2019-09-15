@@ -73,19 +73,19 @@ public class OfficialListFragment extends FragmentPresenter<OfficialListDelegate
         if (done) {
             if (positive) {
                 doneBeanList = SortUtl.sort(doneBeanList, SortUtl.POSITIVE, isCreate);
-                doneAdapter.setBeanList(doneBeanList);
+                doneAdapter.setmBeanList(doneBeanList);
             } else {
                 doneBeanList = SortUtl.sort(doneBeanList, SortUtl.REVERSE, isCreate);
-                doneAdapter.setBeanList(doneBeanList);
+                doneAdapter.setmBeanList(doneBeanList);
             }
             doneAdapter.notifyDataSetChanged();
         } else {
             if (positive) {
                 notDoneBeanList = SortUtl.sort(notDoneBeanList, SortUtl.POSITIVE, isCreate);
-                notDoneAdapter.setBeanList(notDoneBeanList);
+                notDoneAdapter.setmBeanList(notDoneBeanList);
             } else {
                 notDoneBeanList = SortUtl.sort(notDoneBeanList, SortUtl.REVERSE, isCreate);
-                notDoneAdapter.setBeanList(notDoneBeanList);
+                notDoneAdapter.setmBeanList(notDoneBeanList);
             }
             notDoneAdapter.notifyDataSetChanged();
         }

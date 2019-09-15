@@ -30,7 +30,7 @@ import static org.oasystem_wanyuan.constants.Constants.LOGIN_INFO;
  */
 
 public class LoginActivity extends ActivityPresenter {
-    private EditText unEt, pwdEt;
+    private EditText mUnEt, mPwdEt;
 
     @Override
     public Class getDelegateClass() {
@@ -45,10 +45,10 @@ public class LoginActivity extends ActivityPresenter {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        unEt = viewDelegate.get(R.id.login_username);
-        addTextChangeListener(unEt);
-        pwdEt = viewDelegate.get(R.id.login_password);
-        viewDelegate.setOnClickListener(onClickListener, R.id.login_btn, R.id.can_not_login, R.id.forget_pwd);
+        mUnEt = mViewDelegate.get(R.id.login_username);
+        addTextChangeListener(mUnEt);
+        mPwdEt = mViewDelegate.get(R.id.login_password);
+        mViewDelegate.setOnClickListener(onClickListener, R.id.login_btn, R.id.can_not_login, R.id.forget_pwd);
     }
 
     public static String stringFilter(String str) throws PatternSyntaxException {
@@ -89,7 +89,7 @@ public class LoginActivity extends ActivityPresenter {
 
             switch (view.getId()) {
                 case R.id.login_btn:
-                    if (unEt.getText().toString().replaceAll(" ", "").isEmpty() || pwdEt.getText().toString().replaceAll(" ", "").isEmpty()) {
+                    if (mUnEt.getText().toString().replaceAll(" ", "").isEmpty() || mPwdEt.getText().toString().replaceAll(" ", "").isEmpty()) {
                         ToastUtil.s("输入不能为空");
                     } else {
                         if (!AppUtil.isFastDoubleClick(1000)) {
@@ -115,12 +115,12 @@ public class LoginActivity extends ActivityPresenter {
             public void onNext(BaseEntity<LoginBean> bean) {
                 super.onNext(bean);
                 if (bean.getCode() == 0) {
-                    SharedPreferencesUtil.saveUserName(unEt.getText().toString().replaceAll(" ", ""));
+                    SharedPreferencesUtil.saveUserName(mUnEt.getText().toString().replaceAll(" ", ""));
                     ACache aCache = ACache.get(MyApplication.getContext());
                     aCache.put(LOGIN_INFO, bean.getData());
                     startMyActivityWithFinish(MainActivity.class);
                 }
             }
-        }, unEt.getText().toString().replaceAll(" ", ""), pwdEt.getText().toString().replaceAll(" ", ""));
+        }, mUnEt.getText().toString().replaceAll(" ", ""), mPwdEt.getText().toString().replaceAll(" ", ""));
     }
 }

@@ -15,14 +15,14 @@ import static org.oasystem_wanyuan.constants.Constants.CORE_INIT;
  */
 
 public class MyApplication extends Application {
-    private static Context context;
-    private static MyApplication application;
+    private static Context sContext;
+    private static MyApplication sApplication;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
-        application = this;
+        sContext = getApplicationContext();
+        sApplication = this;
         AutoSizeConfig.getInstance().setBaseOnWidth(false);
         //增加这句话
         QbSdk.initX5Environment(this, new QbSdk.PreInitCallback() {
@@ -39,10 +39,10 @@ public class MyApplication extends Application {
     }
 
     public static Context getContext() {
-        return context;
+        return sContext;
     }
 
     public static MyApplication getAppContext() {
-        return application;
+        return sApplication;
     }
 }

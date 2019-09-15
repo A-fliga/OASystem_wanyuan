@@ -79,14 +79,14 @@ android {
 
         release {
             //万源
-//            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
+            buildConfigField "String", "HOST", '"http://112.35.6.11:9098/api/"'
             //大竹
 //            buildConfigField "String", "HOST", '"http://112.35.1.224:9099/api/"'
             //测试
 //            buildConfigField "String", "HOST", '"http://106.12.106.117/api/"'
 
             //渠县
-            buildConfigField "String", "HOST", '"http://112.33.63.90:9098/api/"'
+//            buildConfigField "String", "HOST", '"http://112.33.63.90:9098/api/"'
             signingConfig android.signingConfigs.release
             minifyEnabled true
             zipAlignEnabled true

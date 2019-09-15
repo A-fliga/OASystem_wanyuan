@@ -12,7 +12,7 @@ import java.io.File;
  */
 
 public final class Constants {
-    public static Boolean CORE_INIT = false;
+    public static boolean CORE_INIT = false;
     public static final int SIZE_IN_DP = 640;
     public static final int TYPE_WIDTH_COUNT = 5;
     public static final String OA_SYSTEM = getOrg();

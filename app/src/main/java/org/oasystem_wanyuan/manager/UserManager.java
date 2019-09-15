@@ -16,21 +16,21 @@ import static org.oasystem_wanyuan.constants.Constants.LOGIN_INFO;
  */
 
 public class UserManager {
-    private static volatile UserManager instance;
-    private UserInfo userInfo;
-    private AllUserBean allUserBean;
+    private static volatile UserManager sInstance;
+    private UserInfo mUserInfo;
+    private AllUserBean mAllUserBean;
     private UserManager() {
     }
 
     public static UserManager getInstance() {
-        if (instance == null) {
+        if (sInstance == null) {
             synchronized (UserManager.class) {
-                if (instance == null) {
-                    instance = new UserManager();
+                if (sInstance == null) {
+                    sInstance = new UserManager();
                 }
             }
         }
-        return instance;
+        return sInstance;
     }
 
     public Boolean isLogin() {
@@ -40,14 +40,14 @@ public class UserManager {
     }
 
     public void setAllUserInfo(AllUserBean allUserInfo){
-        this.allUserBean = allUserInfo;
+        this.mAllUserBean = allUserInfo;
     }
 
     public List<AllUserBean.DataBean> getAllUserInfo(){
         List<AllUserBean.DataBean> beanList = new ArrayList<>();
-        for (int i = 0; i < allUserBean.getData().size(); i++) {
+        for (int i = 0; i < mAllUserBean.getData().size(); i++) {
 //            if (allUserBean.getData().get(i).getId() != UserManager.getInstance().getUserInfo().getId()) {
-                beanList.add(allUserBean.getData().get(i));
+                beanList.add(mAllUserBean.getData().get(i));
 //            }
         }
         return beanList;
@@ -55,10 +55,10 @@ public class UserManager {
 
 
     public void setUserInfo(UserInfo userInfo){
-        this.userInfo = userInfo;
+        this.mUserInfo = userInfo;
     }
 
     public UserInfo getUserInfo(){
-        return userInfo;
+        return mUserInfo;
     }
 }

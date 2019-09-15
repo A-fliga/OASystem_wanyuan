@@ -266,7 +266,7 @@ public class SignatureView extends FrameLayout {
         mCanSigning = isSigning;
     }
 
-    public Boolean getCanSigning() {
+    public boolean getCanSigning() {
         return mCanSigning;
     }
 

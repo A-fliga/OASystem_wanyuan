@@ -19,8 +19,8 @@ import org.oasystem_wanyuan.utils.ToastUtil;
  */
 
 public class AddOptionFormActivity extends ActivityPresenter<AddOptionFormDelegate>{
-    private int itemId;
-    private EditText add_option_et;
+    private int mItemId;
+    private EditText mAddOptionEt;
     @Override
     public Class<AddOptionFormDelegate> getDelegateClass() {
         return AddOptionFormDelegate.class;
@@ -36,18 +36,18 @@ public class AddOptionFormActivity extends ActivityPresenter<AddOptionFormDelega
         super.onCreate(savedInstanceState);
         Bundle bundle  = getIntent().getExtras();
         if(bundle != null){
-            itemId = bundle.getInt("itemId");
+            mItemId = bundle.getInt("itemId");
             String content = bundle.getString("content", "");
-            add_option_et = viewDelegate.get(R.id.add_option_et);
+            mAddOptionEt = mViewDelegate.get(R.id.add_option_et);
             if(!TextUtils.isEmpty(content)){
-                add_option_et.setText(content);
-                add_option_et.setSelection(content.length());
+                mAddOptionEt.setText(content);
+                mAddOptionEt.setSelection(content.length());
             }
         }
-        viewDelegate.getToolBarRightTv().setOnClickListener(new View.OnClickListener() {
+        mViewDelegate.getToolBarRightTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(add_option_et.getText().toString().replaceAll(" ",""))){
+                if(TextUtils.isEmpty(mAddOptionEt.getText().toString().replaceAll(" ",""))){
                     ToastUtil.s("意见内容不能为空");
                 }
                 else {
@@ -68,6 +68,6 @@ public class AddOptionFormActivity extends ActivityPresenter<AddOptionFormDelega
                     finish();
                 }
             }
-        },String.valueOf(itemId),add_option_et.getText().toString().replaceAll(" ",""));
+        },String.valueOf(mItemId), mAddOptionEt.getText().toString().replaceAll(" ",""));
     }
 }

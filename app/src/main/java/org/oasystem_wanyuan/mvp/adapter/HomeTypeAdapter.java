@@ -24,28 +24,29 @@ import java.util.List;
  */
 
 public class HomeTypeAdapter extends RecyclerView.Adapter<HomeTypeAdapter.HomeTypeViewHolder> {
-    private List<String> imgIdList;
-    private List<String> typeContentList;
-    private OnItemClickListener listener;
-    private Context context;
-    private int windowWidth;
-    private boolean isHome;
-    private int visibleSize = 0;
-    private List<HomeTypeBean.DataBean> beanList;
+    private List<String> mImgIdList;
+    private List<String> mTypeContentList;
+    private List<HomeTypeBean.DataBean> mBeanList;
+    private OnItemClickListener mListener;
+    private Context mContext;
+    private int mWindowWidth;
+    private boolean mIsHome;
+    private int mVisibleSize = 0;
+
 
     public HomeTypeAdapter(Context context, List<String> imgIdList, List<String> typeContentList, List<HomeTypeBean.DataBean> beanList, boolean isHome) {
-        this.imgIdList = imgIdList;
-        this.typeContentList = typeContentList;
-        this.context = context;
-        this.beanList = beanList;
-        this.isHome = isHome;
+        this.mImgIdList = imgIdList;
+        this.mTypeContentList = typeContentList;
+        this.mContext = context;
+        this.mBeanList = beanList;
+        this.mIsHome = isHome;
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
-        windowWidth = wm.getDefaultDisplay().getWidth();
+        mWindowWidth = wm.getDefaultDisplay().getWidth();
     }
 
-    public List<HomeTypeBean.DataBean> getBeanList() {
-        return beanList;
+    public List<HomeTypeBean.DataBean> getmBeanList() {
+        return mBeanList;
     }
 
 
@@ -57,26 +58,26 @@ public class HomeTypeAdapter extends RecyclerView.Adapter<HomeTypeAdapter.HomeTy
     @Override
     public void onBindViewHolder(HomeTypeViewHolder holder, final int position) {
         ViewGroup.LayoutParams param = holder.itemView.getLayoutParams();
-        param.width = windowWidth / (Constants.TYPE_WIDTH_COUNT + 1);
-        if ("more".equals(imgIdList.get(position % imgIdList.size()))) {
-            Glide.with(context).load(R.mipmap.more_type).fitCenter().into(holder.type_img);
+        param.width = mWindowWidth / (Constants.TYPE_WIDTH_COUNT + 1);
+        if ("more".equals(mImgIdList.get(position % mImgIdList.size()))) {
+            Glide.with(mContext).load(R.mipmap.more_type).fitCenter().into(holder.type_img);
         } else {
-            Glide.with(context).load(imgIdList.get(position % imgIdList.size())).fitCenter().placeholder(R.mipmap.sign_add_advise).into(holder.type_img);
+            Glide.with(mContext).load(mImgIdList.get(position % mImgIdList.size())).fitCenter().placeholder(R.mipmap.sign_add_advise).into(holder.type_img);
         }
-        holder.type_tv.setText(typeContentList.get(position));
+        holder.type_tv.setText(mTypeContentList.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (listener != null) {
-                    listener.onItemClick(position);
+                if (mListener != null) {
+                    mListener.onItemClick(position);
                 }
             }
         });
         holder.home_type_count.setVisibility(View.VISIBLE);
-        if (isHome) {
-            if (position < visibleSize - 1) {
-                holder.home_type_count.setText(beanList.get(position).getDispatch_flow_list_count() > 99 ? "99"
-                        : String.valueOf(beanList.get(position).getDispatch_flow_list_count()));
+        if (mIsHome) {
+            if (position < mVisibleSize - 1) {
+                holder.home_type_count.setText(mBeanList.get(position).getDispatch_flow_list_count() > 99 ? "99"
+                        : String.valueOf(mBeanList.get(position).getDispatch_flow_list_count()));
             } else {
                 long totalCount = 0;
                 //分类数小于5时，不显示统计的数量
@@ -91,23 +92,23 @@ public class HomeTypeAdapter extends RecyclerView.Adapter<HomeTypeAdapter.HomeTy
                 }
             }
         } else {
-            holder.home_type_count.setText(beanList.get(position).getDispatch_flow_list_count() > 99 ? "99"
-                    : String.valueOf(beanList.get(position).getDispatch_flow_list_count()));
+            holder.home_type_count.setText(mBeanList.get(position).getDispatch_flow_list_count() > 99 ? "99"
+                    : String.valueOf(mBeanList.get(position).getDispatch_flow_list_count()));
         }
     }
 
     @Override
     public int getItemCount() {
-        if (isHome) {
-            if (beanList.size() > Constants.TYPE_WIDTH_COUNT) {
-                visibleSize = Constants.TYPE_WIDTH_COUNT + 1;
+        if (mIsHome) {
+            if (mBeanList.size() > Constants.TYPE_WIDTH_COUNT) {
+                mVisibleSize = Constants.TYPE_WIDTH_COUNT + 1;
             } else {
-                visibleSize = beanList.size() + 1;
+                mVisibleSize = mBeanList.size() + 1;
             }
         } else {
-            visibleSize = beanList.size();
+            mVisibleSize = mBeanList.size();
         }
-        return visibleSize;
+        return mVisibleSize;
     }
 
     class HomeTypeViewHolder extends RecyclerView.ViewHolder {
@@ -123,6 +124,6 @@ public class HomeTypeAdapter extends RecyclerView.Adapter<HomeTypeAdapter.HomeTy
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        this.mListener = listener;
     }
 }
