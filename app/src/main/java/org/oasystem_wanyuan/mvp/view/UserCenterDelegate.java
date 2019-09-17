@@ -7,6 +7,7 @@ import org.oasystem_wanyuan.R;
 import org.oasystem_wanyuan.manager.UserManager;
 import org.oasystem_wanyuan.mvp.model.bean.UserInfo;
 import org.oasystem_wanyuan.mvp.view.baseDelegate.ViewDelegate;
+import org.oasystem_wanyuan.utils.AppUtil;
 import org.oasystem_wanyuan.utils.LoadImgUtil;
 
 /**
@@ -36,5 +37,8 @@ public class UserCenterDelegate extends ViewDelegate {
             name.setText(userInfo.getName());
             unit.setText(userInfo.getCompany_name());
         }
+
+        TextView versionCode = get(R.id.versionCode);
+        versionCode.setText("版本号：" + AppUtil.getVersionCode());
     }
 }
